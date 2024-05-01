@@ -1,5 +1,5 @@
 <script>
-    import ClimbingRoute from "../Components/ClimbingRoute.svelte";
+    import RouteWidget from "../Components/RouteWidget.svelte";
     import Grade from "../Components/Grade.svelte";
 
 </script>
@@ -14,3 +14,4 @@
 <p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
 
 <a href="/AddRoutes">Submit a climbing route</a>
+<RouteWidget></RouteWidget>
