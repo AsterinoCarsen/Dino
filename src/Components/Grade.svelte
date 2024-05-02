@@ -1,4 +1,5 @@
 <script>
+    import '/src/css/tailwind.css';
     // Internally use Yosemite grading, then convert
     export let grade = "5.10a";
     grade = grade.toLowerCase();
@@ -46,4 +47,4 @@
 
 </script>
 
-<h4>{calculatedGrade}</h4>
+<h4 class="prose prose-sm">{calculatedGrade}</h4>
