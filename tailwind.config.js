@@ -4,7 +4,14 @@ export default {
     "./src/**/*.svelte"
   ],
   theme: {
-    extend: {},
+    extend: {
+        colors: {
+            'blue': '#273460',
+            'white': '#F3E9DC',
+            'red': '#DD7373'
+
+        },
+    },
   },
   plugins: [
     require("@tailwindcss/typography")

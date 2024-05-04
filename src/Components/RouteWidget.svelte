@@ -30,19 +30,18 @@
 
     let locationName = "";
 
-    async function getLocationName() {
+    async function getLocationName(latit, longit) {
         try {
             const url = 'https://api.bigdatacloud.net/data/reverse-geocode-client';
 
             const params = new URLSearchParams({
-                latitude: data.location.lat,
-                longitude: data.location.long
+                latitude: latit,
+                longitude: longit
             });
 
             const response = await fetch(`${url}?${params}&localityLanguage=en`);
 
             const responseData = await response.json();
-            console.log(responseData);
             locationName = responseData.locality + ", " + responseData.principalSubdivision + ", " + responseData.countryCode;
 
         } catch (error) {
@@ -50,17 +49,17 @@
         }
     }
 
-    getLocationName();
+    getLocationName(data.location.lat, data.location.long);
 </script>
 
-<div class="w-96 h-96 rounded-lg overflow-hidden animate-fadeIn">
+<div class="hover:shadow-2xl transition ease-in w-96 h-96 rounded-lg overflow-hidden animate-fadeIn">
     <div class="bg-gray-100 w-full h-1/2 overflow-hidden">
-        <ImageViewer />
+        <ImageViewer images={data.images} />
     </div>
 
-    <div class="bg-stone-300 w-full h-1/2 p-3 prose prose-sm">
-        <h1 class="border-b pb-4 border-black">{data.name}</h1>
-        <h3>Grade: {data.grade}</h3>
-        <p>{locationName}</p>
+    <div class="bg-blue w-full h-1/2 p-3">
+        <h1 class="border-b pb-4 border-white font-extrabold text-xl">{data.name}</h1>
+        <h3 class="pb-4 pt-4">Grade: {data.grade}</h3>
+        <p class="">{locationName}</p>
     </div>
 </div>

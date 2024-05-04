@@ -1,17 +1,14 @@
 <script>
-    import RouteWidget from "../Components/RouteWidget.svelte";
-    import Grade from "../Components/Grade.svelte";
-
+    import '/src/css/tailwind.css';
 </script>
 
 <style>
-    .grid {
-        display: grid;
-    }
 </style>
 
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<div class="flex flex-col w-screen h-screen bg-white p-32">
+    <a href="/AddRoutes">Submit</a>
+    <a href="/GridRoutes">Routes</a>
 
-<a href="/AddRoutes">Submit a climbing route</a>
-<RouteWidget />
+    <h1 class="text-6xl text-blue">Dino.</h1>
+
+</div>

@@ -26,10 +26,16 @@
     }
 </script>
 
-<div class="relative flex items-center justify-center h-full w-full">
-    <button on:click={left} style="color: white" class="absolute scale-150 pl-2 left-0 fa-solid fa-chevron-left"></button>
+<style>
+    button {
+        transform: scale(2);
+    }
+</style>
 
-    <button on:click={right} style="color: white" class="absolute scale-150 pr-2 right-0 fa-solid fa-chevron-right"></button>
+<div class="relative flex items-center justify-center h-full w-full">
+    <button on:click={left} style="color: white" class="absolute pl-2 left-0 fa-solid fa-chevron-left"></button>
+
+    <button on:click={right} style="color: white" class="absolute pr-2 right-0 fa-solid fa-chevron-right"></button>
 
     <div>
         <img src={currImage} alt="Image" />

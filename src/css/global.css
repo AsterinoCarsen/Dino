@@ -5,3 +5,17 @@ body {
     margin: 0px 10px 0px 10px;
     padding: 0;
 }
+
+h1, h2, h3, h4, p {
+    font-family: "Calistoga", sans-serif;
+    color: white;
+    font-weight: 800;
+}
+
+a, a:visited {
+    color: #DD7373;
+}
+
+a:hover {
+    color: #DD7373;
+}
