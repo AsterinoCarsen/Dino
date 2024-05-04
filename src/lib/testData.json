@@ -1,0 +1,86 @@
+[
+    {
+        "name": "Burden of Dreams",
+        "grade": "5.14d",
+        "type": "boulder",
+        "location": {
+            "lat": 60.42374453639612,
+            "long": 26.13559389520086
+        },
+        "images": [
+            "https://s3.us-east-1.amazonaws.com/images.gearjunkie.com/uploads/2023/10/burden-of-dreams-bosi.jpg",
+            "https://www.planetmountain.com/uploads/img/1/41631.jpg",
+            "https://gripped.com/wp-content/uploads/2017/11/Nalle-Hukkataival-V17.jpg"
+        ]
+    },
+    {
+        "name": "The Nose",
+        "grade": "5.9",
+        "type": "trad",
+        "location": {
+            "lat": 37.728098090610935,
+            "long": -119.63665499471433
+        },
+        "images": [
+            "https://i.natgeofe.com/n/f14f6c30-8d11-4e33-a5e9-05f1b50bdde3/yosemite-national-park-california_3x2.jpg",
+            "https://cdn.aarp.net/content/dam/aarp/travel/destinations/2020/09/1140-yosemite-hero.imgcache.rev.web.1000.575.jpg",
+            "https://cdn.britannica.com/94/100594-050-85B1CF62/El-Capitan-Bridalveil-Fall-California-Yosemite-National.jpg"
+        ]
+    },
+    {
+        "name": "The Nose",
+        "grade": "5.9",
+        "type": "trad",
+        "location": {
+            "lat": 37.728098090610935,
+            "long": -119.63665499471433
+        },
+        "images": [
+            "https://i.natgeofe.com/n/f14f6c30-8d11-4e33-a5e9-05f1b50bdde3/yosemite-national-park-california_3x2.jpg",
+            "https://cdn.aarp.net/content/dam/aarp/travel/destinations/2020/09/1140-yosemite-hero.imgcache.rev.web.1000.575.jpg",
+            "https://cdn.britannica.com/94/100594-050-85B1CF62/El-Capitan-Bridalveil-Fall-California-Yosemite-National.jpg"
+        ]
+    },
+    {
+        "name": "The Nose",
+        "grade": "5.9",
+        "type": "trad",
+        "location": {
+            "lat": 37.728098090610935,
+            "long": -119.63665499471433
+        },
+        "images": [
+            "https://i.natgeofe.com/n/f14f6c30-8d11-4e33-a5e9-05f1b50bdde3/yosemite-national-park-california_3x2.jpg",
+            "https://cdn.aarp.net/content/dam/aarp/travel/destinations/2020/09/1140-yosemite-hero.imgcache.rev.web.1000.575.jpg",
+            "https://cdn.britannica.com/94/100594-050-85B1CF62/El-Capitan-Bridalveil-Fall-California-Yosemite-National.jpg"
+        ]
+    },
+    {
+        "name": "The Nose",
+        "grade": "5.9",
+        "type": "trad",
+        "location": {
+            "lat": 37.728098090610935,
+            "long": -119.63665499471433
+        },
+        "images": [
+            "https://i.natgeofe.com/n/f14f6c30-8d11-4e33-a5e9-05f1b50bdde3/yosemite-national-park-california_3x2.jpg",
+            "https://cdn.aarp.net/content/dam/aarp/travel/destinations/2020/09/1140-yosemite-hero.imgcache.rev.web.1000.575.jpg",
+            "https://cdn.britannica.com/94/100594-050-85B1CF62/El-Capitan-Bridalveil-Fall-California-Yosemite-National.jpg"
+        ]
+    },
+    {
+        "name": "The Nose",
+        "grade": "5.9",
+        "type": "trad",
+        "location": {
+            "lat": 37.728098090610935,
+            "long": -119.63665499471433
+        },
+        "images": [
+            "https://i.natgeofe.com/n/f14f6c30-8d11-4e33-a5e9-05f1b50bdde3/yosemite-national-park-california_3x2.jpg",
+            "https://cdn.aarp.net/content/dam/aarp/travel/destinations/2020/09/1140-yosemite-hero.imgcache.rev.web.1000.575.jpg",
+            "https://cdn.britannica.com/94/100594-050-85B1CF62/El-Capitan-Bridalveil-Fall-California-Yosemite-National.jpg"
+        ]
+    }
+]

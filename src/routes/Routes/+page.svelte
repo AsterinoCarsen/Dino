@@ -1,21 +1,7 @@
 <script>
+    import RouteList from "../../Components/RouteList.svelte";
     import RouteWidget from "../../Components/RouteWidget.svelte";
-
-
-    export let testData = {
-        name: "Burden of Dreams",
-        grade: "5.14d",
-        type: "Boulder",
-        location: {
-            lat: 60.423895,
-            long: 26.135606
-        },
-        images: [
-            "https://s3.us-east-1.amazonaws.com/images.gearjunkie.com/uploads/2023/10/burden-of-dreams-bosi.jpg",
-            "https://www.planetmountain.com/uploads/img/1/41631.jpg",
-            "https://gripped.com/wp-content/uploads/2017/11/Nalle-Hukkataival-V17.jpg"
-        ]
-    };
+    import jsonData from "../../lib/testData.json"
 
     let locationName = "";
 
@@ -51,10 +37,16 @@
     }
 
     askForLocation();
+    
+    let isList = false;
+    function listView() {
+        isList = !isList;
+    }
 </script>
 
-<div class="pt-24 pb-24 pl-40 pr-40">
+<div class="pt-24 pb-24 pl-64 pr-64">
     <a href="/" class="absolute scale-125 top-12 left-12 fa-solid fa-home color-red"></a>
+    <button on:click={listView} class="absolute scale-125 right-12 top-12 fa-solid fa-list"></button>
 
     <h1 class="text-6xl pb-10 border-b border-black fontfamily-calistoga font-extrabold text-blue">
         {#if locationName === ""}
@@ -64,15 +56,27 @@
         {/if}
     </h1>
 
-
     <div class="pt-16 flex justify-center items-center">
-        <div class="pt-5 grid grid-cols-3 gap-32 place-content-center">
-            <RouteWidget data={testData} />
-            <RouteWidget />
-            <RouteWidget />
-            <RouteWidget />
-            <RouteWidget />
-            <RouteWidget />
-        </div>
+        {#if isList == false}
+            <div class="pt-5 grid grid-cols-3 gap-32 place-content-center">
+                {#if jsonData}
+                    {#each jsonData as route}
+                        <RouteWidget data={route} />
+                    {/each}
+                {/if}
+            </div>
+        {/if}
+
+        {#if isList == true}
+            <div>
+                {#if jsonData}
+                    {#each jsonData as route}
+                        <div class="odd:bg-gray-400">
+                            <RouteList data={route} />
+                        </div>
+                    {/each}
+                {/if}
+            </div>
+        {/if}
     </div>
 </div>
