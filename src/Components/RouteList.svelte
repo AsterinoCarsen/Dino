@@ -41,8 +41,17 @@
     getLocationName(data.location.lat, data.location.long);
 </script>
 
-<div class="flex justify-between w-full h-auto pb-4 prose font-bold">
-    {data.name}
-    {data.grade}
-    {locationName}
+<div class="flex justify-between w-screen h-auto pb-4 prose font-bold">
+    <div class="flex w-screen justify-center items-center text-center">
+        {data.name}
+    </div>
+
+    <div class="flex w-screen justify-center items-center text-center">
+        {data.grade}
+    </div>
+
+    <div class="flex w-screen justify-center items-center text-center">
+        {locationName}
+    </div>
+
 </div>

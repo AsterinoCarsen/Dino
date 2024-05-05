@@ -56,27 +56,25 @@
         {/if}
     </h1>
 
-    <div class="pt-16 flex justify-center items-center">
+    <div class="flex justify-center">
         {#if isList == false}
-            <div class="pt-5 grid grid-cols-3 gap-32 place-content-center">
-                {#if jsonData}
-                    {#each jsonData as route}
-                        <RouteWidget data={route} />
-                    {/each}
-                {/if}
+            <div class="grid gap-10 grid-cols-3 ">
+                {#each jsonData as route}
+                    <RouteWidget data={route} />
+                {/each}
             </div>
         {/if}
 
+
         {#if isList == true}
-            <div>
-                {#if jsonData}
-                    {#each jsonData as route}
-                        <div class="odd:bg-gray-400">
-                            <RouteList data={route} />
-                        </div>
-                    {/each}
-                {/if}
+            <div class="flex flex-col w-screen">
+                {#each jsonData as route}
+                    <div class="odd:bg-gray-400">
+                        <RouteList data={route} />
+                    </div>
+                {/each}
             </div>
         {/if}
     </div>
+
 </div>
