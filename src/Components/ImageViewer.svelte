@@ -33,9 +33,10 @@
 </style>
 
 <div class="relative flex items-center justify-center h-full w-full">
-    <button on:click={left} style="color: white" class="absolute pl-2 left-0 fa-solid fa-chevron-left"></button>
-
-    <button on:click={right} style="color: white" class="absolute pr-2 right-0 fa-solid fa-chevron-right"></button>
+    {#if images.length > 1}
+        <button on:click={left} style="color: white" class="absolute pl-2 left-0 fa-solid fa-chevron-left"></button>
+        <button on:click={right} style="color: white" class="absolute pr-2 right-0 fa-solid fa-chevron-right"></button>
+    {/if}
 
     <div>
         <img src={currImage} alt="Image" />
