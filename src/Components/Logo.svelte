@@ -16,12 +16,12 @@
 
 {#if isBlack == true}
     <div class="text-{size}xl bg-black text-white">
-        /Dino
+        Dino
     </div>
 {/if}
 
 {#if isBlack == false}
     <div class="text-{size}xl">
-        /Dino
+        Dino
     </div>
 {/if}

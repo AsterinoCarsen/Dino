@@ -1,21 +1,44 @@
+@font-face {
+    font-family: 'gaegu';
+    src: url('../fonts/Gaegu-Bold.ttf') format('truetype'),
+}
+
+@font-face {
+    font-family: "mont";
+    src: url("../fonts/Montserrat-VariableFont_wght.ttf") format("truetype")
+}
+
 body {
     display: flex;
     flex-direction: column;
     align-items: left;
     margin: 0px 10px 0px 10px;
     padding: 0;
+    background-color: black;
+    overflow-x: hidden;
 }
 
 h1, h2, h3, h4, p {
-    font-family: "Calistoga", sans-serif;
     color: white;
-    font-weight: 800;
 }
 
 a, a:visited {
-    color: #DD7373;
+    color: white;
 }
 
 a:hover {
-    color: #DD7373;
+    color: #DB504A;
+}
+
+body::-webkit-scrollbar {
+    width: 8px;
+}
+  
+body::-webkit-scrollbar-track {
+    background: black;
+}
+  
+body::-webkit-scrollbar-thumb {
+    background-color: white;
+    border-radius: 4px;
 }

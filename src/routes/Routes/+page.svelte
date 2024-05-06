@@ -1,5 +1,6 @@
 <script>
-    import RouteList from "../../Components/RouteList.svelte";
+    import NavBar from "../../Components/NavBar.svelte";
+import RouteList from "../../Components/RouteList.svelte";
     import RouteWidget from "../../Components/RouteWidget.svelte";
     import jsonData from "../../lib/testData.json"
 
@@ -45,10 +46,9 @@
 </script>
 
 <div class="pt-24 pb-24 pl-64 pr-64">
-    <a href="/" class="absolute scale-125 top-12 left-12 fa-solid fa-home color-red"></a>
-    <button on:click={listView} class="absolute scale-125 right-12 top-12 fa-solid fa-list"></button>
+    <NavBar />
 
-    <h1 class="text-6xl pb-10 border-b border-black fontfamily-calistoga font-extrabold text-blue">
+    <h1 class="text-6xl pb-10 mb-10 border-b border-white font-extrabold text-blue">
         {#if locationName === ""}
             Popular Routes
         {:else}
