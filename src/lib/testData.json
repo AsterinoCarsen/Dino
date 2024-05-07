@@ -5,7 +5,8 @@
         "type": "boulder",
         "location": {
             "lat": 60.42374453639612,
-            "long": 26.13559389520086
+            "long": 26.13559389520086,
+            "title": ""
         },
         "images": [
             "https://s3.us-east-1.amazonaws.com/images.gearjunkie.com/uploads/2023/10/burden-of-dreams-bosi.jpg",
@@ -19,7 +20,8 @@
         "type": "trad",
         "location": {
             "lat": 37.728098090610935,
-            "long": -119.63665499471433
+            "long": -119.63665499471433,
+            "title": ""
         },
         "images": [
             "https://i.natgeofe.com/n/f14f6c30-8d11-4e33-a5e9-05f1b50bdde3/yosemite-national-park-california_3x2.jpg",
@@ -33,7 +35,8 @@
         "type": "trad",
         "location": {
             "lat": 37.728098090610935,
-            "long": -119.63665499471433
+            "long": -119.63665499471433,
+            "title": ""
         },
         "images": [
             "https://i.natgeofe.com/n/f14f6c30-8d11-4e33-a5e9-05f1b50bdde3/yosemite-national-park-california_3x2.jpg",
@@ -47,7 +50,8 @@
         "type": "trad",
         "location": {
             "lat": 37.728098090610935,
-            "long": -119.63665499471433
+            "long": -119.63665499471433,
+            "title": ""
         },
         "images": [
             "https://i.natgeofe.com/n/f14f6c30-8d11-4e33-a5e9-05f1b50bdde3/yosemite-national-park-california_3x2.jpg",
@@ -61,7 +65,8 @@
         "type": "trad",
         "location": {
             "lat": 37.728098090610935,
-            "long": -119.63665499471433
+            "long": -119.63665499471433,
+            "title": ""
         },
         "images": [
             "https://i.natgeofe.com/n/f14f6c30-8d11-4e33-a5e9-05f1b50bdde3/yosemite-national-park-california_3x2.jpg",
@@ -75,7 +80,8 @@
         "type": "trad",
         "location": {
             "lat": 37.728098090610935,
-            "long": -119.63665499471433
+            "long": -119.63665499471433,
+            "title": ""
         },
         "images": [
             "https://i.natgeofe.com/n/f14f6c30-8d11-4e33-a5e9-05f1b50bdde3/yosemite-national-park-california_3x2.jpg",

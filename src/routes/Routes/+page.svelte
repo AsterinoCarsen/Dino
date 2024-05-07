@@ -1,43 +1,34 @@
 <script>
     import NavBar from "../../Components/NavBar.svelte";
-import RouteList from "../../Components/RouteList.svelte";
+    import RouteList from "../../Components/RouteList.svelte";
     import RouteWidget from "../../Components/RouteWidget.svelte";
     import jsonData from "../../lib/testData.json"
+    import { getLocationName } from "$lib/reverseGeocode";
 
     let locationName = "";
 
-    async function getLocationName(latit, longit) {
-        try {
-            const url = 'https://api.bigdatacloud.net/data/reverse-geocode-client';
-
-            const params = new URLSearchParams({
-                latitude: latit,
-                longitude: longit
-            });
-
-            const response = await fetch(`${url}?${params}&localityLanguage=en`);
-
-            const responseData = await response.json();
-            locationName = responseData.locality;
-
-        } catch (error) {
-            console.log("Error getting location reverse geocode: " + error);
-        }
-    }
-
-    function askForLocation() {
+    async function askForLocation() {
         if (typeof navigator !== 'undefined' && 'geolocation' in navigator) {
-            navigator.geolocation.getCurrentPosition(
-                position => {
-                    getLocationName(position.coords.latitude, position.coords.longitude);
-                }
-            );
+            await new Promise((resolve, reject) => {
+                navigator.geolocation.getCurrentPosition(
+                    async position => {
+                        locationName = await getLocationName(position.coords.latitude, position.coords.longitude);
+                        resolve();
+                    },
+                    error => reject(error)
+                );
+            });
         } else {
             console.log("Geolocation is not supported in this environment.");
         }
     }
 
-    askForLocation();
+    askForLocation().then(() => {
+        console.log("Location name retrieved:", locationName);
+    }).catch(error => {
+        console.error("Error:", error);
+    });
+
     
     let isList = false;
     function listView() {
