@@ -37,17 +37,22 @@
     }
 
     updateLocationTitle().then(() => {});
-    
+
+    function capitalize(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
 </script>
 
-<div class="hover:shadow-2xl shadow-white transition ease-in w-96 h-96 overflow-hidden animate-fadeIn border-b-2 border-white">
-    <div class="w-full h-1/2 overflow-hidden">
-        <ImageViewer images={data.images} />
+<a href="/ViewRoute">
+    <div class="hover:shadow-2xl shadow-white transition ease-in w-96 h-96 overflow-hidden animate-fadeIn border-b-2 border-white">
+        <div class="w-full h-1/2 overflow-hidden">
+            <ImageViewer images={data.images} />
+        </div>
+    
+        <div class="w-full h-1/2 p-3">
+            <h1 class="border-b pb-4 border-white font-extrabold text-xl">{data.name}</h1>
+            <h3 class="pb-4 pt-4">Grade: {data.grade} | {capitalize(data.type)}</h3>
+            <p class="">{data.location.title}</p>
+        </div>
     </div>
-
-    <div class="w-full h-1/2 p-3">
-        <h1 class="border-b pb-4 border-white font-extrabold text-xl">{data.name}</h1>
-        <h3 class="pb-4 pt-4">Grade: {data.grade} | {data.type}</h3>
-        <p class="">{data.location.title}</p>
-    </div>
-</div>
+</a>
