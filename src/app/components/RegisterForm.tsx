@@ -53,13 +53,15 @@ export default function Register() {
         }
     };
 
+    const isDisabled = username.trim() === "" || password.trim() === "";
+
     return (
         <div className="flex w-screen h-screen items-center justify-center">
-            <form onSubmit={handleSubmit} className="flex flex-col p-10 w-lg h-2/3 bg-slate-500 rounded-lg">
+            <form onSubmit={handleSubmit} className="flex flex-col p-10 w-lg h-2/3">
                 <h2 className="mb-10">Register</h2>
 
                 <label>Username</label>
-                <input className="p-2 mb-4 rounded-md border-2 border-slate-200"
+                <input className="p-2 mb-10 rounded-md border-2 border-grey-400"
                     type="text"
                     name="username"
                     placeholder="Enter your username"
@@ -68,7 +70,7 @@ export default function Register() {
                 />
 
                 <label>Password</label>
-                <input className="p-2 mb-4 rounded-md border-2 border-slate-200"
+                <input className="p-2 mb-10 rounded-md border-2 border-grey-400"
                     type="password"
                     name="password"
                     placeholder="Enter your password"
@@ -79,7 +81,7 @@ export default function Register() {
                 {error && <p className="text-red-500">{error}</p>}
                 {success && <p className="text-green-500">{success}</p>}
 
-                <button type="submit" className="bg-blue-600 text-white py-2 rounded-md mt-4 hover:bg-blue-700">
+                <button type="submit" disabled={isDisabled} className="text-white py-2 rounded-md mt-4">
                     {loading ? "Registering..." : "Register"}
                 </button>
             </form>

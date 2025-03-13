@@ -1,26 +1,95 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+    --yellow: #D79922;
+    --paleYellow: #EFE2BA;
+    --red: #F13C20;
+    --blue: #4056A1;
+    --lightBlue: #C5CBE3;
+    --paleWhite: #f1f0eb;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+.bg-yellow {
+    background-color: var(--yellow);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.color-yellow {
+    color: var(--yellow);
+}
+
+.bg-paleYellow {
+    background-color: var(--paleYellow);
+}
+
+.color-paleYellow {
+    color: var(--paleYellow);
+}
+
+.color-red {
+    color: var(--red);
+}
+
+.bg-red {
+    background-color: var(--red);
+}
+
+.color-blue {
+    color: var(--blue);
+}
+
+.bg-blue {
+    background-color: var(--blue);
+}
+
+.color-lightBlue {
+    color: var(--lightBlue);
+}
+
+.bg-lightBlue {
+    background-color: var(--lightBlue);
+}
+
+.color-paleWhite {
+    color: var(--paleWhite);
+}
+
+.bg-paleWhite {
+    background-color: var(--paleWhite);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+    padding: 0;
+    margin: 0;
+}
+
+h1 {
+    font-size: xxx-large;
+    font-weight: 700;
+}
+
+h2 {
+    font-size: xx-large;
+    font-weight: 600;
+}
+
+h3 {
+    font-size: x-large;
+    font-weight: 500;
+}
+
+p {
+    font-size: large;
+    font-weight: 400;
+}
+
+button {
+    background-color: var(--blue);
+}
+
+button:hover {
+    background-color: var(--lightBlue);
+}
+
+button:disabled {
+    background-color: var(--red);
 }

@@ -1,6 +1,7 @@
 'use client';
 
 import { ChangeEvent, useState, FormEvent } from "react";
+import { useRouter } from "next/navigation";
 
 interface LoginResponse {
     message: string;
@@ -13,6 +14,8 @@ export default function Login() {
     const [password, setPassword] = useState<string>("");
     const [error, setError] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
+
+    const router = useRouter();
 
     const handleUsernameChange = (e: ChangeEvent<HTMLInputElement>) => {
         setUsername(e.target.value);
@@ -40,8 +43,8 @@ export default function Login() {
             const data: LoginResponse = await response.json();
 
             if (response.ok) {
-                setError("Success!");
                 localStorage.setItem("token", data.token);
+                router.push("/home");
             } else {
                 setError(data.error);
             }
@@ -54,13 +57,15 @@ export default function Login() {
 
     };
 
+    const isDisabled = username.trim() === "" || password.trim() === "";
+
     return (
         <div className="flex w-screen h-screen items-center justify-center">
-            <form onSubmit={handleSubmit} className="flex flex-col p-10 w-lg h-2/3 bg-slate-500 rounded-lg">
+            <form onSubmit={handleSubmit} className="flex flex-col p-10 w-lg h-2/3">
                 <h2 className="mb-10">Login</h2>
 
                 <label>Username</label>
-                <input className="p-2 mb-10 rounded-md border-2 border-slate-200"
+                <input className="p-2 mb-10 rounded-md border-2 border-grey-400"
                     type="text"
                     id="username"
                     name="username"
@@ -70,7 +75,7 @@ export default function Login() {
                 />
 
                 <label>Password</label>
-                <input className="p-2 mb-10 rounded-md border-2 border-slate-200"
+                <input className="p-2 mb-10 rounded-md border-2 border-grey-400"
                     type="password"
                     id="password"
                     name="username"
@@ -79,10 +84,10 @@ export default function Login() {
                     onChange={handlePasswordChange}
                 />
 
-                <p>{error}</p>
+                {error && <p className="text-red-500">{error}</p>}
 
-                <button type="submit" className="bg-blue-600 text-white py-2 rounded-md mt-4 hover:bg-blue-700">
-                    Log In
+                <button type="submit" disabled={isDisabled} className="text-white py-2 rounded-md mt-4">
+                    {loading ? "Logging in..." : "Login"}
                 </button>
             </form>
         </div>
