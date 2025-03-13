@@ -81,7 +81,7 @@ export default function Register() {
                 {error && <p className="text-red-500">{error}</p>}
                 {success && <p className="text-green-500">{success}</p>}
 
-                <button type="submit" disabled={isDisabled} className="bg-blue-600 text-white py-2 rounded-md mt-4 hover:bg-blue-700 disabled:bg-blue-200">
+                <button type="submit" disabled={isDisabled} className="text-white py-2 rounded-md mt-4">
                     {loading ? "Registering..." : "Register"}
                 </button>
             </form>

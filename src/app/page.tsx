@@ -1,18 +1,20 @@
 'use client';
 
-import Link from 'next/link';
 import LoginForm from "./components/LoginForm";
 import RegisterForm from "./components/RegisterForm";
 
 export default function Home() {
   return (
-    <div className="flex w-screen h-screen">
-        <div className='flex pl-20 w-1/2 h-full'>
-            <RegisterForm />
-        </div>
+    <div className="flex flex-col justify-center items-center bg-paleWhite w-full min-h-screen">
+        <h1 className="place-self-center">Welcome to Dino.</h1>
+        <div className="flex w-full max-w-7xl">
+            <div className='flex w-1/2 h-full border-r-2 border-gray-200'>
+                <RegisterForm />
+            </div>
 
-        <div className='flex pr-20 w-1/2 h-full bg-lightYellow'>
-            <LoginForm />
+            <div className='flex w-1/2 h-full'>
+                <LoginForm />
+            </div>
         </div>
     </div>
   );
