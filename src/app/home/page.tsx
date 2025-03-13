@@ -9,9 +9,17 @@ interface DecodedToken {
     exp: number;
 }
 
+interface Ascension {
+    aid: number;
+    grade: string;
+    attempts: number;
+    ascension_type: string;
+}
+
 export default function Home() {
     const [token, setToken] = useState<string | null>(null);
     const [userData, setUserData] = useState<DecodedToken | null>(null);
+    const [ascensions, setAscensions] = useState<Ascension[]>([]);
 
     useEffect(() => {
         const storedToken = localStorage.getItem("token");
@@ -21,12 +29,28 @@ export default function Home() {
             try {
                 const decoded: DecodedToken = jwtDecode(storedToken);
                 setUserData(decoded);
+                fetchAscensions(decoded.uid);
             } catch (error) {
                 console.error("Invalid token: ", error);
                 localStorage.removeItem("token");
             }
         }
     }, []);
+
+    const fetchAscensions = async (uid: string) => {
+        try {
+            const response = await fetch(`/api/getAscents?uid=${uid}`);
+
+            if (!response.ok) {
+                throw new Error("Failed to fetch ascensions");
+            }
+
+            const data = await response.json();
+            setAscensions(data);
+        } catch (error) {
+            console.log("Error fetching ascensions:", error);
+        }
+    };
 
     return (
         <div>
@@ -36,6 +60,15 @@ export default function Home() {
                     <p>Username: {userData.username}</p>
                     <p>User ID: {userData.uid}</p>
                     <p>Token expires at: {new Date(userData.exp * 1000).toLocaleString()}</p>
+                    {ascensions.length > 0 ? (
+                        <ul>
+                            {ascensions.map(ascension => (
+                                <li key={ascension.aid}>{ascension.grade} {ascension.attempts}</li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p>No ascensions found.</p>
+                    )}
                 </div>
             ): (
                 <div>
