@@ -1,6 +1,7 @@
 'use client';
 
 import { ChangeEvent, useState, FormEvent } from "react";
+import { useRouter } from "next/navigation";
 
 interface LoginResponse {
     message: string;
@@ -13,6 +14,8 @@ export default function Login() {
     const [password, setPassword] = useState<string>("");
     const [error, setError] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
+
+    const router = useRouter();
 
     const handleUsernameChange = (e: ChangeEvent<HTMLInputElement>) => {
         setUsername(e.target.value);
@@ -40,8 +43,8 @@ export default function Login() {
             const data: LoginResponse = await response.json();
 
             if (response.ok) {
-                setError("Success!");
                 localStorage.setItem("token", data.token);
+                router.push("/home");
             } else {
                 setError(data.error);
             }

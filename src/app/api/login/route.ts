@@ -45,7 +45,7 @@ export async function POST(req: Request) {
         }
 
         const token = jwt.sign(
-            { username: user.username },
+            { uid: user.uid, username: user.username },
             KEY as string,
             { expiresIn: "1h" }
         );
