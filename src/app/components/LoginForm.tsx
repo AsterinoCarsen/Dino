@@ -2,17 +2,17 @@
 
 import { ChangeEvent, useState, FormEvent } from "react";
 
-interface RegisterResponse {
-    message?: string;
-    error?: string;
+interface LoginResponse {
+    message: string;
+    token: string;
+    error: string;
 }
 
-export default function Register() {
+export default function Login() {
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [error, setError] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
-    const [success, setSuccess] = useState<string>("");
 
     const handleUsernameChange = (e: ChangeEvent<HTMLInputElement>) => {
         setUsername(e.target.value);
@@ -27,40 +27,44 @@ export default function Register() {
 
         setLoading(true);
         setError("");
-        setSuccess("");
 
         try {
-            const response = await fetch("/api/register", {
+            const response = await fetch("/api/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ username, password }),
+                body: JSON.stringify({ username: username, password }),
             });
 
-            const data: RegisterResponse = await response.json();
+            const data: LoginResponse = await response.json();
 
             if (response.ok) {
-                setSuccess(data.message || "Registration successful!");
+                setError("Success!");
+                localStorage.setItem("token", data.token);
             } else {
-                setError(data.error || "An error occurred.");
+                setError(data.error);
             }
         } catch (error) {
-            console.error("Registration error:", error);
-            setError("An error occurred while registering.");
+            console.error("Login error:", error);
+            setError("An error occured while loggin in.");
         } finally {
             setLoading(false);
         }
+
     };
+
+    const isDisabled = username.trim() === "" || password.trim() === "";
 
     return (
         <div className="flex w-screen h-screen items-center justify-center">
-            <form onSubmit={handleSubmit} className="flex flex-col p-10 w-lg h-2/3 bg-slate-500 rounded-lg">
-                <h2 className="mb-10">Register</h2>
+            <form onSubmit={handleSubmit} className="flex flex-col p-10 w-lg h-2/3">
+                <h2 className="mb-10">Login</h2>
 
                 <label>Username</label>
-                <input className="p-2 mb-4 rounded-md border-2 border-slate-200"
+                <input className="p-2 mb-10 rounded-md border-2 border-grey-400"
                     type="text"
+                    id="username"
                     name="username"
                     placeholder="Enter your username"
                     value={username}
@@ -68,21 +72,21 @@ export default function Register() {
                 />
 
                 <label>Password</label>
-                <input className="p-2 mb-4 rounded-md border-2 border-slate-200"
+                <input className="p-2 mb-10 rounded-md border-2 border-grey-400"
                     type="password"
-                    name="password"
+                    id="password"
+                    name="username"
                     placeholder="Enter your password"
                     value={password}
                     onChange={handlePasswordChange}
                 />
 
                 {error && <p className="text-red-500">{error}</p>}
-                {success && <p className="text-green-500">{success}</p>}
 
-                <button type="submit" className="bg-blue-600 text-white py-2 rounded-md mt-4 hover:bg-blue-700">
-                    {loading ? "Registering..." : "Register"}
+                <button type="submit" disabled={isDisabled} className="bg-blue-600 text-white py-2 rounded-md mt-4 hover:bg-blue-700 disabled:bg-blue-200">
+                    {loading ? "Logging in..." : "Login"}
                 </button>
             </form>
         </div>
-    );
+    )
 }
