@@ -42,7 +42,7 @@ export async function POST(req: Request) {
             return res.json({ error: "Failed to register user." }, { status: 500 });
         }
 
-        return res.json({ error: "Registration successful!" }, { status: 201 });
+        return res.json({ message: "Registration successful!" }, { status: 201 });
     } catch (error) {
         console.error("Registration error: ", error);
         return res.json({ error: "Internal server error." }, { status: 500 });

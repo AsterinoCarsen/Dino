@@ -20,6 +20,11 @@ export default function Home() {
     const [token, setToken] = useState<string | null>(null);
     const [userData, setUserData] = useState<DecodedToken | null>(null);
     const [ascensions, setAscensions] = useState<Ascension[]>([]);
+    const [newAscent, setNewAscent] = useState({
+        grade: '',
+        attempts: 1,
+        ascension_type: ''
+    });
 
     useEffect(() => {
         const storedToken = localStorage.getItem("token");
@@ -39,7 +44,7 @@ export default function Home() {
 
     const fetchAscensions = async (uid: string) => {
         try {
-            const response = await fetch(`/api/getAscents?uid=${uid}`);
+            const response = await fetch(`/api/getascents?uid=${uid}`);
 
             if (!response.ok) {
                 throw new Error("Failed to fetch ascensions");
@@ -50,6 +55,10 @@ export default function Home() {
         } catch (error) {
             console.log("Error fetching ascensions:", error);
         }
+    };
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
     };
 
     return (
