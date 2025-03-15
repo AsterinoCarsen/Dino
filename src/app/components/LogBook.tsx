@@ -26,7 +26,7 @@ export default function LogBook({ uid }: LogBookProps) {
 
     const fetchAscensions = async (uid: string) => {
         try {
-            const response = await fetch(`/api/getascents?uid=${uid}`);
+            const response = await fetch(`/api/ascents/getascents?uid=${uid}`);
 
             if (!response.ok) {
                 throw new Error("Failed to fetch ascensions");

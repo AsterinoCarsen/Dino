@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 import bcrypt from "bcrypt";
-import db from "../../lib/db";
+import db from "../../../lib/db";
 
 interface RegisterRequestBody {
     username: string;
