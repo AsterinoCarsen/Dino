@@ -6,6 +6,14 @@ import db from "../../../lib/db";
 interface RegisterRequestBody {
     username: string;
     password: string;
+    captchaToken: string;
+}
+
+interface CaptchaResponse {
+    success: boolean;
+    challenge_ts?: string;
+    hostname?: string;
+    "error-codes"?: string[];
 }
 
 export async function POST(req: Request) {
@@ -16,10 +24,20 @@ export async function POST(req: Request) {
     }
 
     try {
-        const { username, password }: RegisterRequestBody = await req.json();
+        const { username, password, captchaToken }: RegisterRequestBody = await req.json();
 
         if (!username || !password) {
             return res.json({ error: "Username and password are required." }, { status: 400 });
+        }
+
+        const secretKey = process.env.CAPTCHA_SECRET;
+        const verifyURL = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${captchaToken}`
+
+        const captchaVerifyResponse = await fetch(verifyURL, { method: "POST"});
+        const captchaResult: CaptchaResponse = await captchaVerifyResponse.json();
+
+        if (!captchaResult.success) {
+            return NextResponse.json({ error: "CAPTCHA verification failed." }, { status: 400 });
         }
 
         const { data: existingUser, error: userCheckError } = await db
