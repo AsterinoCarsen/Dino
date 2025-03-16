@@ -30,6 +30,14 @@ export async function POST(req: Request) {
             return res.json({ error: "Username and password are required." }, { status: 400 });
         }
 
+        if (username.length < 4) {
+            return res.json({ error: "Usernames must be at least 4 characters." }, { status: 400 });
+        }
+
+        if (password.length < 6) {
+            return res.json({ error: "Passwords must be at least 6 characters." }, { status: 400 });
+        }
+
         const secretKey = process.env.CAPTCHA_SECRET;
         const verifyURL = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${captchaToken}`
 

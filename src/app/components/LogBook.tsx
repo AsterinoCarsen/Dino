@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, FormEvent } from 'react';
-import { Plus } from "lucide-react";
+import { Plus, Trash } from "lucide-react";
 
 interface Ascension {
     aid: number;
@@ -81,6 +81,28 @@ export default function LogBook({ uid }: LogBookProps) {
         }
     };
 
+    const handleDelete = async (e: FormEvent, aid: number) =>  {
+        e.preventDefault();
+
+        try {
+            const response = await fetch("/api/ascents/deleteascent", {
+                method: "DELETE",
+                body: JSON.stringify({ aid })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error("Failed to delete ascent.");
+            }
+
+            setModalVisible(false);
+            fetchAscensions(uid);
+        } catch (error) {
+            console.error("Error adding ascent: ", error);
+        }
+    };
+
     const toggleModal = () => {
         setModalVisible(prev => ! prev);
     };
@@ -88,7 +110,7 @@ export default function LogBook({ uid }: LogBookProps) {
     return (
         <div>
             {isModalVisible && (
-                <div className='fixed inset-0 flex justify-center items-center z-50 bg-black bg-opacity-50'>
+                <div className='fixed inset-0 flex justify-center items-center z-50 bg-black bg-opacity-custom'>
                     <form onSubmit={handleSubmit} className='bg-white p-6 rounded-lg shadow-lg flex flex-col gap-4 w-96'>
                         <h2 className="text-xl font-semibold">Log New Ascent</h2>
             
@@ -126,25 +148,30 @@ export default function LogBook({ uid }: LogBookProps) {
 
                         <label className="flex flex-col">
                             Ascent Type (Optional)
-                            <input 
-                                type="text" 
-                                className="border p-2 rounded" 
-                                placeholder="e.g., Bouldering, Sport, Trad"
+                            <select
+                                className="border p-2 rounded"
+                                defaultValue=""
                                 onChange={(e) => setAscentType(e.target.value)}
-                            />
+                            >
+                                    <option value="" disabled>Select an ascent type</option>
+                                    <option value="Boulder">Boulder</option>
+                                    <option value="Top Rope">Top Rope</option>
+                                    <option value="Lead">Lead</option>
+                                    <option value="Auto Belay">Auto Belay</option>
+                            </select>
                         </label>
 
                         <div className="flex justify-end gap-2">
                             <button 
                                 type="button" 
-                                className="bg-gray-400 text-white px-4 py-2 rounded"
+                                className="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded"
                                 onClick={() => setModalVisible(false)}
                             >
                                 Cancel
                             </button>
                             <button 
                                 type="submit" 
-                                className="text-white px-4 py-2 rounded"
+                                className="text-white bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded"
                             >
                                 Submit
                             </button>
@@ -168,6 +195,7 @@ export default function LogBook({ uid }: LogBookProps) {
                                 <th className="py-2 px-4 text-left">Ascent Type</th>
                                 <th className="py-2 px-4 text-left">Attempts</th>
                                 <th className="py-2 px-4 text-left">Date</th>
+                                <th className="py-2 px-4 text-left">Delete</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -178,13 +206,16 @@ export default function LogBook({ uid }: LogBookProps) {
                                     <td className="py-2 px-4">{asc.ascension_type}</td>
                                     <td className="py-2 px-4">{asc.attempts}</td>
                                     <td className="py-2 px-4">{new Date(asc.created_at).toLocaleDateString()}</td>
+                                    <td className="py-2 px-4">
+                                        <button onClick={(e) => handleDelete(e, asc.aid)}><Trash className='w-5 h-5' /></button>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
                 </div>
             ) : (
-                <p>No ascensions found.</p>
+                <p className='flex justify-center'>No ascensions found.</p>
             )}
         </div>
     )
