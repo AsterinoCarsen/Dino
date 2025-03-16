@@ -24,14 +24,14 @@ export async function POST(req: Request) {
         }
 
         const { data: AscentRequestBody, error } = await db
-            .from("ascents")
+            .from("ascensions")
             .insert([
                 {
                     uid,
                     ascent_name: ascentName,
                     grade,
                     attempts,
-                    ascent_type: ascentType
+                    ascension_type: ascentType
                 }
             ]);
 
