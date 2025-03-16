@@ -1,6 +1,7 @@
 'use client';
 
 import { ChangeEvent, useState, FormEvent } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
 
 interface RegisterResponse {
     message?: string;
@@ -13,6 +14,7 @@ export default function Register() {
     const [error, setError] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
     const [success, setSuccess] = useState<string>("");
+    const [captchaToken, setCaptchaToken] = useState<string | null>(null);
 
     const handleUsernameChange = (e: ChangeEvent<HTMLInputElement>) => {
         setUsername(e.target.value);
@@ -22,20 +24,29 @@ export default function Register() {
         setPassword(e.target.value);
     };
 
+    const handleCaptchaChange = (token: string | null) => {
+        setCaptchaToken(token);
+    }
+
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
+
+        if (!captchaToken) {
+            setError("Please complete the CAPTCHA verification.");
+            return;
+        }
 
         setLoading(true);
         setError("");
         setSuccess("");
 
         try {
-            const response = await fetch("/api/register", {
+            const response = await fetch("/api/account/register", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ username, password }),
+                body: JSON.stringify({ username, password, captchaToken }),
             });
 
             const data: RegisterResponse = await response.json();
@@ -81,7 +92,12 @@ export default function Register() {
                 {error && <p className="text-red-500">{error}</p>}
                 {success && <p className="text-green-500">{success}</p>}
 
-                <button type="submit" disabled={isDisabled} className="text-white py-2 rounded-md mt-4">
+                <ReCAPTCHA 
+                    sitekey={process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY!}
+                    onChange={handleCaptchaChange}
+                />
+
+                <button type="submit" disabled={isDisabled} className="bg-blue-500 hover:bg-blue-600 disabled:bg-blue-300 text-white py-2 rounded-md mt-4">
                     {loading ? "Registering..." : "Register"}
                 </button>
             </form>
