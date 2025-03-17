@@ -11,14 +11,11 @@ interface DecodedToken {
 }
 
 export default function Home() {
-    const [_token, setToken] = useState<string | null>(null);
     const [userData, setUserData] = useState<DecodedToken | null>(null);
 
     useEffect(() => {
         const storedToken = localStorage.getItem("token");
         if (storedToken) {
-            setToken(storedToken);
-
             try {
                 const decoded: DecodedToken = jwtDecode(storedToken);
                 setUserData(decoded);
