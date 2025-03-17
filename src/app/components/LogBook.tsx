@@ -90,8 +90,6 @@ export default function LogBook({ uid }: LogBookProps) {
                 body: JSON.stringify({ aid })
             });
 
-            const data = await response.json();
-
             if (!response.ok) {
                 throw new Error("Failed to delete ascent.");
             }

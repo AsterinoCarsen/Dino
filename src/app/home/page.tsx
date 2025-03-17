@@ -11,7 +11,7 @@ interface DecodedToken {
 }
 
 export default function Home() {
-    const [token, setToken] = useState<string | null>(null);
+    const [_token, setToken] = useState<string | null>(null);
     const [userData, setUserData] = useState<DecodedToken | null>(null);
 
     useEffect(() => {
