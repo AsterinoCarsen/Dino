@@ -32,7 +32,7 @@ export default function Login() {
         setError("");
 
         try {
-            const response = await fetch("/api/login", {
+            const response = await fetch("/api/account/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -86,7 +86,7 @@ export default function Login() {
 
                 {error && <p className="text-red-500">{error}</p>}
 
-                <button type="submit" disabled={isDisabled} className="text-white py-2 rounded-md mt-4">
+                <button type="submit" disabled={isDisabled} className="bg-blue-500 hover:bg-blue-600 disabled:bg-blue-300 text-white py-2 rounded-md mt-4">
                     {loading ? "Logging in..." : "Login"}
                 </button>
             </form>

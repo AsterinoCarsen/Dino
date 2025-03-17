@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
+import LogBook from '../components/LogBook';
 
 interface DecodedToken {
     uid: string;
@@ -30,17 +31,13 @@ export default function Home() {
 
     return (
         <div>
-            Welcome to the home page!
             {userData ? (
-                <div>
-                    <p>Username: {userData.username}</p>
-                    <p>User ID: {userData.uid}</p>
-                    <p>Token expires at: {new Date(userData.exp * 1000).toLocaleString()}</p>
+                <div className='flex flex-col pt-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-12'>
+                    <h1 className='pb-20'>Welcome, {userData.username}</h1>
+                    <LogBook uid={userData.uid} />
                 </div>
             ): (
-                <div>
-                    Please log in.
-                </div>
+                <p>Please log in...</p>
             )}
         </div>
     )

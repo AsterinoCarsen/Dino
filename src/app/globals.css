@@ -57,6 +57,10 @@
     background-color: var(--paleWhite);
 }
 
+.bg-opacity-custom {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
 body {
     padding: 0;
     margin: 0;
@@ -80,16 +84,4 @@ h3 {
 p {
     font-size: large;
     font-weight: 400;
-}
-
-button {
-    background-color: var(--blue);
-}
-
-button:hover {
-    background-color: var(--lightBlue);
-}
-
-button:disabled {
-    background-color: var(--red);
 }
