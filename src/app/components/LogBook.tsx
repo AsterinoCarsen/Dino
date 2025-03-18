@@ -24,6 +24,7 @@ export default function LogBook({ uid }: LogBookProps) {
     const [grade, setGrade] = useState<string>("");
     const [attempts, setAttempts] = useState<number>(1);
     const [ascentType, setAscentType] = useState<string | null>(null);
+    const [elo, setElo] = useState<number | null>(null);
 
     useEffect(() => {
         if (uid) {
@@ -39,12 +40,13 @@ export default function LogBook({ uid }: LogBookProps) {
                 throw new Error("Failed to fetch ascensions");
             }
 
-            const data = await response.json();
+            const { data, elo } = await response.json();
             
             const sortedAscensions = data.sort((a: Ascension, b: Ascension) => {
                 return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
             });
 
+            setElo(elo);
             setAscensions(sortedAscensions);
         } catch (error) {
             console.log("Error fetching ascensions:", error);
@@ -183,6 +185,9 @@ export default function LogBook({ uid }: LogBookProps) {
             </div>
             {ascensions.length > 0 ? (
                 <div className="overflow-x-auto">
+                    {elo !== null && (
+                        <h3>Rating: {Math.round(elo)}</h3>
+                    )}
                     <table className="min-w-full table-auto">
                         <thead>
                             <tr className="bg-gray-200">
