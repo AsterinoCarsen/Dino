@@ -2,6 +2,7 @@
 
 import { ChangeEvent, useState, FormEvent } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
+import Loading from "./Loading";
 
 interface RegisterResponse {
     message?: string;
@@ -98,7 +99,7 @@ export default function Register() {
                 />
 
                 <button type="submit" disabled={isDisabled} className="bg-blue-500 hover:bg-blue-600 disabled:bg-blue-300 text-white py-2 rounded-md mt-4">
-                    {loading ? "Registering..." : "Register"}
+                    {loading ? <Loading /> : "Register"}
                 </button>
             </form>
         </div>

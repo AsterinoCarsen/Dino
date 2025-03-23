@@ -2,6 +2,9 @@
 
 import React, { useState, useEffect, FormEvent } from 'react';
 import { Plus, Trash } from "lucide-react";
+import Loading from './Loading';
+import EloDisplay from './EloDisplay';
+import GradeOptions from './GradeOptions';
 
 interface Ascension {
     aid: number;
@@ -25,6 +28,8 @@ export default function LogBook({ uid }: LogBookProps) {
     const [attempts, setAttempts] = useState<number>(1);
     const [ascentType, setAscentType] = useState<string | null>(null);
     const [elo, setElo] = useState<number | null>(null);
+
+    const [deletingRow, setDeletingRow] = useState<number | null>(null);
 
     useEffect(() => {
         if (uid) {
@@ -83,6 +88,7 @@ export default function LogBook({ uid }: LogBookProps) {
 
     const handleDelete = async (e: FormEvent, aid: number) =>  {
         e.preventDefault();
+        setDeletingRow(aid);
 
         try {
             const response = await fetch("/api/ascents/deleteascent", {
@@ -94,8 +100,10 @@ export default function LogBook({ uid }: LogBookProps) {
                 throw new Error("Failed to delete ascent.");
             }
 
-            setModalVisible(false);
-            fetchAscensions(uid);
+            setTimeout(() => {
+                fetchAscensions(uid);
+                setDeletingRow(null);
+            }, 500);
         } catch (error) {
             console.error("Error adding ascent: ", error);
         }
@@ -124,13 +132,7 @@ export default function LogBook({ uid }: LogBookProps) {
 
                         <label className="flex flex-col">
                             Grade
-                            <input 
-                                type="text" 
-                                className="border p-2 rounded" 
-                                placeholder="Enter grade"
-                                onChange={(e) => setGrade(e.target.value)}
-                                required
-                            />
+                            <GradeOptions setGrade={setGrade} />
                         </label>
 
                         <label className="flex flex-col">
@@ -139,6 +141,8 @@ export default function LogBook({ uid }: LogBookProps) {
                                 type="number" 
                                 className="border p-2 rounded" 
                                 placeholder="Number of attempts"
+                                min="0"
+                                max="1000"
                                 onChange={(e) => setAttempts(Number(e.target.value))}
                                 required
                             />
@@ -186,37 +190,39 @@ export default function LogBook({ uid }: LogBookProps) {
             {ascensions.length > 0 ? (
                 <div className="overflow-x-auto">
                     {elo !== null && (
-                        <h3>Rating: {Math.round(elo)}</h3>
+                        <EloDisplay elo={elo} />
                     )}
-                    <table className="min-w-full table-auto">
-                        <thead>
-                            <tr className="bg-gray-200">
-                                <th className="py-2 px-4 text-left">Route Name</th>
-                                <th className="py-2 px-4 text-left">Grade</th>
-                                <th className="py-2 px-4 text-left">Ascent Type</th>
-                                <th className="py-2 px-4 text-left">Attempts</th>
-                                <th className="py-2 px-4 text-left">Date</th>
-                                <th className="py-2 px-4 text-left">Delete</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {ascensions.map((asc, index) => (
-                                <tr key={asc.aid} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-100'}>
-                                    <td className="py-2 px-4">{asc.ascent_name}</td>
-                                    <td className="py-2 px-4">{asc.grade}</td>
-                                    <td className="py-2 px-4">{asc.ascension_type}</td>
-                                    <td className="py-2 px-4">{asc.attempts}</td>
-                                    <td className="py-2 px-4">{new Date(asc.created_at).toLocaleDateString()}</td>
-                                    <td className="py-2 px-4">
-                                        <button onClick={(e) => handleDelete(e, asc.aid)}><Trash className='w-5 h-5' /></button>
-                                    </td>
+                    <div className='max-h-96 overflow-y-auto'>
+                        <table className="min-w-full table-auto">
+                            <thead>
+                                <tr className="bg-gray-200">
+                                    <th className="py-2 px-4 text-left">Route Name</th>
+                                    <th className="py-2 px-4 text-left">Grade</th>
+                                    <th className="py-2 px-4 text-left">Ascent Type</th>
+                                    <th className="py-2 px-4 text-left">Attempts</th>
+                                    <th className="py-2 px-4 text-left">Date</th>
+                                    <th className="py-2 px-4 text-left">Delete</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {ascensions.map((asc, index) => (
+                                    <tr key={asc.aid} className={`index % 2 === 0 ? 'bg-white' : 'bg-gray-100' transition-colors duration-500 ${deletingRow === asc.aid ? 'bg-gray-300': ''}`}>
+                                        <td className="py-2 px-4">{asc.ascent_name}</td>
+                                        <td className="py-2 px-4">{asc.grade}</td>
+                                        <td className="py-2 px-4">{asc.ascension_type}</td>
+                                        <td className="py-2 px-4">{asc.attempts}</td>
+                                        <td className="py-2 px-4">{new Date(asc.created_at).toLocaleDateString()}</td>
+                                        <td className="py-2 px-4">
+                                            <button className='hover:text-red-500' onClick={(e) => handleDelete(e, asc.aid)}><Trash className='w-5 h-5' /></button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             ) : (
-                <p className='flex justify-center'>No ascensions found.</p>
+                <Loading />
             )}
         </div>
     )
