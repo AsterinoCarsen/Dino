@@ -1,4 +1,5 @@
 import { easeInOut } from "framer-motion";
+import { HelpCircle } from "lucide-react";
 import React, { useState, useEffect } from "react";
 
 interface EloDisplayProps {
@@ -10,6 +11,7 @@ const FPS = 60;
 
 export default function EloDisplay({ elo }: EloDisplayProps) {
     const [displayElo, setDisplayElo] = useState(elo);
+    const [isTooltipVisible, setToolTipVisiblity] = useState(false);
 
     useEffect(() => {
         let frame = 0;
@@ -38,6 +40,19 @@ export default function EloDisplay({ elo }: EloDisplayProps) {
         <div className="flex text-center">
             <h2 className="text-3xl font-bold">{Math.round(displayElo)}</h2>
             <p>CR</p>
+
+            <div
+                className="relative flex items-center justify-center w-5 h-5 rounded-full bg-gray-300 text-black text-sm font-bold cursor-pointer"
+                onMouseEnter={() => setToolTipVisiblity(true)}
+                onMouseLeave={() => setToolTipVisiblity(false)}
+            >
+                <HelpCircle className="w-5 h-5 text-gray-500 cursor-pointer hover:text-black" size={20} />
+                {isTooltipVisible && (
+                    <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-64 p-2 bg-gray-800 text-white text-sm rounded-md shadow-lg">
+                        Your Climbing Rating (CR) is based on your climbing history, factoring in difficulty and attempts.
+                    </div>
+                )}
+            </div>
         </div>
     );
 }
