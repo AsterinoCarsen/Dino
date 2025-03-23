@@ -206,7 +206,7 @@ export default function LogBook({ uid }: LogBookProps) {
                             </thead>
                             <tbody>
                                 {ascensions.map((asc, index) => (
-                                    <tr key={asc.aid} className={`index % 2 === 0 ? 'bg-white' : 'bg-gray-100' transition-colors duration-500 ${deletingRow === asc.aid ? 'bg-gray-300': ''}`}>
+                                    <tr key={asc.aid} className={`${index % 2 === 0 ? 'bg-white' : 'bg-gray-100'} transition-colors duration-500 ${deletingRow === asc.aid ? 'bg-gray-300' : ''}`}>
                                         <td className="py-2 px-4">{asc.ascent_name}</td>
                                         <td className="py-2 px-4">{asc.grade}</td>
                                         <td className="py-2 px-4">{asc.ascension_type}</td>

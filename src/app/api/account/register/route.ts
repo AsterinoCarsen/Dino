@@ -55,8 +55,7 @@ export async function POST(req: Request) {
             .maybeSingle();
 
         if (userCheckError) {
-            console.error(userCheckError);
-            return res.json({ error: "Internal server error while checking for user existence." }, { status: 500 });
+            return res.json({ error: "Internal server error while checking for user existence.", userCheckError }, { status: 500 });
         }
 
         if (existingUser) {
