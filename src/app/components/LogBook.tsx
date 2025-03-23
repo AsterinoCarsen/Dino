@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect, FormEvent } from 'react';
 import { Plus, Trash } from "lucide-react";
+import Loading from './Loading';
+import EloDisplay from './EloDisplay';
 
 interface Ascension {
     aid: number;
@@ -195,7 +197,7 @@ export default function LogBook({ uid }: LogBookProps) {
             {ascensions.length > 0 ? (
                 <div className="overflow-x-auto">
                     {elo !== null && (
-                        <h3>Rating: {Math.round(elo)}</h3>
+                        <EloDisplay elo={elo} />
                     )}
                     <div className='max-h-96 overflow-y-auto'>
                         <table className="min-w-full table-auto">
@@ -227,7 +229,7 @@ export default function LogBook({ uid }: LogBookProps) {
                     </div>
                 </div>
             ) : (
-                <p className='flex justify-center'>No ascensions found.</p>
+                <Loading />
             )}
         </div>
     )

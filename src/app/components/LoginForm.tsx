@@ -2,6 +2,7 @@
 
 import { ChangeEvent, useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
+import Loading from "./Loading";
 
 interface LoginResponse {
     message: string;
@@ -87,7 +88,7 @@ export default function Login() {
                 {error && <p className="text-red-500">{error}</p>}
 
                 <button type="submit" disabled={isDisabled} className="bg-blue-500 hover:bg-blue-600 disabled:bg-blue-300 text-white py-2 rounded-md mt-4">
-                    {loading ? "Logging in..." : "Login"}
+                    {loading ? <Loading /> : "Login"}
                 </button>
             </form>
         </div>
