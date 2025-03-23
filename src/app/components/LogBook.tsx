@@ -4,6 +4,7 @@ import React, { useState, useEffect, FormEvent } from 'react';
 import { Plus, Trash } from "lucide-react";
 import Loading from './Loading';
 import EloDisplay from './EloDisplay';
+import GradeOptions from './GradeOptions';
 
 interface Ascension {
     aid: number;
@@ -135,13 +136,7 @@ export default function LogBook({ uid }: LogBookProps) {
 
                         <label className="flex flex-col">
                             Grade
-                            <input 
-                                type="text" 
-                                className="border p-2 rounded" 
-                                placeholder="Enter grade"
-                                onChange={(e) => setGrade(e.target.value)}
-                                required
-                            />
+                            <GradeOptions setGrade={setGrade} />
                         </label>
 
                         <label className="flex flex-col">
@@ -150,6 +145,8 @@ export default function LogBook({ uid }: LogBookProps) {
                                 type="number" 
                                 className="border p-2 rounded" 
                                 placeholder="Number of attempts"
+                                min="0"
+                                max="1000"
                                 onChange={(e) => setAttempts(Number(e.target.value))}
                                 required
                             />
