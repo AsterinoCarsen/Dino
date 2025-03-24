@@ -1,6 +1,10 @@
 import React from 'react';
 import { motion } from "framer-motion";
 
+/**
+ * A spinning loading animation.
+ * @returns 
+ */
 export default function Loading() {
     return (
         <div className='flex items-center justify-center w-full h-full'>

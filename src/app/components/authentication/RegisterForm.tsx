@@ -2,7 +2,7 @@
 
 import { ChangeEvent, useState, FormEvent } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
-import Loading from "./Loading";
+import Loading from "../misc/Loading";
 
 interface RegisterResponse {
     message?: string;

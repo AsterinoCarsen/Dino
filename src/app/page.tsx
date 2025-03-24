@@ -1,7 +1,7 @@
 'use client';
 
-import LoginForm from "./components/LoginForm";
-import RegisterForm from "./components/RegisterForm";
+import LoginForm from "./components/authentication/LoginForm";
+import RegisterForm from "./components/authentication/RegisterForm";
 
 export default function Home() {
   return (

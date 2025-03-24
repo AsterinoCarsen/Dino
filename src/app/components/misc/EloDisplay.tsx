@@ -9,6 +9,11 @@ interface EloDisplayProps {
 const ANIMATION_DURATION = 875; // In milliseconds
 const FPS = 60;
 
+/**
+ * Displays the current user's elo in a stylized, animated, and annotated way.
+ * @param elo the current elo from the api
+ * @returns 
+ */
 export default function EloDisplay({ elo }: EloDisplayProps) {
     const [displayElo, setDisplayElo] = useState(elo);
     const [isTooltipVisible, setToolTipVisiblity] = useState(false);

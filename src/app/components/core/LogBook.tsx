@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect, FormEvent } from 'react';
 import { Plus, Trash } from "lucide-react";
-import Loading from './Loading';
-import EloDisplay from './EloDisplay';
-import GradeOptions from './GradeOptions';
+import Loading from '../misc/Loading';
+import EloDisplay from '../misc/EloDisplay';
+import GradeOptions from '../misc/GradeOptions';
 
 interface Ascension {
     aid: number;
@@ -187,7 +187,7 @@ export default function LogBook({ uid }: LogBookProps) {
             )}
 
             <div className='flex justify-end mb-2'>
-                <button onClick={toggleModal} className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 shadow-md">
+                <button onClick={toggleModal} className="bg-blue text-white p-2 rounded-full hover:bg-blue-600 shadow-md">
                     <Plus size={24} />
                 </button>
             </div>
@@ -210,7 +210,9 @@ export default function LogBook({ uid }: LogBookProps) {
                             </thead>
                             <tbody>
                                 {ascensions.map((asc, index) => (
-                                    <tr key={asc.aid} className={`index % 2 === 0 ? 'bg-white' : 'bg-gray-100' transition-colors duration-500 ${deletingRow === asc.aid ? 'bg-gray-300': ''}`}>
+                                    <tr key={asc.aid} className={`transition-colors duration-500 
+                                                        ${index % 2 === 0 ? 'bg-white' : 'bg-gray-100'} 
+                                                        ${deletingRow === asc.aid ? 'bg-gray-300' : ''}`}>
                                         <td className="py-2 px-4">{asc.ascent_name}</td>
                                         <td className="py-2 px-4">{asc.grade}</td>
                                         <td className="py-2 px-4">{asc.ascension_type}</td>

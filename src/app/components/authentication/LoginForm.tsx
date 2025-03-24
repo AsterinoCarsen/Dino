@@ -2,7 +2,7 @@
 
 import { ChangeEvent, useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import Loading from "./Loading";
+import Loading from "../misc/Loading";
 
 interface LoginResponse {
     message: string;

@@ -4,6 +4,11 @@ interface GradeSelectorProps {
     setGrade: (grade: string) => void;
 }
 
+/**
+ * All the options inside 'create new ascent' inside Logbook for selecting the grade.
+ * @param setGrade a function that takes a string and returns void
+ * @returns 
+ */
 export default function GradeOptions({ setGrade }: GradeSelectorProps) {
     return (
         <select

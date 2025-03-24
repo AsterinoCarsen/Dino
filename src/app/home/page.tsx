@@ -2,7 +2,8 @@
 
 import React, { useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
-import LogBook from '../components/LogBook';
+import LogBook from '../components/core/LogBook';
+import Navbar from '../components/core/Navbar';
 
 interface DecodedToken {
     uid: string;
@@ -30,7 +31,8 @@ export default function Home() {
     }, []);
 
     return (
-        <div>
+        <div className='h-screen bg-paleWhite'>
+            <Navbar />
             {userData ? (
                 <div className='flex flex-col pt-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-12'>
                     <h1 className='pb-20'>Welcome, {userData.username}</h1>
