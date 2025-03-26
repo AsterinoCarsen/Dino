@@ -98,7 +98,7 @@ export default function Register() {
                     onChange={handleCaptchaChange}
                 />
 
-                <button type="submit" disabled={isDisabled} className="bg-blue-500 hover:bg-blue-600 disabled:bg-blue-300 text-white py-2 rounded-md mt-4">
+                <button type="submit" disabled={isDisabled} className="btn-black py-2 rounded-md mt-4">
                     {loading ? <Loading /> : "Register"}
                 </button>
             </form>

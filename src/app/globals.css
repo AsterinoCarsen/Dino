@@ -1,87 +1,57 @@
 @import "tailwindcss";
 
 :root {
-    --yellow: #D79922;
-    --paleYellow: #EFE2BA;
-    --red: #F13C20;
-    --blue: #4056A1;
-    --lightBlue: #C5CBE3;
-    --paleWhite: #f1f0eb;
+    --highlightBlack: rgba(36, 36, 35, 0.85);
+    --black: #242423;
+    --whiteBorder: #e9e0d9;
+    --white: #fff5ed;
+    --highlightWhite: rgba(233, 224, 217, 0.85);
 }
 
-.bg-yellow {
-    background-color: var(--yellow);
+.btn-white {
+    background-color: var(--white);
+    border: 2px solid var(--whiteBorder);
 }
 
-.color-yellow {
-    color: var(--yellow);
+.btn-white:hover {
+    background-color: var(--highlightWhite);
 }
 
-.bg-paleYellow {
-    background-color: var(--paleYellow);
+.btn-black {
+    background-color: var(--black);
+    color: var(--white);
 }
 
-.color-paleYellow {
-    color: var(--paleYellow);
-}
-
-.color-red {
-    color: var(--red);
-}
-
-.bg-red {
-    background-color: var(--red);
-}
-
-.color-blue {
-    color: var(--blue);
-}
-
-.bg-blue {
-    background-color: var(--blue);
-}
-
-.color-lightBlue {
-    color: var(--lightBlue);
-}
-
-.bg-lightBlue {
-    background-color: var(--lightBlue);
-}
-
-.color-paleWhite {
-    color: var(--paleWhite);
-}
-
-.bg-paleWhite {
-    background-color: var(--paleWhite);
-}
-
-.bg-opacity-custom {
-    background-color: rgba(0, 0, 0, 0.5);
+.btn-black:hover {
+    background-color: var(--highlightBlack);
 }
 
 body {
+    background-color: var(--white);
     padding: 0;
     margin: 0;
 }
 
 h1 {
+    color: var(--black);
     font-size: xxx-large;
     font-weight: 700;
 }
 
 h2 {
+    color: var(--black);
     font-size: xx-large;
     font-weight: 600;
 }
 
 h3 {
+    color: var(--black);
     font-size: x-large;
     font-weight: 500;
 }
 
 p {
+    color: var(--black);
     font-size: large;
     font-weight: 400;
 }
