@@ -1,6 +1,7 @@
 'use client';
 
 import { ChangeEvent, useState, FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import ReCAPTCHA from "react-google-recaptcha";
 import Loading from "../misc/Loading";
 
@@ -16,6 +17,8 @@ export default function Register() {
     const [loading, setLoading] = useState<boolean>(false);
     const [success, setSuccess] = useState<string>("");
     const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+
+    const router = useRouter();
 
     const handleUsernameChange = (e: ChangeEvent<HTMLInputElement>) => {
         setUsername(e.target.value);
@@ -54,6 +57,7 @@ export default function Register() {
 
             if (response.ok) {
                 setSuccess(data.message || "Registration successful!");
+                router.push("/login");
             } else {
                 setError(data.error || "An error occurred.");
             }

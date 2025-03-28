@@ -196,10 +196,10 @@ export default function LogBook({ uid }: LogBookProps) {
                     {elo !== null && (
                         <EloDisplay elo={elo} />
                     )}
-                    <div className='max-h-96 overflow-y-auto'>
+                    <div className='max-h-96 overflow-y-auto scrollbar-hide'>
                         <table className="min-w-full table-auto">
                             <thead>
-                                <tr className="bg-gray-200">
+                                <tr className="bg-black">
                                     <th className="py-2 px-4 text-left">Route Name</th>
                                     <th className="py-2 px-4 text-left">Grade</th>
                                     <th className="py-2 px-4 text-left">Ascent Type</th>
@@ -211,7 +211,7 @@ export default function LogBook({ uid }: LogBookProps) {
                             <tbody>
                                 {ascensions.map((asc, index) => (
                                     <tr key={asc.aid} className={`transition-colors duration-500 
-                                                        ${index % 2 === 0 ? 'bg-white' : 'bg-gray-100'} 
+                                                        ${index % 2 === 0 ? 'bg-white' : 'bg-highlightWhite'} 
                                                         ${deletingRow === asc.aid ? 'bg-gray-300' : ''}`}>
                                         <td className="py-2 px-4">{asc.ascent_name}</td>
                                         <td className="py-2 px-4">{asc.grade}</td>
