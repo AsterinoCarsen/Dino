@@ -6,7 +6,7 @@ interface EloDisplayProps {
     elo: number;
 }
 
-const ANIMATION_DURATION = 875; // In milliseconds
+const ANIMATION_DURATION = 100; // In milliseconds
 const FPS = 60;
 
 /**
@@ -39,7 +39,7 @@ export default function EloDisplay({ elo }: EloDisplayProps) {
 
 
         return () => clearInterval(interval);
-    }, [elo]);
+    }, [elo, displayElo]);
 
     return (
         <div className="flex text-center">

@@ -1,9 +1,13 @@
 'use client';
 
+import '@mantine/core/styles.css';
+
 import { ChangeEvent, useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import ReCAPTCHA from "react-google-recaptcha";
 import Loading from "../misc/Loading";
+
+import { MantineProvider, Button } from "@mantine/core";
 
 interface RegisterResponse {
     message?: string;
@@ -72,8 +76,8 @@ export default function Register() {
     const isDisabled = username.trim() === "" || password.trim() === "";
 
     return (
-        <div className="flex w-screen h-screen items-center justify-center">
-            <form onSubmit={handleSubmit} className="flex flex-col p-10 w-lg h-2/3">
+        <MantineProvider>
+            <form onSubmit={handleSubmit} className="flex flex-col p-10 w-1/3 h-1/2">
                 <h2 className="mb-10">Register</h2>
 
                 <label>Username</label>
@@ -102,10 +106,10 @@ export default function Register() {
                     onChange={handleCaptchaChange}
                 />
 
-                <button type="submit" disabled={isDisabled} className="btn-black py-2 rounded-md mt-4">
+                <Button type="submit" disabled={isDisabled} variant="filled" size="lg" className='min-h-[48px]'>
                     {loading ? <Loading /> : "Register"}
-                </button>
+                </Button>
             </form>
-        </div>
+        </MantineProvider>
     );
 }

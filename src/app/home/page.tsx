@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
-import LogBook from '../components/core/LogBook';
+import LogBook from '../components/core/LogBook/LogBook';
 import Navbar from '../components/core/Navbar';
 
 interface DecodedToken {
@@ -12,14 +12,11 @@ interface DecodedToken {
 }
 
 export default function Home() {
-    const [token, setToken] = useState<string | null>(null);
     const [userData, setUserData] = useState<DecodedToken | null>(null);
 
     useEffect(() => {
         const storedToken = localStorage.getItem("token");
         if (storedToken) {
-            setToken(storedToken);
-
             try {
                 const decoded: DecodedToken = jwtDecode(storedToken);
                 setUserData(decoded);

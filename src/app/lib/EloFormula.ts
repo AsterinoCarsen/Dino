@@ -2,7 +2,12 @@ import { GRADE_MAP } from "./grades";
 
 const ATTEMPT_FACTOR = 20; // Elo adjustment per attempt difference
 
-export function calculateClimbingElo(data: any[]): number {
+interface Ascent {
+    grade: string;
+    attempts: number;
+}
+
+export function calculateClimbingElo(data: Ascent[]): number {
     if (!data || data.length === 0) return 800;
 
     // Compute average attempts per grade

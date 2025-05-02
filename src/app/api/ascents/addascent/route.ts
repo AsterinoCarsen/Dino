@@ -23,7 +23,7 @@ export async function POST(req: Request) {
             return res.json({ error: "Missing required fields." }, { status: 400 });
         }
 
-        const { data: AscentRequestBody, error } = await db
+        const { error } = await db
             .from("ascensions")
             .insert([
                 {

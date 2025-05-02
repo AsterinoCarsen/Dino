@@ -1,8 +1,12 @@
 'use client';
 
+import '@mantine/core/styles.css';
+
 import { ChangeEvent, useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Loading from "../misc/Loading";
+
+import { MantineProvider, Button } from "@mantine/core";
 
 interface LoginResponse {
     message: string;
@@ -61,8 +65,8 @@ export default function Login() {
     const isDisabled = username.trim() === "" || password.trim() === "";
 
     return (
-        <div className="flex w-screen h-screen items-center justify-center">
-            <form onSubmit={handleSubmit} className="flex flex-col p-10 w-lg h-2/3">
+        <MantineProvider>
+            <form onSubmit={handleSubmit} className="flex w-1/3 h-1/2 flex-col p-10">
                 <h2 className="mb-10">Login</h2>
 
                 <label>Username</label>
@@ -87,10 +91,10 @@ export default function Login() {
 
                 {error && <p className="text-red-500">{error}</p>}
 
-                <button type="submit" disabled={isDisabled} className="btn-black py-2 rounded-md mt-4">
+                <Button type="submit" disabled={isDisabled} variant="filled" size="lg">
                     {loading ? <Loading /> : "Login"}
-                </button>
+                </Button>
             </form>
-        </div>
+        </MantineProvider>
     )
 }

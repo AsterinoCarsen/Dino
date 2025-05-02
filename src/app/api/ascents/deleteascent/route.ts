@@ -20,7 +20,7 @@ export async function DELETE(req: Request) {
             return res.json({ error: "Missing required field." }, { status: 400 });
         }
 
-        const { data: DeleteRequestBody, error } = await db
+        const { error } = await db
             .from('ascensions')
             .delete()
             .eq('aid', aid);

@@ -5,7 +5,7 @@ import Register from '../components/authentication/RegisterForm';
 
 export default function RegisterPage() {
     return (
-        <div>
+        <div className='flex w-screen h-screen justify-center items-center'>
             <Register />
         </div>
     )
