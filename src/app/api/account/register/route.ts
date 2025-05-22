@@ -48,7 +48,7 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "CAPTCHA verification failed." }, { status: 400 });
         }
 
-        const { data: existingUser, error: userCheckError } = await db
+        const { data: existingUser } = await db
             .from("users")
             .select("username")
             .eq("username", username)

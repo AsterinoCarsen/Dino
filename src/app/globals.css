@@ -1,67 +1,60 @@
 @import "tailwindcss";
 
 :root {
-    --yellow: #D79922;
-    --paleYellow: #EFE2BA;
-    --red: #F13C20;
-    --blue: #4056A1;
-    --lightBlue: #C5CBE3;
-    --paleWhite: #f1f0eb;
+    --highlightBlack: rgba(36, 36, 35, 0.85);
+    --black: #242423;
+    --whiteBorder: #e9e0d9;
+    --white: #fff5ed;
+    --highlightWhite: rgba(233, 224, 217, 0.85);
 }
 
-.bg-yellow {
-    background-color: var(--yellow);
+.bg-white {
+    background-color: var(--white);
 }
 
-.color-yellow {
-    color: var(--yellow);
+.bg-black {
+    background-color: var(--black);
+    color: white;
 }
 
-.bg-paleYellow {
-    background-color: var(--paleYellow);
+.bg-highlightWhite {
+    background-color: var(--highlightWhite);
 }
 
-.color-paleYellow {
-    color: var(--paleYellow);
+.btn-white {
+    background-color: var(--white);
+    border: 2px solid var(--whiteBorder);
 }
 
-.color-red {
-    color: var(--red);
+.btn-white:hover {
+    background-color: var(--highlightWhite);
 }
 
-.bg-red {
-    background-color: var(--red);
+.btn-black {
+    background-color: var(--black);
+    color: var(--white);
 }
 
-.color-blue {
-    color: var(--blue);
+.btn-black:hover {
+    background-color: var(--highlightBlack);
 }
 
-.bg-blue {
-    background-color: var(--blue);
+::-webkit-scrollbar {
+    width: 8px;
 }
 
-.color-lightBlue {
-    color: var(--lightBlue);
+::-webkit-scrollbar-track {
+    background-color: var(--black);
+    border-radius: 4px;
 }
 
-.bg-lightBlue {
-    background-color: var(--lightBlue);
-}
-
-.color-paleWhite {
-    color: var(--paleWhite);
-}
-
-.bg-paleWhite {
-    background-color: var(--paleWhite);
-}
-
-.bg-opacity-custom {
-    background-color: rgba(0, 0, 0, 0.5);
+::-webkit-scrollbar-thumb {
+    background-color: var(--whiteBorder);
+    border-radius: 4px;
 }
 
 body {
+    background-color: var(--white);
     padding: 0;
     margin: 0;
 }
@@ -72,16 +65,19 @@ h1 {
 }
 
 h2 {
+    color: var(--black);
     font-size: xx-large;
     font-weight: 600;
 }
 
 h3 {
+    color: var(--black);
     font-size: x-large;
     font-weight: 500;
 }
 
 p {
+    color: var(--black);
     font-size: large;
     font-weight: 400;
 }
