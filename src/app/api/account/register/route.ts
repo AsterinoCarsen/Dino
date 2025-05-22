@@ -54,10 +54,6 @@ export async function POST(req: Request) {
             .eq("username", username)
             .maybeSingle();
 
-        if (userCheckError) {
-            return res.json({ error: "Internal server error while checking for user existence.", userCheckError }, { status: 500 });
-        }
-
         if (existingUser) {
             return res.json({ error: "Username is already taken." }, { status: 409 });
         }
