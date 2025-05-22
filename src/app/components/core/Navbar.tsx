@@ -1,13 +1,15 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
+import { ArrowRight } from 'lucide-react';
 
 import { Button, MantineProvider } from '@mantine/core';
 
 export default function Navbar() {
     const [token, setToken] = useState<string | null>(null);
     const router = useRouter();
+    const pathname = usePathname();
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -31,6 +33,12 @@ export default function Navbar() {
         router.push("/login");
     }
 
+    const handleGoHome = () => {
+        router.push("/");
+    }
+
+    const isAuthPage = pathname === '/login' || pathname === '/register';
+
     return (
         <MantineProvider>
             <nav className='fixed top-0 left-0 w-full p-4 z-50'>
@@ -39,6 +47,10 @@ export default function Navbar() {
                     {token ? (
                         <Button onClick={handleSignout} variant="filled" size="md">
                             Sign Out
+                        </Button>
+                    ) : isAuthPage ? (
+                        <Button onClick={handleGoHome} variant="outline" size="md">
+                            <ArrowRight />
                         </Button>
                     ) : (
                         <div className='flex gap-12'>
@@ -51,8 +63,6 @@ export default function Navbar() {
                             </Button>
                         </div>
                     )}
-
-
                 </div>
             </nav>
         </MantineProvider>

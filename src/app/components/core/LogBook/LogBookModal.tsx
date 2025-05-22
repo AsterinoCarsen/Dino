@@ -27,7 +27,7 @@ export default function LogBookModal({
             yOffset="15vh" 
             overlayProps={{backgroundOpacity: 0.55, blur: 3}} 
             opened={opened} 
-            onClose={close} 
+            onClose={onClose} 
             title="Log New Ascent"
             centered
             styles={{
