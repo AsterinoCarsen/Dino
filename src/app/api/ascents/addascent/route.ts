@@ -1,14 +1,6 @@
 import { NextResponse } from "next/server";
 import db from "../../../lib/db";
 
-interface AscentRequestBody {
-    uid: number;
-    ascentName?: string | null;
-    grade: string;
-    attempts: number;
-    ascentType?: string | null;
-}
-
 export async function POST(req: Request) {
     const res = NextResponse;
 
@@ -17,7 +9,7 @@ export async function POST(req: Request) {
     }
 
     try {
-        const { uid, ascentName = null, grade, attempts, ascentType = null } = await req.json() as AscentRequestBody;
+        const { uid, ascentName = null, grade, attempts, ascentType = null } = await req.json();
 
         if (!uid || !grade || !attempts) {
             return res.json({ error: "Missing required fields." }, { status: 400 });

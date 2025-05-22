@@ -1,10 +1,6 @@
 import { NextResponse } from "next/server";
 import db from "../../../lib/db";
 
-interface DeleteRequestBody {
-    aid: number;
-}
-
 export async function DELETE(req: Request) {
     const res = NextResponse;
 
@@ -13,7 +9,7 @@ export async function DELETE(req: Request) {
     }
 
     try {
-        const { aid }: DeleteRequestBody = await req.json();
+        const { aid } = await req.json();
         console.log(aid);
 
         if (!aid) {
