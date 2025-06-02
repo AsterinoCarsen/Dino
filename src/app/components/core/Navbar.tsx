@@ -38,13 +38,14 @@ export default function Navbar() {
     }
 
     const isAuthPage = pathname === '/login' || pathname === '/register';
+    const isHomePage = pathname === '/home' || pathname === '/charts';
 
     return (
         <MantineProvider>
             <nav className='fixed top-0 left-0 w-full p-4 z-50'>
                 <div className='max-w-7xl mx-auto flex justify-between items-center text-black'>
                     <h2>Dino.</h2>
-                    {token ? (
+                    {token && isHomePage ? (
                         <Button onClick={handleSignout} variant="filled" size="md">
                             Sign Out
                         </Button>

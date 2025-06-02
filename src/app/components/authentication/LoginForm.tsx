@@ -2,7 +2,7 @@
 
 import '@mantine/core/styles.css';
 
-import { ChangeEvent, useState, FormEvent } from "react";
+import { ChangeEvent, useState, FormEvent, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Loading from "../misc/Loading";
 
@@ -21,6 +21,8 @@ export default function Login() {
     const [loading, setLoading] = useState<boolean>(false);
 
     const router = useRouter();
+
+    const defaultInputElem = useRef<HTMLInputElement>(null);
 
     const handleUsernameChange = (e: ChangeEvent<HTMLInputElement>) => {
         setUsername(e.target.value);
@@ -62,6 +64,10 @@ export default function Login() {
 
     };
 
+    useEffect(() => {
+        defaultInputElem.current?.focus();
+    }, []);
+
     const isDisabled = username.trim() === "" || password.trim() === "";
 
     return (
@@ -77,6 +83,7 @@ export default function Login() {
                     placeholder="Enter your username"
                     value={username}
                     onChange={handleUsernameChange}
+                    ref={defaultInputElem}
                 />
 
                 <label>Password</label>

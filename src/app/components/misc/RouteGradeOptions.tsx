@@ -9,15 +9,15 @@ interface GradeSelectorProps {
  * @param setGrade a function that takes a string and returns void
  * @returns 
  */
-export default function GradeOptions({ setGrade }: GradeSelectorProps) {
+export default function RouteGradeOptions({ setGrade }: GradeSelectorProps) {
     return (
         <select
-            className='border p-2 rounded'
+            className='border p-2 rounded w-full'
             defaultValue='5.5'
             onChange={(e) => setGrade(e.target.value)}
             required
         >
-            <option value="5.5" disabled>Select a grade.</option>
+            <option value="5.5" disabled>Select Route Grades</option>
             <option value="5.6">5.6</option>
             <option value="5.7">5.7</option>
             <option value="5.8">5.8</option>

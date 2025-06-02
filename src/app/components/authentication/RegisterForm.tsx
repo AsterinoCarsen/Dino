@@ -2,7 +2,7 @@
 
 import '@mantine/core/styles.css';
 
-import { ChangeEvent, useState, FormEvent } from "react";
+import { ChangeEvent, useState, FormEvent, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import ReCAPTCHA from "react-google-recaptcha";
 import Loading from "../misc/Loading";
@@ -23,6 +23,8 @@ export default function Register() {
     const [captchaToken, setCaptchaToken] = useState<string | null>(null);
 
     const router = useRouter();
+
+    const defaultInputElem = useRef<HTMLInputElement>(null);
 
     const handleUsernameChange = (e: ChangeEvent<HTMLInputElement>) => {
         setUsername(e.target.value);
@@ -73,6 +75,10 @@ export default function Register() {
         }
     };
 
+    useEffect(() => {
+        defaultInputElem.current?.focus();
+    }, []);
+
     const isDisabled = username.trim() === "" || password.trim() === "";
 
     return (
@@ -87,6 +93,7 @@ export default function Register() {
                     placeholder="Enter your username"
                     value={username}
                     onChange={handleUsernameChange}
+                    ref={defaultInputElem}
                 />
 
                 <label>Password</label>

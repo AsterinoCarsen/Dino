@@ -1,7 +1,8 @@
 import React from 'react';
 
 import { Modal } from '@mantine/core';
-import GradeOptions from '../../misc/GradeOptions';
+import RouteGradeOptions from '../../misc/RouteGradeOptions';
+import BoulderGradeOptions from '../../misc/BoulderGradeOptions';
 
 interface LogBookModalProps {
     opened: boolean;
@@ -55,7 +56,10 @@ export default function LogBookModal({
         
                 <label className="flex flex-col">
                     Grade
-                    <GradeOptions setGrade={setGrade} />
+                    <div className='flex'>
+                        <RouteGradeOptions setGrade={setGrade} />
+                        <BoulderGradeOptions setGrade={setGrade} />
+                    </div>
                 </label>
         
                 <label className="flex flex-col">
