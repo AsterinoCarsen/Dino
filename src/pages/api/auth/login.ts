@@ -34,7 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
         const { data: user, error: dbError } = await db
             .from("users")
-            .select("uid, username, password_hash")
+            .select("public_id, username, password_hash")
             .eq("username", username)
             .single();
 
@@ -49,7 +49,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         }
 
         const token = jwt.sign(
-            { uid: user.uid, username: user.username },
+            { uid: user.public_id, username: user.username },
             KEY,
             { expiresIn: "1h" }
         );

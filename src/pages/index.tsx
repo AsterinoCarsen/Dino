@@ -102,9 +102,9 @@ export default function Home() {
             <footer className="px-12 py-16 border-t border-dino-border text-center">
                 <h3 className="text-3xl font-semibold mb-4">Ready to Climb Smarter?</h3>
                 <p className="text-gray-400 mb-8">Join now and take your climbing to the next level.</p>
-                <a href="/dashboard" className="bg-emerald-500 hover:bg-emerald-600 px-8 py-3 rounded-full font-semibold transition">
+                <button onClick={handleRedirectAuthPage} className="bg-emerald-500 hover:bg-emerald-600 px-8 py-3 rounded-full font-semibold transition">
                     Sign Up for Free
-                </a>
+                </button>
             </footer>
         </div>
     );

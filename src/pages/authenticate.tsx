@@ -1,6 +1,7 @@
 import { FormEvent, useState } from "react";
 import { ClipLoader } from "react-spinners";
 import { useRouter } from "next/router";
+import zxcvbn from "zxcvbn";
 
 interface AuthenticationFormPageState {
     isLogin: boolean;
@@ -52,26 +53,15 @@ export default function AuthPage() {
     }
 
     const isStrongPassword = (password: string): boolean => {
-        const minLength = 8;
-        const hasUpper = /[A-Z]/.test(password);
-        const hasLower = /[a-z]/.test(password);
-        const hasNumber = /[0-9]/.test(password);
-        const hasSpecial = /[!@#$%^&*(),.?":{}|<>_]/.test(password);
-
-        return (
-            password.length >= minLength &&
-            hasUpper &&
-            hasLower &&
-            hasNumber &&
-            hasSpecial
-        );
+        const { score } = zxcvbn(password);
+        return score >= 3;
     }
 
     const validateRegistration = (username: string, password: string): string | null => {
         if (!username || !password) return "All fields are required.";
         if (username.length < 5) return "Username must be at least 5 characters.";
         if (!isStrongPassword(password)) {
-            return "Password must be at least 8 characters, contain upper and lower case characters, contain a number and a special character.";
+            return "Password is not strong enough.";
         }
 
         return null;

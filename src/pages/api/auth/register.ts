@@ -57,8 +57,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             return res.status(500).json({ success: false, message: "Database error while creating user" });
         }
 
+        console.log(newUser.public_id);
+
         const token = jwt.sign(
-            { uid: newUser.uid, username: newUser.username },
+            { uid: newUser.public_id, username: newUser.username },
             KEY,
             { expiresIn: "1h" }
         );
