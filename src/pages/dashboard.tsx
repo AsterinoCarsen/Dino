@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Sidebar, Card, StatCard, Badge, AscentItem, PerformanceSnapshot } from "@/components";
+import { Sidebar, Card, Badge, AscentItem, PerformanceSnapshot } from "@/components";
 import { AscentItemType, NewAscension } from "@/lib/performance/getAscensionsType";
 import ClimbingSummary from "@/components/ClimbingSummary";
 import NewAscentModal from "@/components/NewAscentModal";
@@ -17,7 +17,6 @@ export default function Dashboard() {
             );
         });
     };
-
 
     useEffect(() => {
         const fetchAscensions = async () => {

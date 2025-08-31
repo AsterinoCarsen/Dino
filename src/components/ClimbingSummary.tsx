@@ -2,10 +2,13 @@ import React, { useMemo } from "react";
 import StatCard from "./StatCard";
 import { AscentItemType } from "@/lib/performance/getAscensionsType";
 import { getHigherGrade } from "@/lib/performance/compareGrades";
+import { calculateElo, calculateEloChange } from "@/lib/performance/calculateElo";
 
 interface ClimbingSummaryProps {
     ascensions: AscentItemType[];
 }
+
+type EloAscension = Pick<AscentItemType, "ascent_name" | "grade" | "attempts" | "height_ft" | "ascension_type" | "date_climbed">;
 
 const ClimbingSummary: React.FC<ClimbingSummaryProps> = ({ ascensions }) => {
     const sevenDaysAgo = useMemo(() => {
@@ -19,7 +22,7 @@ const ClimbingSummary: React.FC<ClimbingSummaryProps> = ({ ascensions }) => {
         return date >= new Date(sevenDaysAgo.getTime() - 7 * 24 * 60 * 60 * 1000);
     });
 
-    const formatChange = (value: number | string) => (parseInt(value.toString()) >= 0 ? `+${value}` : `-${value}`);
+    const formatChange = (value: number | string) => (parseInt(value.toString()) >= 0 ? `+${value}` : `${value}`);
 
     const stats = useMemo(() => {
         if (!ascensions || ascensions.length === 0) {
@@ -28,7 +31,7 @@ const ClimbingSummary: React.FC<ClimbingSummaryProps> = ({ ascensions }) => {
                 bestRouteGrade: "",
                 bestBoulderGrade: "",
                 avgAttempts: 0,
-                currentELO: 1420, // placeholder
+                currentELO: "N/A",
                 volumeChange: 0,
                 bestGradeChange: "",
                 avgAttemptsChange: 0,
@@ -60,7 +63,8 @@ const ClimbingSummary: React.FC<ClimbingSummaryProps> = ({ ascensions }) => {
             ? ascensions.reduce((sum, a) => sum + (Number(a.attempts) || 1), 0) / ascensions.length
             : 0;
 
-        const currentELO = 1420;
+        const currentELO = Math.round(calculateElo(ascensions));
+        const eloChange = Math.round(calculateEloChange(ascensions));
 
         const prevWeek = last14Days.filter(a => new Date(a.date_climbed) < sevenDaysAgo);
 
@@ -71,8 +75,6 @@ const ClimbingSummary: React.FC<ClimbingSummaryProps> = ({ ascensions }) => {
             ? prevWeek.reduce((sum, a) => sum + (Number(a.attempts) || 1), 0) / prevWeek.length
             : 0;
         const avgAttemptsChange = (avgAttempts - prevAvgAttempts).toFixed(1);
-
-        const eloChange = `+${Math.floor(Math.random() * 20)} this week`; // placeholder
 
         return {
             volume,
@@ -91,7 +93,7 @@ const ClimbingSummary: React.FC<ClimbingSummaryProps> = ({ ascensions }) => {
             <StatCard
                 label="Climbing Volume (Last 7 days)"
                 value={stats.volume.toString() + " ft"}
-                change={formatChange(stats.volumeChange) + " ft"}
+                change={formatChange(stats.volumeChange) + " ft this week"}
             />
             <StatCard
                 label="Best Grade"
@@ -101,12 +103,12 @@ const ClimbingSummary: React.FC<ClimbingSummaryProps> = ({ ascensions }) => {
             <StatCard
                 label="Avg Attempts/Send"
                 value={stats.avgAttempts.toString()}
-                change={formatChange(stats.avgAttemptsChange)}
+                change={formatChange(stats.avgAttemptsChange) + ' this week'}
             />
             <StatCard
                 label="Current ELO"
                 value={stats.currentELO.toString()}
-                change={stats.eloChange}
+                change={formatChange(stats.eloChange.toString()) + ' this week'}
             />
         </div>
     );
