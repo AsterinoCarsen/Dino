@@ -2,6 +2,12 @@ import { useEffect, useState } from "react";
 import { NewAscension } from "@/lib/performance/getAscensionsType";
 import { getPublicId } from "@/lib/decodeToken";
 
+import boulderGrades from "../lib/performance/boulderGrades.json";
+import routeGrades from "../lib/performance/ropeGrades.json";
+
+const boulderGradeMaps: Record<string, number> = boulderGrades;
+const routeGradeMaps: Record<string, number> = routeGrades;
+
 interface NewAscentModalProps {
     isOpen: boolean;
     onClose: () => void;
@@ -92,16 +98,58 @@ export default function NewAscentModal({ isOpen, onClose, onSuccess }: NewAscent
                         required
                     />
 
-                    <label className="text-gray-400 text-sm">Grade</label>
-                    <input
-                        type="text"
-                        name="grade"
-                        placeholder="Grade (e.g., 5.10a or V3)"
-                        value={formData.grade}
+                    <label className="text-gray-400 text-sm">Ascension Type</label>
+                    <select
+                        name="ascension_type"
+                        value={formData.ascension_type}
                         onChange={handleChange}
                         className="w-full bg-white/5 border border-dino-border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         required
-                    />
+                    >
+                        <option className="bg-dino-dark" value="" disabled>
+                            Select Ascension Type
+                        </option>
+                        <option className="bg-dino-dark" value="Lead">Lead</option>
+                        <option className="bg-dino-dark" value="Toprope">Top Rope</option>
+                        <option className="bg-dino-dark" value="Boulder">Boulder</option>
+                        <option className="bg-dino-dark" value="Auto-Belay">Auto-Belay</option>
+                    </select>
+
+                    <label className="text-gray-400 text-sm">Grade</label>
+                    {formData.ascension_type === "" ? (
+                        <select
+                            disabled
+                            className="w-full bg-white/5 border border-dino-border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                            style={{ color: "#9ca3af" }}
+                        >
+                            <option>Select Ascension Type First</option>
+                        </select>
+                    ) : (
+                        <select
+                            name="grade"
+                            value={formData.grade}
+                            onChange={handleChange}
+                            className="w-full bg-white/5 border border-dino-border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                            required
+                        >
+                            <option className="bg-dino-dark" value="" disabled>
+                                Select Grade
+                            </option>
+
+                            {formData.ascension_type === "Boulder"
+                            ? Object.keys(boulderGradeMaps).map((g) => (
+                                <option key={g} className="bg-dino-dark" value={g}>
+                                    {g}
+                                </option>
+                                ))
+                            : Object.keys(routeGradeMaps).map((g) => (
+                                <option key={g} className="bg-dino-dark" value={g}>
+                                    {g}
+                                </option>
+                                ))}
+                        </select>
+                    )}
+
 
                     <label className="text-gray-400 text-sm">Attempts</label>
                     <input
@@ -121,36 +169,28 @@ export default function NewAscentModal({ isOpen, onClose, onSuccess }: NewAscent
                         placeholder="Height (ft)"
                         value={formData.height_ft}
                         onChange={handleChange}
+                        defaultValue={5}
                         min={5}
                         className="w-full bg-white/5 border border-dino-border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     />
 
-                    <label className="text-gray-400 text-sm">Ascension Type</label>
+                    <label className="text-gray-400 text-sm">Style</label>
                     <select
-                        name="ascension_type"
-                        value={formData.ascension_type}
+                        name="style"
+                        value={formData.style}
                         onChange={handleChange}
                         className="w-full bg-white/5 border border-dino-border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         required
                     >
-                        <option className="bg-dino-dark" value="" disabled>
-                            Select Type
-                        </option>
-                        <option className="bg-dino-dark" value="Lead">Lead</option>
-                        <option className="bg-dino-dark" value="Toprope">Top Rope</option>
-                        <option className="bg-dino-dark" value="Boulder">Boulder</option>
-                        <option className="bg-dino-dark" value="Auto-Belay">Auto-Belay</option>
+                        <option className="bg-dino-dark" value="" disabled> Select Style</option>
+                        <option className="bg-dino-dark" value="Slab" >Slab</option>
+                        <option className="bg-dino-dark" value="Crimpy" >Crimpy</option>
+                        <option className="bg-dino-dark" value="Overhang" >Overhang</option>
+                        <option className="bg-dino-dark" value="Pinchy" >Pinchy</option>
+                        <option className="bg-dino-dark" value="Technical" >Technical</option>
+                        <option className="bg-dino-dark" value="Dynamic" >Dynamic</option>
+                        <option className="bg-dino-dark" value="Pocketed" >Pocketed</option>
                     </select>
-
-                    <label className="text-gray-400 text-sm">Style</label>
-                    <input
-                        type="text"
-                        name="style"
-                        placeholder="Style (e.g., Slab, Technical, Crimpy)"
-                        value={formData.style}
-                        onChange={handleChange}
-                        className="w-full bg-white/5 border border-dino-border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    />
 
                     <label className="text-gray-400 text-sm">Date</label>
                     <input
