@@ -4,6 +4,7 @@ import { AscentItemType, NewAscension } from "@/lib/performance/getAscensionsTyp
 import ClimbingSummary from "@/components/ClimbingSummary";
 import NewAscentModal from "@/components/NewAscentModal";
 import { getPublicId } from "@/lib/decodeToken";
+import FocusAreas from "@/components/FocusAreas";
 
 export default function Dashboard() {
     const [ascensions, setAscensions] = useState<AscentItemType[]>([]);
@@ -17,6 +18,31 @@ export default function Dashboard() {
             );
         });
     };
+
+    const handleDeleteAscension = async (aid: number) => {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+
+        try {
+            const public_id = getPublicId(token);
+
+            const response = await fetch("/api/ascensions/removeAscension", {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json"},
+                body: JSON.stringify({ public_id, aid }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                setAscensions((prev) => prev.filter((asc) => asc.aid !== aid));
+            } else {
+                console.error(data.message);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     useEffect(() => {
         const fetchAscensions = async () => {
@@ -64,19 +90,7 @@ export default function Dashboard() {
                 <PerformanceSnapshot ascensions={ascensions} />
 
                 {/* Training Goals */}
-                <Card title="Focus Areas">
-                    <ul className="space-y-2">
-                        <li className="bg-white/5 p-3 rounded-lg border border-dino-border">
-                            Overhang endurance <span className="text-red-400">(42% success rate)</span>
-                        </li>
-                        <li className="bg-white/5 p-3 rounded-lg border border-dino-border">
-                            Crimps strength <span className="text-red-400">(3 misses at V5+ last week)</span>
-                        </li>
-                    </ul>
-                    <a href="#" className="inline-block mt-4 text-emerald-400 hover:underline">
-                        View Full Insights →
-                    </a>
-                </Card>
+                <FocusAreas ascensions={ascensions} />
 
                 {/* Recent Ascents */}
                 <Card title="Recent Ascents">
@@ -90,6 +104,7 @@ export default function Dashboard() {
                                 date={item.date_climbed}
                                 attempts={item.attempts}
                                 style={item.style}
+                                onDelete={() => handleDeleteAscension(item.aid)}
                             />
                         ))}
                     </div>
@@ -101,8 +116,8 @@ export default function Dashboard() {
                 {/* Badges */}
                 <Card title="Badges Earned This Week">
                     <div className="flex flex-wrap gap-3">
-                        <Badge icon="🥇" label="Grade Crusher V6" />
-                        <Badge icon="🔥" label="7-Day Send Streak" />
+                        <Badge icon="🥇" label="Grade Crusher V6" achievedAt="September 3rd, 2025" />
+                        <Badge icon="🔥" label="7-Day Send Streak" achievedAt="September 1st, 2025" />
                     </div>
                 </Card>
             </main>

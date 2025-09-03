@@ -110,6 +110,7 @@ export default function AuthPage() {
                             type="text"
                             placeholder="Your climbing alias"
                             className="w-full bg-white/5 border border-dino-border rounded-lg px-4 py-2 focus:outline-none focus:border-emerald-400"
+                            autoFocus
                             onChange={(e) =>
                                 setState((prev) => ({
                                     ...prev,

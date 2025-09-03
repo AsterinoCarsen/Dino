@@ -79,7 +79,7 @@ const ClimbingSummary: React.FC<ClimbingSummaryProps> = ({ ascensions }) => {
         const bestBoulder = getBestGrade(ascensions, "boulder");
         const bestRoute = getBestGrade(ascensions, "route");
 
-        const avgAttempts = getAvgAttempts(last7Days);
+        const avgAttempts = getAvgAttempts(ascensions);
         const prevAvgAttempts = getAvgAttempts(prevWeek);
         const avgAttemptsChange = avgAttempts - prevAvgAttempts;
 
