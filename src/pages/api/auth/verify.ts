@@ -6,6 +6,8 @@ const KEY = process.env.JWT_SECRET;
 
 if (!KEY) throw new Error("Missing JWT secret environment variable.");
 
+const JWT_SECRET: string = KEY;
+
 interface VerifyRequestBody {
     token: string;
 }
@@ -27,7 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             return res.status(400).json({ success: false, message: "Missing token."});
         }
 
-        const decoded = jwt.verify(token, KEY) as jwt.JwtPayload;
+        const decoded = jwt.verify(token, JWT_SECRET) as jwt.JwtPayload;
 
         return res.status(200).json({ success: true, message: "Token is valid." });
     } catch (error) {

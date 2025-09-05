@@ -7,6 +7,8 @@ const KEY = process.env.JWT_SECRET;
 
 if (!KEY) throw new Error("Missing JWT secret environment variable.");
 
+const JWT_SECRET: string = KEY;
+
 interface RegisterRequestBody {
     username: string;
     password: string;
@@ -61,7 +63,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
         const token = jwt.sign(
             { uid: newUser.public_id, username: newUser.username },
-            KEY,
+            JWT_SECRET,
             { expiresIn: "1h" }
         );
 
