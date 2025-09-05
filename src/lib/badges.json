@@ -1,0 +1,80 @@
+[
+    {
+        "title": "First Send",
+        "description": "Awarded for completing your first climb.",
+        "icon_key": "mdi:flag-checkered",
+        "condition": { "total_sends": 1 }
+    },
+    {
+        "title": "Beginner Climber",
+        "description": "Congrats on completing 5 climbs! You're getting started.",
+        "icon_key": "mdi:mountain",
+        "condition": { "total_sends": 5 }
+    },
+    {
+        "title": "Climbing Novice",
+        "description": "Complete 10 climbs to show your commitment to the wall.",
+        "icon_key": "mdi:terrain",
+        "condition": { "total_sends": 10 }
+    },
+    {
+        "title": "Ascent Apprentice",
+        "description": "25 climbs logged! You’re really getting the hang of it.",
+        "icon_key": "mdi:hiking",
+        "condition": { "total_sends": 25 }
+    },
+    {
+        "title": "Boulder Enthusiast",
+        "description": "50 climbs completed! You love the challenge.",
+        "icon_key": "mdi:boulder",
+        "condition": { "total_sends": 50 }
+    },
+    {
+        "title": "Route Chaser",
+        "description": "75 climbs completed! Your dedication shows.",
+        "icon_key": "mdi:run-fast",
+        "condition": { "total_sends": 75 }
+    },
+    {
+        "title": "Send Master",
+        "description": "100 climbs logged! You’re a climbing master.",
+        "icon_key": "mdi:shield-crown",
+        "condition": { "total_sends": 100 }
+    },
+    {
+        "title": "Peak Performer",
+        "description": "150 climbs completed! You’re climbing like a pro.",
+        "icon_key": "mdi:peak",
+        "condition": { "total_sends": 150 }
+    },
+    {
+        "title": "Mountain Conqueror",
+        "description": "200 climbs logged! Huge milestone achieved.",
+        "icon_key": "mdi:mountain-peak",
+        "condition": { "total_sends": 200 }
+    },
+    {
+        "title": "Vertical Veteran",
+        "description": "300 climbs completed! You’re a legendary climber.",
+        "icon_key": "mdi:star-circle",
+        "condition": { "total_sends": 300 }
+    },
+    {
+        "title": "Summit Sage",
+        "description": "500 climbs logged! You’ve reached elite status.",
+        "icon_key": "mdi:crown",
+        "condition": { "total_sends": 500 }
+    },
+    {
+        "title": "Crag Champion",
+        "description": "750 climbs completed! You’re at the top of your game.",
+        "icon_key": "mdi:trophy",
+        "condition": { "total_sends": 750 }
+    },
+    {
+        "title": "Ascent Legend",
+        "description": "1000 climbs logged! Legendary status achieved.",
+        "icon_key": "mdi:medal",
+        "condition": { "total_sends": 1000 }
+    }
+]

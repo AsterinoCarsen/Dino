@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { NewAscension } from "@/lib/performance/getAscensionsType";
 import { getPublicId } from "@/lib/decodeToken";
+import { checkBadgeCondition } from "@/lib/checkBadgeConditions";
 
 import boulderGrades from "../lib/performance/boulderGrades.json";
 import routeGrades from "../lib/performance/ropeGrades.json";
@@ -67,6 +68,19 @@ export default function NewAscentModal({ isOpen, onClose, onSuccess }: NewAscent
             if (result.success) {
                 setStatus({ type: "success", message: "Ascension logged successfully!" });
                 onSuccess(result.data);
+
+                const response = await fetch(`/api/ascensions/getAscensions?public_id=${public_id}`);
+                const data = await response.json();
+                const earnedBadges = await checkBadgeCondition(data.data);
+
+                const addBadgeResponse = await fetch("/api/badges/addBadge", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ public_id, badges: earnedBadges })
+                });
+
+                const addBadgeResponseData = await addBadgeResponse.json();
+                
                 setTimeout(() => {
                     onClose();
                 }, 1000);

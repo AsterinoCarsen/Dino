@@ -46,8 +46,6 @@ export function calculateElo(ascensions: Ascension[]): number {
 
         let finalContribution = earnedScoreBeforeTime * Math.exp(-RECENCY_RATE * daysAgo);
         totalScore += finalContribution;
-
-        console.log("Grade: %s minus attempts %d minus recency %d because %d days ago", asc.grade, earnedScoreBeforeTime, finalContribution, daysAgo);
     }
 
     elo = totalScore / ascensions.length;

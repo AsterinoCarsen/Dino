@@ -5,10 +5,14 @@ import ClimbingSummary from "@/components/ClimbingSummary";
 import NewAscentModal from "@/components/NewAscentModal";
 import { getPublicId } from "@/lib/decodeToken";
 import FocusAreas from "@/components/FocusAreas";
+import BadgeList from "@/components/BadgeList";
 
 export default function Dashboard() {
     const [ascensions, setAscensions] = useState<AscentItemType[]>([]);
     const [modalOpen, setModalOpen] = useState<boolean>(false);
+
+    const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    const public_id = token ? getPublicId(token) : null;
 
     const handleAddAscension = (newAscension: NewAscension) => {
         setAscensions((prev) => {
@@ -24,8 +28,6 @@ export default function Dashboard() {
         if (!token) return;
 
         try {
-            const public_id = getPublicId(token);
-
             const response = await fetch("/api/ascensions/removeAscension", {
                 method: "DELETE",
                 headers: { "Content-Type": "application/json"},
@@ -64,6 +66,8 @@ export default function Dashboard() {
 
         fetchAscensions();
     }, []);
+
+
 
     return (
         <div className="min-h-screen bg-dino-dark text-dino-text flex">
@@ -114,12 +118,7 @@ export default function Dashboard() {
                 </Card>
 
                 {/* Badges */}
-                <Card title="Badges Earned This Week">
-                    <div className="flex flex-wrap gap-3">
-                        <Badge icon="🥇" label="Grade Crusher V6" achievedAt="September 3rd, 2025" />
-                        <Badge icon="🔥" label="7-Day Send Streak" achievedAt="September 1st, 2025" />
-                    </div>
-                </Card>
+                <BadgeList public_id={public_id} />
             </main>
         </div>
     );
