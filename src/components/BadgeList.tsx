@@ -1,9 +1,8 @@
 import Badge from "./Badge";
 import Card from "./Card";
-import { useEffect, useState } from "react";
 
 interface BadgeListProps {
-    public_id: string | null;
+    badges: Badge[];
 }
 
 interface Badge {
@@ -14,29 +13,7 @@ interface Badge {
     earned_at: string;
 }
 
-export default function BadgeList({ public_id }: BadgeListProps) {
-    const [badges, setBadges] = useState<Badge[]>([]);
-
-    useEffect(() => {
-        async function fetchBadges() {
-            if (!public_id) return;
-
-            try {
-                const response = await fetch(`/api/badges/getBadges?public_id=${public_id}`, {
-                    method: "GET",
-                    headers: { "Content-Type": "application/json" },
-                });
-
-                const data = await response.json();
-                setBadges(data.badges);
-            } catch (error) {
-                console.error(error);
-            }
-        }
-
-        fetchBadges();
-    }, [public_id]);
-
+export default function BadgeList({ badges }: BadgeListProps) {
     const formatDate = (isoString: string): string => {
         const date = new Date(isoString);
         return date.toISOString().split("T")[0];

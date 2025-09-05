@@ -7,9 +7,18 @@ import { getPublicId } from "@/lib/decodeToken";
 import FocusAreas from "@/components/FocusAreas";
 import BadgeList from "@/components/BadgeList";
 
+interface Badge {
+    id: number;
+    title: string;
+    description: string;
+    icon_key: string;
+    earned_at: string;
+}
+
 export default function Dashboard() {
     const [ascensions, setAscensions] = useState<AscentItemType[]>([]);
     const [modalOpen, setModalOpen] = useState<boolean>(false);
+    const [badges, setBadges] = useState<Badge[]>([]);
 
     const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
     const public_id = token ? getPublicId(token) : null;
@@ -67,7 +76,25 @@ export default function Dashboard() {
         fetchAscensions();
     }, []);
 
+    useEffect(() => {
+        async function fetchBadges() {
+            if (!public_id) return;
 
+            try {
+                const response = await fetch(`/api/badges/getBadges?public_id=${public_id}`, {
+                    method: "GET",
+                    headers: { "Content-Type": "application/json" },
+                });
+
+                const data = await response.json();
+                setBadges(data.badges);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        fetchBadges();
+    }, [public_id]);
 
     return (
         <div className="min-h-screen bg-dino-dark text-dino-text flex">
@@ -118,7 +145,7 @@ export default function Dashboard() {
                 </Card>
 
                 {/* Badges */}
-                <BadgeList public_id={public_id} />
+                <BadgeList badges={badges} />
             </main>
         </div>
     );

@@ -26,7 +26,7 @@
     {
         "title": "Boulder Enthusiast",
         "description": "50 climbs completed! You love the challenge.",
-        "icon_key": "mdi:boulder",
+        "icon_key": "mdi:circle-slice-8",
         "condition": { "total_sends": 50 }
     },
     {
@@ -44,13 +44,13 @@
     {
         "title": "Peak Performer",
         "description": "150 climbs completed! You’re climbing like a pro.",
-        "icon_key": "mdi:peak",
+        "icon_key": "mdi:triangle",
         "condition": { "total_sends": 150 }
     },
     {
         "title": "Mountain Conqueror",
         "description": "200 climbs logged! Huge milestone achieved.",
-        "icon_key": "mdi:mountain-peak",
+        "icon_key": "mdi:mountain",
         "condition": { "total_sends": 200 }
     },
     {

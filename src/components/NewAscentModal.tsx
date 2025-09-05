@@ -78,8 +78,6 @@ export default function NewAscentModal({ isOpen, onClose, onSuccess }: NewAscent
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ public_id, badges: earnedBadges })
                 });
-
-                const addBadgeResponseData = await addBadgeResponse.json();
                 
                 setTimeout(() => {
                     onClose();
