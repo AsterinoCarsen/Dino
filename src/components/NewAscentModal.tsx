@@ -122,9 +122,9 @@ export default function NewAscentModal({ isOpen, onClose, onSuccess }: NewAscent
                             Select Ascension Type
                         </option>
                         <option className="bg-dino-dark" value="Lead">Lead</option>
-                        <option className="bg-dino-dark" value="Toprope">Top Rope</option>
+                        <option className="bg-dino-dark" value="Top Rope">Top Rope</option>
                         <option className="bg-dino-dark" value="Boulder">Boulder</option>
-                        <option className="bg-dino-dark" value="Auto-Belay">Auto-Belay</option>
+                        <option className="bg-dino-dark" value="Auto Belay">Auto Belay</option>
                     </select>
 
                     <label className="text-gray-400 text-sm">Grade</label>
