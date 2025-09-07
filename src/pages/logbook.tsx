@@ -179,7 +179,7 @@ export default function Logbook() {
                             onChange={(e) => setRouteGradeFilter(e.target.value)}
                             className="bg-white/5 border border-dino-border rounded-lg px-4 py-2 focus:outline-none"
                         >
-                            <option>All</option>
+                            <option>All Route Grades</option>
                             {Object.keys(routeGradeMaps).map((g) => (
                                 <option key={g} value={g} className="bg-dino-dark">
                                     {g}
@@ -191,7 +191,7 @@ export default function Logbook() {
                             onChange={(e) => setBoulderGradeFilter(e.target.value)}
                             className="bg-white/5 border border-dino-border rounded-lg px-4 py-2 focus:outline-none"
                         >
-                            <option>All</option>
+                            <option>All Boulder Grades</option>
                             {Object.keys(boulderGradeMaps).map((g) => (
                                 <option key={g} value={g} className="bg-dino-dark">
                                     {g}
