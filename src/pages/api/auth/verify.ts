@@ -27,7 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             return res.status(400).json({ success: false, message: "Missing token."});
         }
 
-        const decoded = jwt.verify(token, KEY) as jwt.JwtPayload;
+        const decoded = jwt.verify(token, KEY as string) as jwt.JwtPayload;
 
         return res.status(200).json({ success: true, message: "Token is valid." });
     } catch (error) {
