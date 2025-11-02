@@ -16,10 +16,10 @@ Dino is a web application designed for sport climbers and boulderers to track th
 ![Log Climb Demo](./public/gif1.gif)
 
 ### Climbing Logbook
-![Log Climb Demo](assets/gifs/log-climb-demo.gif)
+![Log Climb Demo](./public/gif2.gif)
 
 ### Profile
-![Log Climb Demo](assets/gifs/log-climb-demo.gif)
+![Log Climb Demo](./public/gif3.gif)
 
 ---
 
@@ -56,3 +56,15 @@ JWT_SECRET=<Your JWT secret>
 CAPTCHA_SECRET=<Your CAPTCHA secret>
 NEXT_PUBLIC_CAPTCHA_SITE_KEY=<Your CAPTCHA site key>
 ```
+
+---
+
+## Future Improvements
+- Mobile user-interface improvements
+- Leaderboards
+- Further improved insights page
+
+---
+
+## Contributions
+Built by Carsen Asterino.
