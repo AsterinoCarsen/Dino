@@ -15,6 +15,10 @@ export default function SideBar() {
         router.push("/dashboard");
     }
 
+    const handleGoProfile = () => {
+        router.push("/profile");
+    }
+
     const handleSignOut = () => {
         localStorage.removeItem("token");
         router.push("/authenticate");
@@ -27,7 +31,7 @@ export default function SideBar() {
                 <a onClick={handleGoDashboard} className="text-gray-400 cursor-pointer hover:text-white font-semibold transition">Dashboard</a>
                 <a onClick={handleGoLogBook} className="text-gray-400 cursor-pointer hover:text-white font-semibold transition">Logbook</a>
                 <a href="#" className="text-gray-400 hover:text-white font-semibold transition">Insights</a>
-                <a href="#" className="text-gray-400 hover:text-white font-semibold transition">Profile</a>
+                <a onClick={handleGoProfile} className="text-gray-400 cursor-pointer hover:text-white font-semibold transition">Profile</a>
                 <button onClick={handleSignOut} className="text-gray-400 cursor-pointer text-left hover:text-white font-semibold transition">Sign Out</button>
             </nav>
         </aside>

@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import { FormEvent } from "react";
+import Image from "next/image";
 
 interface VerifyResponseBody {
     success: boolean;
@@ -66,8 +67,14 @@ export default function Home() {
                     </div>
                 </div>
                 <div className="mt-12 md:mt-0 md:ml-12">
-                    <div className="w-[500px] h-[300px] bg-white/5 border border-dino-border rounded-xl flex items-center justify-center text-gray-500">
-                        [Hero Image Placeholder]
+                    <div className="relative w-[500px] h-[330px] rounded-xl overflow-hidden border border-dino-border shadow-lg">
+                        <Image
+                            src="/hero.png"
+                            alt="Dino App Hero Preview"
+                            fill
+                            className="object-contain object-center"
+                            priority
+                        />
                     </div>
                 </div>
             </section>
@@ -86,14 +93,32 @@ export default function Home() {
             <section id="screenshots" className="px-12 py-16 border-t border-dino-border">
                 <h3 className="text-3xl font-semibold mb-12 text-center">Take a Peek Inside</h3>
                 <div className="grid md:grid-cols-3 gap-8">
-                    <div className="w-full h-[200px] bg-white/5 border border-dino-border rounded-xl flex items-center justify-center text-gray-500">
-                        [Screenshot 1]
+                    <div className="relative w-full aspect-[1546/531] bg-white/5 border border-dino-border rounded-xl flex items-center justify-center text-gray-500">
+                        <Image
+                            src="/index1.png"
+                            alt="Dino App Hero Preview"
+                            fill
+                            className="object-contain object-center"
+                            priority
+                        />
                     </div>
-                    <div className="w-full h-[200px] bg-white/5 border border-dino-border rounded-xl flex items-center justify-center text-gray-500">
-                        [Screenshot 2]
+                    <div className="relative w-full aspect-[1550/664] bg-white/5 border border-dino-border rounded-xl flex items-center justify-center text-gray-500">
+                        <Image
+                            src="/index2.png"
+                            alt="Dino App Hero Preview"
+                            fill
+                            className="object-contain object-center"
+                            priority
+                        />
                     </div>
-                    <div className="w-full h-[200px] bg-white/5 border border-dino-border rounded-xl flex items-center justify-center text-gray-500">
-                        [Screenshot 3]
+                    <div className="relative w-full aspect-[1541/765] bg-white/5 border border-dino-border rounded-xl flex items-center justify-center text-gray-500">
+                        <Image
+                            src="/index3.png"
+                            alt="Dino App Hero Preview"
+                            fill
+                            className="object-contain object-center"
+                            priority
+                        />
                     </div>
                 </div>
             </section>

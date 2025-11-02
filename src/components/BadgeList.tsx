@@ -20,7 +20,7 @@ export default function BadgeList({ badges }: BadgeListProps) {
     }
 
     return (
-        <Card title="Badges Earned This Week">
+        <Card title="Badges">
             <div className="flex flex-wrap gap-3">
                 {badges.map((badge) => (
                     <Badge

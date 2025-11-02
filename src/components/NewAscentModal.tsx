@@ -108,6 +108,7 @@ export default function NewAscentModal({ isOpen, onClose, onSuccess }: NewAscent
                         onChange={handleChange}
                         className="w-full bg-white/5 border border-dino-border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         required
+                        autoComplete="off"
                     />
 
                     <label className="text-gray-400 text-sm">Ascension Type</label>

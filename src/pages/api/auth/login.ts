@@ -52,7 +52,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
         const token = jwt.sign(
             { uid: user.public_id, username: user.username },
-            JWT_SECRET,
+            KEY as string,
             { expiresIn: "1h" }
         );
 
