@@ -5,6 +5,7 @@ import { Card, StatCard } from "@/components";
 import { Badge } from "@/components";
 import BadgeList from "@/components/BadgeList";
 import { getPublicId } from "@/lib/decodeToken";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 interface Badge {
     id: number;
@@ -51,11 +52,7 @@ export default function Profile() {
                 {/* Profile Header */}
                 <Card>
                     <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
-                        <img
-                            src="https://via.placeholder.com/120"
-                            alt="Profile Avatar"
-                            className="w-28 h-28 rounded-full border-4 border-dino-border"
-                        />
+                        <Icon icon="ic:baseline-account-circle" className="text-gray-400 text-6xl" />
                         <div>
                             <h2 className="text-3xl font-semibold">Carsen</h2>
                             <p className="text-gray-400">Climber since 2021 | Boulder & Lead Specialist</p>
@@ -71,8 +68,7 @@ export default function Profile() {
                 {/* Bio & Preferences */}
                 <Card title="Bio & Preferences">
                     <p className="text-gray-300 mb-4">
-                        Passionate about climbing overhangs and pushing my limits on crimps. 
-                        Always seeking new routes to test endurance and power.
+                        Lorem ipsum dolor sit amet consectetur adipiscing elit. Dolor sit amet consectetur adipiscing elit quisque faucibus.
                     </p>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                         <InfoItem label="Primary Discipline" value="Bouldering" />
