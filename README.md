@@ -1,40 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+# Dino
+![License](https://img.shields.io/badge/license-MIT-blue)
+![Next.js](https://img.shields.io/badge/Next.js-15.4.6-black)
+![React](https://img.shields.io/badge/React-19.1.0-blue)
 
-## Getting Started
+---
 
-First, run the development server:
+## Overview
+Dino is a web application designed for sport climbers and boulderers to track their performance over time, tailor their training, and quantify their improvements with a gamified user-interface.
 
+---
+
+## Demo
+
+### Dashboard Page
+![Log Climb Demo](./public/gif1.gif)
+
+### Climbing Logbook
+![Log Climb Demo](assets/gifs/log-climb-demo.gif)
+
+### Profile
+![Log Climb Demo](assets/gifs/log-climb-demo.gif)
+
+---
+
+## Features
+
+- Full-stack user authentication with JWT
+- Track lifetime climbing stats and weekly progress
+- Earn badges for important milestones
+- Data visualization using ReCharts
+- Responsive UI with Next.js and Tailwind
+
+---
+
+## Tech Stack
+- **Frontend:** Next.js 15, React 19, Tailwind 4
+- **Backend:** Node.js, Supabase, PostgreSQL
+- **Utilities:** JWT, ReCharts, Iconify, BCrypt, UUID
+
+---
+
+## Installation
 ```bash
+git clone https://github.com/AsterinoCarsen/Dino.git
+cd Dino
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+Create a `.env.local` file inside the parent directory with the following environment variables:
+```env
+DATABASE_URL=<Your database URL>
+DATABASE_KEY=<Your database key>
+JWT_SECRET=<Your JWT secret>
+CAPTCHA_SECRET=<Your CAPTCHA secret>
+NEXT_PUBLIC_CAPTCHA_SITE_KEY=<Your CAPTCHA site key>
+```
