@@ -6,6 +6,7 @@ import NewAscentModal from "@/components/NewAscentModal";
 import { getPublicId } from "@/lib/decodeToken";
 import FocusAreas from "@/components/FocusAreas";
 import BadgeList from "@/components/BadgeList";
+import { useRouter } from "next/router";
 
 interface Badge {
     id: number;
@@ -22,6 +23,7 @@ export default function Dashboard() {
 
     const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
     const public_id = token ? getPublicId(token) : null;
+    const router = useRouter();
 
     const handleAddAscension = (newAscension: NewAscension) => {
         setAscensions((prev) => {
@@ -96,6 +98,10 @@ export default function Dashboard() {
         fetchBadges();
     }, [public_id]);
 
+    const handleGoLogBook = () => {
+        router.push("./logbook");
+    }
+
     return (
         <div className="min-h-screen bg-dino-dark text-dino-text flex">
             <NewAscentModal isOpen={modalOpen} onClose={() => setModalOpen(false)} onSuccess={handleAddAscension} />
@@ -139,12 +145,11 @@ export default function Dashboard() {
                             />
                         ))}
                     </div>
-                    <a href="#" className="inline-block mt-4 text-emerald-400 hover:underline">
+                    <a onClick={handleGoLogBook} className="inline-block mt-4 text-emerald-400 hover:underline hover:cursor-pointer">
                         See All in Logbook →
                     </a>
                 </Card>
 
-                {/* Badges */}
                 <BadgeList badges={badges} />
             </main>
         </div>
