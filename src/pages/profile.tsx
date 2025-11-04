@@ -6,6 +6,9 @@ import { Badge } from "@/components";
 import BadgeList from "@/components/BadgeList";
 import { getPublicId } from "@/lib/decodeToken";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { AscentItemType } from "@/lib/performance/getAscensionsType";
+import { getHigherGrade } from "@/lib/performance/compareGrades";
+import { calculateElo } from "@/lib/performance/calculateElo";
 
 interface Badge {
     id: number;
@@ -17,6 +20,7 @@ interface Badge {
 
 export default function Profile() {
     const [badges, setBadges] = useState<Badge[]>([]);
+    const [ascensions, setAscensions] = useState<AscentItemType[]>();
 
     const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
     const public_id = token ? getPublicId(token) : null;
@@ -41,7 +45,42 @@ export default function Profile() {
         fetchBadges();
     }, [public_id]);
 
+    useEffect(() => {
+        const fetchAscensions = async () => {
+            const token = localStorage.getItem("token");
+            if (!token) return;
     
+            try {
+                const public_id = getPublicId(token);
+                const response = await fetch(`/api/ascensions/getAscensions?public_id=${public_id}`);
+                const data = await response.json();
+                const sortedAscensions = data.data.sort((a: AscentItemType, b: AscentItemType) => {
+                    return new Date(b.date_climbed).getTime() - new Date(a.date_climbed).getTime();
+                });
+                setAscensions(sortedAscensions);
+                console.log(sortedAscensions);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+    
+        fetchAscensions();
+    }, []);
+
+    const getBestGrade = (ascensions: AscentItemType[], type: "boulder" | "route") => {
+        const grades = ascensions
+            .map(a => a.grade)
+            .filter(g => {
+                if (!g) return false;
+                return type === "boulder" ? (g.startsWith("V") || g.toUpperCase() === "VB") : g.startsWith("5");
+            });
+    
+        return grades.reduce((highest, grade) => {
+            if (!highest) return grade;
+            return getHigherGrade(highest, grade);
+        }, "");
+    };
+
     return (
         <div className="min-h-screen bg-dino-dark text-dino-text flex">
             <SideBar />
@@ -57,9 +96,17 @@ export default function Profile() {
                             <h2 className="text-3xl font-semibold">Carsen</h2>
                             <p className="text-gray-400">Climber since 2021 | Boulder & Lead Specialist</p>
                             <div className="flex gap-6 mt-4">
-                                <StatCard label="ELO Rating" value="1420" change="+15 this week" />
-                                <StatCard label="Best Grade" value="V6" change="No change" />
-                                <StatCard label="Total Climbs" value="278" change="+12 this month" />
+                                <StatCard label="ELO Rating"
+                                    value={Math.round(calculateElo(ascensions || [])).toString()}
+                                />
+                                <StatCard
+                                    label="Best Grade"
+                                    value={`${getBestGrade(ascensions || [], "boulder") || "N/A"}, ${getBestGrade(ascensions || [], "route") || "N/A"}`}
+                                />
+                                <StatCard 
+                                    label="Total Climbs"
+                                    value={ascensions?.length.toString() || "0"}
+                                />
                             </div>
                         </div>
                     </div>
