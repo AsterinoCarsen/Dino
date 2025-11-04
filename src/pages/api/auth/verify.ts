@@ -6,6 +6,8 @@ const KEY = process.env.JWT_SECRET;
 
 if (!KEY) throw new Error("Missing JWT secret environment variable.");
 
+const JWT_SECRET: string = KEY;
+
 interface VerifyRequestBody {
     token: string;
 }
