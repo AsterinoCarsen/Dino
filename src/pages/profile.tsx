@@ -21,6 +21,9 @@ interface Badge {
 export default function Profile() {
     const [badges, setBadges] = useState<Badge[]>([]);
     const [ascensions, setAscensions] = useState<AscentItemType[]>();
+    const [profileCreatedAt, setProfileCreatedAt] = useState<string>("N/A");
+    const [primaryDiscipline, setPrimaryDiscipline] = useState<string>("N/A");
+    const [preferredStyle, setPreferredStyle] = useState<string>("N/A");
 
     const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
     const public_id = token ? getPublicId(token) : null;
@@ -41,8 +44,28 @@ export default function Profile() {
                 console.error(error);
             }
         }
-    
+
+        async function fetchProfileInformation() {
+            if (!public_id) return;
+
+            try {
+                const response = await fetch(`/api/auth/getUser?uuid=${public_id}`, {
+                    method: "GET",
+                    headers: { "Content-Type": "application/json" },
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    const createdAt = new Date(data.data.created_at);
+                    setProfileCreatedAt(createdAt.getFullYear().toString());
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
         fetchBadges();
+        fetchProfileInformation();
     }, [public_id]);
 
     useEffect(() => {
@@ -57,8 +80,25 @@ export default function Profile() {
                 const sortedAscensions = data.data.sort((a: AscentItemType, b: AscentItemType) => {
                     return new Date(b.date_climbed).getTime() - new Date(a.date_climbed).getTime();
                 });
+
+                const typeCounts = sortedAscensions.reduce((acc: Record<string, number>, ascent: AscentItemType) => {
+                    const type = String(ascent.ascension_type || "N/A");
+                    acc[type] = (acc[type] || 0) + 1;
+                    return acc;
+                }, {});
+
+                const styleCounts = sortedAscensions.reduce((acc: Record<string, number>, ascent: AscentItemType) => {
+                    const style = String(ascent.style || "Unknown");
+                    acc[style] = (acc[style] || 0) + 1;
+                    return acc;
+                }, {});
+
+                const mostCommonType = Object.keys(typeCounts).reduce((a, b) => typeCounts[a] > typeCounts[b] ? a : b);
+                const mostCommonStyle = Object.keys(styleCounts).reduce((a, b) => styleCounts[a] > styleCounts[b] ? a : b);
+
+                setPreferredStyle(mostCommonStyle);
+                setPrimaryDiscipline(mostCommonType);
                 setAscensions(sortedAscensions);
-                console.log(sortedAscensions);
             } catch (error) {
                 console.log(error);
             }
@@ -94,7 +134,7 @@ export default function Profile() {
                         <Icon icon="ic:baseline-account-circle" className="text-gray-400 text-6xl" />
                         <div>
                             <h2 className="text-3xl font-semibold">Carsen</h2>
-                            <p className="text-gray-400">Climber since 2021 | Boulder & Lead Specialist</p>
+                            <p className="text-gray-400">Climber since {profileCreatedAt} | {primaryDiscipline} Specialist</p>
                             <div className="flex gap-6 mt-4">
                                 <StatCard label="ELO Rating"
                                     value={Math.round(calculateElo(ascensions || [])).toString()}
@@ -118,10 +158,10 @@ export default function Profile() {
                         Lorem ipsum dolor sit amet consectetur adipiscing elit. Dolor sit amet consectetur adipiscing elit quisque faucibus.
                     </p>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                        <InfoItem label="Primary Discipline" value="Bouldering" />
-                        <InfoItem label="Preferred Style" value="Overhang" />
+                        <InfoItem label="Primary Discipline" value={primaryDiscipline} />
+                        <InfoItem label="Preferred Style" value={preferredStyle} />
                         <InfoItem label="Training Focus" value="Crimp Strength" />
-                        <InfoItem label="Climbing Since" value="2021" />
+                        <InfoItem label="Climbing Since" value={profileCreatedAt} />
                         <InfoItem label="Home Gym" value="Vertical World" />
                     </div>
                 </Card>
