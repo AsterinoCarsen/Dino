@@ -77,6 +77,9 @@ export default function Profile() {
                 const public_id = getPublicId(token);
                 const response = await fetch(`/api/ascensions/getAscensions?public_id=${public_id}`);
                 const data = await response.json();
+
+                console.log(data);
+
                 const sortedAscensions = data.data.sort((a: AscentItemType, b: AscentItemType) => {
                     return new Date(b.date_climbed).getTime() - new Date(a.date_climbed).getTime();
                 });
@@ -153,26 +156,49 @@ export default function Profile() {
                 </Card>
 
                 {/* Bio & Preferences */}
-                <Card title="Bio & Preferences">
-                    <p className="text-gray-300 mb-4">
-                        Lorem ipsum dolor sit amet consectetur adipiscing elit. Dolor sit amet consectetur adipiscing elit quisque faucibus.
-                    </p>
+                <Card title="Profile Summary">
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                         <InfoItem label="Primary Discipline" value={primaryDiscipline} />
                         <InfoItem label="Preferred Style" value={preferredStyle} />
-                        <InfoItem label="Training Focus" value="Crimp Strength" />
                         <InfoItem label="Climbing Since" value={profileCreatedAt} />
-                        <InfoItem label="Home Gym" value="Vertical World" />
                     </div>
                 </Card>
 
                 {/* Lifetime Stats */}
                 <Card title="Lifetime Stats">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                        <StatCard label="Lifetime Volume" value="12,430 ft" change="+350 ft this week" />
-                        <StatCard label="Average Attempts/Send" value="3.2" change="-0.2 attempts" />
-                        <StatCard label="Total Boulder Problems" value="198" change="+8 this month" />
-                        <StatCard label="Total Routes" value="80" change="+4 this month" />
+                        <StatCard
+                            label="Lifetime Volume"
+                            value={
+                                ascensions
+                                    ? `${ascensions.reduce((sum, a) => sum + (a.height_ft || 0), 0)} ft`
+                                    : "0 ft"
+                            }
+                        />
+                        <StatCard
+                            label="Average Attempts/Send"
+                            value={
+                                ascensions && ascensions.length > 0
+                                    ? (ascensions.reduce((sum, a) => sum + (a.attempts || 0), 0) / ascensions.length).toFixed(1)
+                                    : "0"
+                            }
+                        />
+                        <StatCard
+                            label="Total Boulder Problems"
+                            value={
+                                ascensions
+                                    ? ascensions.filter(a => a.ascension_type === "Boulder").length.toString()
+                                    : "0"
+                            }
+                        />
+                        <StatCard
+                            label="Total Routes"
+                            value={
+                                ascensions
+                                    ? ascensions.filter(a => a.ascension_type !== "Boulder").length.toString()
+                                    : "0"
+                            }
+                        />
                     </div>
                 </Card>
 
