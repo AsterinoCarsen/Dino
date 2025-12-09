@@ -21,6 +21,7 @@ export default function SideBar() {
 
     const handleSignOut = () => {
         localStorage.removeItem("token");
+        localStorage.removeItem("ascents");
         router.push("/authenticate");
     }
 

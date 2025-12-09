@@ -6,6 +6,7 @@ import NewAscentModal from "@/components/NewAscentModal";
 import { getPublicId } from "@/lib/decodeToken";
 
 import { useState, useEffect } from "react";
+import { fetchAscensions } from "@/lib/getAscents";
 
 import boulderGrades from "../lib/performance/boulderGrades.json";
 import ropeGrades from "../lib/performance/ropeGrades.json";
@@ -62,31 +63,12 @@ export default function Logbook() {
     };
 
     useEffect(() => {
-        const fetchAscensions = async () => {
-            const token = localStorage.getItem("token");
-            if (!token) return;
-
-            try {
-                const public_id = getPublicId(token);
-                const response = await fetch(
-                    `/api/ascensions/getAscensions?public_id=${public_id}`
-                );
-                const data = await response.json();
-                const sortedAscensions = data.data.sort(
-                    (a: AscentItemType, b: AscentItemType) => {
-                        return (
-                            new Date(b.created_at).getTime() -
-                            new Date(a.created_at).getTime()
-                        );
-                    }
-                );
-                setAscensions(sortedAscensions);
-            } catch (error) {
-                console.log(error);
-            }
-        };
-
-        fetchAscensions();
+        async function loadAscents() {
+            const ascents = await fetchAscensions();
+            setAscensions(ascents);
+        }
+    
+        loadAscents();
     }, []);
 
     const filteredAscensions = ascensions

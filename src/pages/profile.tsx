@@ -9,6 +9,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { AscentItemType } from "@/lib/performance/getAscensionsType";
 import { getHigherGrade } from "@/lib/performance/compareGrades";
 import { calculateElo } from "@/lib/performance/calculateElo";
+import { fetchAscensions } from "@/lib/getAscents";
 
 interface Badge {
     id: number;
@@ -69,45 +70,35 @@ export default function Profile() {
     }, [public_id]);
 
     useEffect(() => {
-        const fetchAscensions = async () => {
-            const token = localStorage.getItem("token");
-            if (!token) return;
-    
-            try {
-                const public_id = getPublicId(token);
-                const response = await fetch(`/api/ascensions/getAscensions?public_id=${public_id}`);
-                const data = await response.json();
+        const loadAscents = async () => {
+            const ascents = await fetchAscensions();
 
-                console.log(data);
+            const sortedAscensions = ascents.sort((a: AscentItemType, b: AscentItemType) => {
+                return new Date(b.date_climbed).getTime() - new Date(a.date_climbed).getTime();
+            });
 
-                const sortedAscensions = data.data.sort((a: AscentItemType, b: AscentItemType) => {
-                    return new Date(b.date_climbed).getTime() - new Date(a.date_climbed).getTime();
-                });
+            const typeCounts = sortedAscensions.reduce((acc: Record<string, number>, ascent: AscentItemType) => {
+                const type = String(ascent.ascension_type || "N/A");
+                acc[type] = (acc[type] || 0) + 1;
+                return acc;
+            }, {});
 
-                const typeCounts = sortedAscensions.reduce((acc: Record<string, number>, ascent: AscentItemType) => {
-                    const type = String(ascent.ascension_type || "N/A");
-                    acc[type] = (acc[type] || 0) + 1;
-                    return acc;
-                }, {});
+            const styleCounts = sortedAscensions.reduce((acc: Record<string, number>, ascent: AscentItemType) => {
+                const style = String(ascent.style || "Unknown");
+                acc[style] = (acc[style] || 0) + 1;
+                return acc;
+            }, {});
 
-                const styleCounts = sortedAscensions.reduce((acc: Record<string, number>, ascent: AscentItemType) => {
-                    const style = String(ascent.style || "Unknown");
-                    acc[style] = (acc[style] || 0) + 1;
-                    return acc;
-                }, {});
+            const mostCommonType = Object.keys(typeCounts).reduce((a, b) => typeCounts[a] > typeCounts[b] ? a : b);
+            const mostCommonStyle = Object.keys(styleCounts).reduce((a, b) => styleCounts[a] > styleCounts[b] ? a : b);
 
-                const mostCommonType = Object.keys(typeCounts).reduce((a, b) => typeCounts[a] > typeCounts[b] ? a : b);
-                const mostCommonStyle = Object.keys(styleCounts).reduce((a, b) => styleCounts[a] > styleCounts[b] ? a : b);
+            setPreferredStyle(mostCommonStyle);
+            setPrimaryDiscipline(mostCommonType);
+            setAscensions(sortedAscensions);
 
-                setPreferredStyle(mostCommonStyle);
-                setPrimaryDiscipline(mostCommonType);
-                setAscensions(sortedAscensions);
-            } catch (error) {
-                console.log(error);
-            }
         };
     
-        fetchAscensions();
+        loadAscents();
     }, []);
 
     const getBestGrade = (ascensions: AscentItemType[], type: "boulder" | "route") => {
