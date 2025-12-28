@@ -44,7 +44,7 @@ export default function GradeProgressionChart({ showBoulder, ascensions }: Grade
     const parsedData = ascensions
         .map((a) => ({
             date: a.date_climbed,
-            boulderGrade: a.grade.startsWith("V") ? parseInt(a.grade.substring(1)) : null,
+            boulderGrade: a.grade.startsWith("v") ? parseInt(a.grade.substring(1)) : null,
             routeGrade: a.grade.startsWith("5.") ? parseFloat(a.grade.substring(2)) : null
         }))
         .filter((d) => showBoulder ? d.boulderGrade !== null : d.routeGrade !== null)

@@ -18,6 +18,10 @@ export default function SideBar() {
     const handleGoProfile = () => {
         router.push("/profile");
     }
+    
+    const handleGoInsights = () => {
+        router.push("/insights");
+    }
 
     const handleSignOut = () => {
         localStorage.removeItem("token");
@@ -31,7 +35,7 @@ export default function SideBar() {
             <nav className="flex flex-col space-y-6">
                 <a onClick={handleGoDashboard} className="text-gray-400 cursor-pointer hover:text-white font-semibold transition">Dashboard</a>
                 <a onClick={handleGoLogBook} className="text-gray-400 cursor-pointer hover:text-white font-semibold transition">Logbook</a>
-                <a href="#" className="text-gray-400 hover:text-white font-semibold transition">Insights</a>
+                <a onClick={handleGoInsights} className="text-gray-400 cursor-pointer hover:text-white font-semibold transition">Insights</a>
                 <a onClick={handleGoProfile} className="text-gray-400 cursor-pointer hover:text-white font-semibold transition">Profile</a>
                 <button onClick={handleSignOut} className="text-gray-400 cursor-pointer text-left hover:text-white font-semibold transition">Sign Out</button>
             </nav>

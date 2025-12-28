@@ -12,7 +12,8 @@ export function getHigherGrade(grade1: string, grade2: string): string {
 }
 
 function getGradeValue(grade: string): number {
-    if (grade.startsWith("V")) {
+    grade = grade.toLowerCase();
+    if (grade.startsWith("v")) {
         return boulderGrades[grade as keyof typeof boulderGrades] ?? -1;        
     }
 
