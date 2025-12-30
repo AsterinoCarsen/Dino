@@ -18,7 +18,8 @@ const getBestGrade = (ascensions: AscentItemType[], type: "boulder" | "route") =
         .map(a => a.grade)
         .filter(g => {
             if (!g) return false;
-            return type === "boulder" ? (g.startsWith("V") || g.toUpperCase() === "VB") : g.startsWith("5");
+            g = g.toLowerCase();
+            return type === "boulder" ? (g.startsWith("v")) : g.startsWith("5");
         });
 
     return grades.reduce((highest, grade) => {

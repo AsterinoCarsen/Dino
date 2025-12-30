@@ -7,6 +7,7 @@ import { getPublicId } from "@/lib/decodeToken";
 import FocusAreas from "@/components/FocusAreas";
 import BadgeList from "@/components/BadgeList";
 import { useRouter } from "next/router";
+import { fetchAscensions } from "@/lib/getAscents";
 
 interface Badge {
     id: number;
@@ -58,24 +59,12 @@ export default function Dashboard() {
     }
 
     useEffect(() => {
-        const fetchAscensions = async () => {
-            const token = localStorage.getItem("token");
-            if (!token) return;
+        async function loadAscents() {
+            const ascents = await fetchAscensions();
+            setAscensions(ascents);
+        }
 
-            try {
-                const public_id = getPublicId(token);
-                const response = await fetch(`/api/ascensions/getAscensions?public_id=${public_id}`);
-                const data = await response.json();
-                const sortedAscensions = data.data.sort((a: AscentItemType, b: AscentItemType) => {
-                    return new Date(b.date_climbed).getTime() - new Date(a.date_climbed).getTime();
-                });
-                setAscensions(sortedAscensions);
-            } catch (error) {
-                console.log(error);
-            }
-        };
-
-        fetchAscensions();
+        loadAscents();
     }, []);
 
     useEffect(() => {
