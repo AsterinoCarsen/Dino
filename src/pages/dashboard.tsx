@@ -19,6 +19,7 @@ interface Badge {
 
 export default function Dashboard() {
     const [ascensions, setAscensions] = useState<AscentItemType[]>([]);
+    const [username, setUsername] = useState<string>("Climber");
     const [modalOpen, setModalOpen] = useState<boolean>(false);
     const [badges, setBadges] = useState<Badge[]>([]);
 
@@ -64,6 +65,22 @@ export default function Dashboard() {
             setAscensions(ascents);
         }
 
+        async function getUsername() {
+            if (!public_id) return;
+
+            try {
+                const response = await fetch(`/api/auth/getUser?uuid=${public_id}`, {
+                    method: "GET",
+                    headers: { "Content-Type": "application/json" },
+                });
+                const data = await response.json();
+                setUsername(data.data.username);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        getUsername();
         loadAscents();
     }, []);
 
@@ -101,7 +118,7 @@ export default function Dashboard() {
                 <Card>
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
                         <div>
-                            <h2 className="text-2xl font-semibold">Welcome back, Carsen!</h2>
+                            <h2 className="text-2xl font-semibold">Welcome back, {username}!</h2>
                             <p className="text-gray-400 pb-4">Here’s your climbing summary.</p>
                         </div>
                         <button onClick={() => setModalOpen(true)} className="mt-4 md:mt-0 bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-2 rounded-full font-semibold shadow transition">
