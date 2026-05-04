@@ -1,6 +1,6 @@
 # Dino
 ![License](https://img.shields.io/badge/license-MIT-blue)
-![Next.js](https://img.shields.io/badge/Next.js-15.4.6-black)
+![Next.js](https://img.shields.io/badge/Next.js-16.1.1-black)
 ![React](https://img.shields.io/badge/React-19.1.0-blue)
 
 ---
