@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 
+using api.Models.Achievements;
+
 namespace api.Models;
 
 public class User
@@ -13,5 +15,5 @@ public class User
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     public ICollection<Session> Sessions { get; set; } = [];
-    public ICollection<Achievement> Achievements { get; set; } = [];
+    public ICollection<UserAchievement> UserAchievements { get; set; } = [];
 }
