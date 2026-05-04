@@ -1,0 +1,36 @@
+namespace api.Models.Grades;
+
+public enum FrenchGrade
+{
+    _3 = 1,
+    _4 = 2,
+    _4a = 3,
+    _4b = 4,
+    _4c = 5,
+    _5a = 6,
+    _5b = 7,
+    _5c = 8,
+    _6a = 9,
+    _6a_plus = 10,
+    _6b = 11,
+    _6b_plus = 12,
+    _6c = 13,
+    _6c_plus = 14,
+    _7a = 15,
+    _7a_plus = 16,
+    _7b = 17,
+    _7b_plus = 18,
+    _7c = 19,
+    _7c_plus = 20,
+    _8a = 21,
+    _8a_plus = 22,
+    _8b = 23,
+    _8b_plus = 24,
+    _8c = 25,
+    _8c_plus = 26,
+    _9a = 27,
+    _9a_plus = 28,
+    _9b = 29,
+    _9b_plus = 30,
+    _9c = 31
+}
