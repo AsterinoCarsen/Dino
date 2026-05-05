@@ -33,6 +33,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<SessionService>();
 
 var app = builder.Build();
 
