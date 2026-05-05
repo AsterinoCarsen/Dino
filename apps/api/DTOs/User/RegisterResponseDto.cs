@@ -1,6 +1,6 @@
 namespace api.DTOs;
 
-public record UserResponseDto(
+public record RegisterResponseDto(
     Guid UserID,
     string Username,
     DateTime CreatedAt

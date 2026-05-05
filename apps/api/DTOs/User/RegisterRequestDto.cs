@@ -1,6 +1,8 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace api.DTOs;
 
 public record RegisterRequestDto(
-    string Username,
-    string Password
+    [MaxLength(30)] string Username,
+    [MaxLength(100)] string Password
 );

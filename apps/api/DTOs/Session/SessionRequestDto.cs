@@ -1,6 +1,8 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace api.DTOs;
 
 public record SessionRequestDto(
-    string Location,
-    string Notes
+    [MaxLength(75)] string Location,
+    [MaxLength(150)] string Notes
 );
