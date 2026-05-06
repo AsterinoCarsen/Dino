@@ -7,9 +7,9 @@ namespace api.DTOs;
 
 public record AscentRequestDto(
     [MaxLength(30)] string Title,
-    GradeSystem GradeSystem,
+    string GradeSystem,
     [MaxLength(12)] string Grade,
-    ClimbStyle Style,
+    string Style,
     [Range(0, 7500)] int Height,
     [Range(0, 1000)] int Attempts,
     int SessionId

@@ -6,9 +6,9 @@ namespace api.DTOs;
 public record AscentResponseDto(
     int Id,
     string Title,
-    GradeSystem GradeSystem,
+    string GradeSystem,
     string Grade,
-    ClimbStyle Style,
+    string Style,
     int Height,
     int Attempts,
     int SessionId,

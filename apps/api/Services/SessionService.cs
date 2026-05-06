@@ -40,19 +40,30 @@ public class SessionService
     public async Task<ICollection<SessionResponseDto>> GetUserSessionsAsync(Guid userId)
     {
         var sessions = await _db.Sessions
+            .Include(s => s.Ascents)
             .Where(s => s.UserId == userId)
             .ToListAsync();
-        
+
         return sessions.Select(s => new SessionResponseDto(
             s.Id,
             s.Location,
             s.Notes,
             s.CreatedAt,
-            []
+            s.Ascents.Select(a => new AscentResponseDto(
+                a.Id,
+                a.Title,
+                a.GradeSystem.ToString(),
+                GradeComparer.GetGradeLabel(a.GradeSystem, a.GradeRank),
+                a.Style.ToString(),
+                a.Height,
+                a.Attempts,
+                a.SessionId,
+                a.CreatedAt
+            )).ToList()
         )).ToList();
     }
 
-    public async Task<SessionResponseDto> GetSessionById(Guid userId, int sessionId)
+    public async Task<SessionResponseDto?> GetSessionById(Guid userId, int sessionId)
     {
         var session = await _db.Sessions
             .Include(s => s.Ascents)
@@ -68,9 +79,9 @@ public class SessionService
             session.Ascents.Select(a => new AscentResponseDto(
                 a.Id,
                 a.Title,
-                a.GradeSystem,
+                a.GradeSystem.ToString(),
                 GradeComparer.GetGradeLabel(a.GradeSystem, a.GradeRank),
-                a.Style,
+                a.Style.ToString(),
                 a.Height,
                 a.Attempts,
                 a.SessionId,
