@@ -28,6 +28,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration["Redis:ConnectionString"];
+});
+
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
@@ -42,6 +47,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<SessionService>();
 builder.Services.AddScoped<AscentService>();
+builder.Services.AddScoped<InsightService>();
+builder.Services.AddScoped<CacheService>();
 
 var app = builder.Build();
 

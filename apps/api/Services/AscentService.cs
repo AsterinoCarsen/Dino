@@ -12,10 +12,12 @@ namespace api.Services;
 public class AscentService
 {
     private readonly ClimbingLogContext _db;
+    private readonly CacheService _cache;
 
-    public AscentService(ClimbingLogContext db)
+    public AscentService(ClimbingLogContext db, CacheService cache)
     {
         _db = db;
+        _cache = cache;
     }
 
     /// <summary>
@@ -60,6 +62,7 @@ public class AscentService
 
         _db.Ascents.Add(ascent);
         await _db.SaveChangesAsync();
+        await InvalidateInsightsCacheAsync(userId);
 
         return MapToDto(ascent);
     }
@@ -77,7 +80,25 @@ public class AscentService
 
         _db.Ascents.Remove(ascent);
         await _db.SaveChangesAsync();
+        await InvalidateInsightsCacheAsync(userId);
         return true;
+    }
+
+    /// <summary>
+    /// Invalidates all insight cache keys for a user after an ascent write.
+    /// </summary>
+    private async Task InvalidateInsightsCacheAsync(Guid userId)
+    {
+        await _cache.DeleteAsync($"insights:{userId}:grade-pyramid:all");
+        await _cache.DeleteAsync($"insights:{userId}:attempt-ratio:all");
+        await _cache.DeleteAsync($"insights:{userId}:volume:month");
+        await _cache.DeleteAsync($"insights:{userId}:volume:session");
+        // Also delete per-system keys for each grade system
+        foreach (var system in Enum.GetValues<GradeSystem>())
+        {
+            await _cache.DeleteAsync($"insights:{userId}:grade-pyramid:{system}");
+            await _cache.DeleteAsync($"insights:{userId}:attempt-ratio:{system}");
+        }
     }
 
     /// <summary>
