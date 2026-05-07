@@ -1,6 +1,7 @@
 using api.Models;
 using api.Models.Achievements;
 using Microsoft.EntityFrameworkCore;
+using api.Data.Seeds;
 
 namespace api.Data;
 
@@ -27,5 +28,13 @@ public class ClimbingLogContext : DbContext
         modelBuilder.Entity<Ascent>()
             .Property(a => a.GradeSystem)
             .HasConversion<string>();
+        
+        modelBuilder.Entity<AchievementDefinition>()
+            .Property(a => a.GradeSystem)
+            .HasConversion<string>();
+
+        // Seed AchievementDefinitions
+        modelBuilder.Entity<AchievementDefinition>()
+            .HasData(AchievementSeeds.GetDefinitions());
     }
 }

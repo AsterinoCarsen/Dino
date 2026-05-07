@@ -12,6 +12,7 @@ public class Ascent
     public GradeSystem GradeSystem { get; set; }
     public int GradeRank { get; set; }
     public int Attempts { get; set; }
+    [Range(0, 7500)]
     public int Height { get; set; }
     public ClimbStyle Style { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

@@ -13,11 +13,13 @@ public class AscentService
 {
     private readonly ClimbingLogContext _db;
     private readonly CacheService _cache;
+    private readonly AchievementService _achievementService;
 
-    public AscentService(ClimbingLogContext db, CacheService cache)
+    public AscentService(ClimbingLogContext db, CacheService cache, AchievementService achievementService)
     {
         _db = db;
         _cache = cache;
+        _achievementService = achievementService;
     }
 
     /// <summary>
@@ -63,6 +65,7 @@ public class AscentService
         _db.Ascents.Add(ascent);
         await _db.SaveChangesAsync();
         await InvalidateInsightsCacheAsync(userId);
+        await _achievementService.EvaluateAsync(userId);
 
         return MapToDto(ascent);
     }

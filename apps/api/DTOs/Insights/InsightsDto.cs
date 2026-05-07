@@ -1,5 +1,14 @@
 namespace api.DTOs;
 
+public record AchievementDefinitionResponseDto(
+    int Id,
+    string Title,
+    string Description,
+    string Condition,
+    int Threshold,
+    string? GradeSystem
+);
+
 /// <summary>
 /// A single grade entry in a grade pyramid.
 /// </summary>

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using api.Models.Grades;
 
 namespace api.Models.Achievements;
 
@@ -19,6 +20,7 @@ public class AchievementDefinition
     public string Description { get; set; } = string.Empty;
     public AchievementCondition Condition { get; set; }
     public int Threshold { get; set; }
+    public GradeSystem? GradeSystem { get; set; }
 
     public ICollection<UserAchievement> UserAchievements { get; set; } = [];
 

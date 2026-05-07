@@ -9,6 +9,5 @@ public enum AchievementCondition
     TotalAscents,
     TotalSessions,
     HighestGrade,
-    ConsecutiveDays,
     TotalHeight
 }

@@ -49,6 +49,7 @@ builder.Services.AddScoped<SessionService>();
 builder.Services.AddScoped<AscentService>();
 builder.Services.AddScoped<InsightService>();
 builder.Services.AddScoped<CacheService>();
+builder.Services.AddScoped<AchievementService>();
 
 var app = builder.Build();
 
