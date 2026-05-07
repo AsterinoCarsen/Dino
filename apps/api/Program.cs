@@ -50,6 +50,7 @@ builder.Services.AddScoped<AscentService>();
 builder.Services.AddScoped<InsightService>();
 builder.Services.AddScoped<CacheService>();
 builder.Services.AddScoped<AchievementService>();
+builder.Services.AddScoped<UserService>();
 
 var app = builder.Build();
 
