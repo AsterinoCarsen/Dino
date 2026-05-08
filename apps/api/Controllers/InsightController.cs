@@ -53,4 +53,11 @@ public class InsightController : BaseController
         var result = await _insightsService.GetVolumeAsync(GetUserId(), groupBy);
         return Ok(result);
     }
+
+    [HttpGet("summary")]
+    public async Task<IActionResult> GetSummary()
+    {
+        var result = await _insightsService.GetSummaryAsync(GetUserId());
+        return Ok(result);
+    }
 }

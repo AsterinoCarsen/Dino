@@ -96,6 +96,7 @@ public class AscentService
         await _cache.DeleteAsync($"insights:{userId}:attempt-ratio:all");
         await _cache.DeleteAsync($"insights:{userId}:volume:month");
         await _cache.DeleteAsync($"insights:{userId}:volume:session");
+        await _cache.DeleteAsync($"insights:{userId}:summary");
         // Also delete per-system keys for each grade system
         foreach (var system in Enum.GetValues<GradeSystem>())
         {
