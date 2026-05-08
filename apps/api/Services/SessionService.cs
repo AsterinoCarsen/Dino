@@ -42,6 +42,7 @@ public class SessionService
         var sessions = await _db.Sessions
             .Include(s => s.Ascents)
             .Where(s => s.UserId == userId)
+            .OrderByDescending(s => s.CreatedAt)
             .ToListAsync();
 
         return sessions.Select(s => new SessionResponseDto(
@@ -49,17 +50,19 @@ public class SessionService
             s.Location,
             s.Notes,
             s.CreatedAt,
-            s.Ascents.Select(a => new AscentResponseDto(
-                a.Id,
-                a.Title,
-                a.GradeSystem.ToString(),
-                GradeComparer.GetGradeLabel(a.GradeSystem, a.GradeRank),
-                a.Style.ToString(),
-                a.Height,
-                a.Attempts,
-                a.SessionId,
-                a.CreatedAt
-            )).ToList()
+            s.Ascents
+                .OrderByDescending(a => a.GradeRank)
+                .Select(a => new AscentResponseDto(
+                    a.Id,
+                    a.Title,
+                    a.GradeSystem.ToString(),
+                    GradeComparer.GetGradeLabel(a.GradeSystem, a.GradeRank),
+                    a.Style.ToString(),
+                    a.Height,
+                    a.Attempts,
+                    a.SessionId,
+                    a.CreatedAt
+                )).ToList()
         )).ToList();
     }
 
@@ -76,17 +79,19 @@ public class SessionService
             session.Location,
             session.Notes,
             session.CreatedAt,
-            session.Ascents.Select(a => new AscentResponseDto(
-                a.Id,
-                a.Title,
-                a.GradeSystem.ToString(),
-                GradeComparer.GetGradeLabel(a.GradeSystem, a.GradeRank),
-                a.Style.ToString(),
-                a.Height,
-                a.Attempts,
-                a.SessionId,
-                a.CreatedAt
-            )).ToList()
+            session.Ascents
+                .OrderByDescending(a => a.GradeRank)
+                .Select(a => new AscentResponseDto(
+                    a.Id,
+                    a.Title,
+                    a.GradeSystem.ToString(),
+                    GradeComparer.GetGradeLabel(a.GradeSystem, a.GradeRank),
+                    a.Style.ToString(),
+                    a.Height,
+                    a.Attempts,
+                    a.SessionId,
+                    a.CreatedAt
+                )).ToList()
         );
     }
 }
