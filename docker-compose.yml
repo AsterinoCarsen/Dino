@@ -32,5 +32,22 @@ services:
     image: redis:7-alpine
     restart: unless-stopped
 
+  caddy:
+    build:
+      context: .
+      dockerfile: Caddyfile.dockerfile
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    environment:
+      - CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN}
+    restart: unless-stopped
+
 volumes:
   postgres_data:
+  caddy_data:
+  caddy_config:
