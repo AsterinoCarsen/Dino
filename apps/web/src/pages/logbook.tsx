@@ -1,0 +1,208 @@
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { Plus, MapPin, Calendar } from 'lucide-react';
+import ProtectedRoute from '../components/ProtectedRoute';
+import TopNav from '../components/TopNav';
+import NewSessionModal from '../components/logbook/NewSessionModal';
+import AddAscentModal from '../components/logbook/AddAscentModal';
+import { useSessions } from '../lib/queries';
+import { Session } from '../lib/types';
+
+export default function Logbook() {
+    const router = useRouter();
+    const { data: sessions, isLoading } = useSessions();
+    const [selectedSessionId, setSelectedSessionId] = useState<number | null>(null);
+    const [newSessionOpen, setNewSessionOpen] = useState(false);
+    const [addAscentOpen, setAddAscentOpen] = useState(false);
+
+    useEffect(() => {
+        if (!sessions || sessions.length == 0) return;
+
+        const queryId = router.query.session
+            ? parseInt(router.query.session as string)
+            : null;
+
+        if (queryId && sessions.find(s => s.id === queryId)) {
+            setSelectedSessionId(queryId);
+        } else {
+            setSelectedSessionId(sessions[0].id);
+        }
+    }, [sessions, router.query.session]);
+
+    const selectedSession: Session | null =
+        sessions?.find(s => s.id === selectedSessionId)
+        ?? sessions?.[0]
+        ?? null;
+
+    const formatDate = (dateStr: string) =>
+        new Date(dateStr).toLocaleDateString('en-US', {
+            weekday: 'long',
+            month: 'long',
+            day: 'numeric',
+            year: 'numeric',
+        });
+
+    const formatShortDate = (dateStr: string) =>
+        new Date(dateStr).toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric',
+        });
+
+    const getStyleColor = (style: string) => {
+        switch (style) {
+            case 'AutoBelay': return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
+            case 'TopRope': return 'bg-orange-500/10 text-orange-400 border-orange-500/20';
+            case 'Lead': return 'bg-blue-500/10 text-blue-400 border-blue-500/20';
+            case 'Boulder': return 'bg-gray-500/10 text-gray-400 border-gray-500/20';
+            default: return 'bg-gray-500/10 text-gray-400 border-gray-500/20';
+        }
+    };
+
+    return (
+        <ProtectedRoute>
+            <div className="min-h-screen bg-dino-dark text-dino-text">
+                <TopNav />
+                <main className="max-w-6xl mx-auto px-6 py-8">
+
+                    <div className="flex justify-between items-start mb-8">
+                        <div>
+                            <h1 className="text-3xl font-medium">Logbook</h1>
+                            <p className="text-gray-400 mt-1 text-sm">Browse your climbing sessions and ascents</p>
+                        </div>
+                        <button
+                            onClick={() => setNewSessionOpen(true)}
+                            className="flex items-center gap-2 bg-white text-black px-5 py-2.5 rounded-xl font-medium text-sm hover:bg-gray-100 transition"
+                        >
+                            <Plus size={16} />
+                            New Session
+                        </button>
+                    </div>
+
+                    {isLoading ? (
+                        <p className="text-gray-400 text-sm">Loading...</p>
+                    ) : (
+                        <div className="grid grid-cols-[320px_1fr] gap-6">
+
+                            <div className="border border-dino-border rounded-2xl overflow-hidden">
+                                <div className="px-5 py-4 border-b border-dino-border">
+                                    <p className="font-medium">Sessions</p>
+                                    <p className="text-sm text-gray-400">{sessions?.length ?? 0} total sessions</p>
+                                </div>
+                                <div className="divide-y divide-dino-border">
+                                    {sessions?.map(session => {
+                                        const isSelected = (selectedSessionId ?? sessions[0]?.id) === session.id;
+                                        return (
+                                            <div
+                                                key={session.id}
+                                                onClick={() => setSelectedSessionId(session.id)}
+                                                className={`px-5 py-4 cursor-pointer transition ${
+                                                    isSelected
+                                                        ? 'border-l-2 border-emerald-500 bg-white/5'
+                                                        : 'border-l-2 border-transparent hover:bg-white/5'
+                                                }`}
+                                            >
+                                                <div className="flex justify-between items-start">
+                                                    <p className="font-medium text-sm">{session.location}</p>
+                                                    <span className="text-xs text-gray-400 bg-white/5 px-2 py-0.5 rounded-full">
+                                                        {session.ascents.length}
+                                                    </span>
+                                                </div>
+                                                <div className="flex items-center gap-1.5 mt-1">
+                                                    <Calendar size={11} className="text-gray-500" />
+                                                    <p className="text-xs text-gray-400">{formatShortDate(session.createdAt)}</p>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+
+                            {selectedSession ? (
+                                <div className="border border-dino-border rounded-2xl p-6 flex flex-col gap-6">
+                                    <div className="flex justify-between items-start">
+                                        <div>
+                                            <div className="flex items-center gap-2 mb-1">
+                                                <MapPin size={16} className="text-gray-400" />
+                                                <h2 className="text-xl font-medium">{selectedSession.location}</h2>
+                                            </div>
+                                            <div className="flex items-center gap-1.5">
+                                                <Calendar size={13} className="text-gray-500" />
+                                                <p className="text-sm text-gray-400">{formatDate(selectedSession.createdAt)}</p>
+                                            </div>
+                                        </div>
+                                        <button
+                                            onClick={() => setAddAscentOpen(true)}
+                                            className="flex items-center gap-2 border border-dino-border px-4 py-2 rounded-xl text-sm font-medium hover:bg-white/5 transition"
+                                        >
+                                            <Plus size={15} />
+                                            Add Ascent
+                                        </button>
+                                    </div>
+
+                                    {selectedSession.notes && (
+                                        <p className="text-sm text-gray-300 bg-white/5 rounded-xl px-4 py-3">
+                                            {selectedSession.notes}
+                                        </p>
+                                    )}
+
+                                    <div>
+                                        <h3 className="font-medium mb-3">
+                                            {selectedSession.ascents.length} {selectedSession.ascents.length === 1 ? "Ascent" : "Ascents"}
+                                        </h3>
+                                        <div className="flex flex-col gap-3">
+                                            {selectedSession.ascents.map(ascent => (
+                                                <div
+                                                    key={ascent.id}
+                                                    className="border border-dino-border rounded-xl px-4 py-3 flex justify-between items-start"
+                                                >
+                                                    <div className="flex flex-col gap-1.5">
+                                                        <p className="font-medium text-sm">{ascent.title}</p>
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="text-xs border border-dino-border px-2 py-0.5 rounded-full">
+                                                                {ascent.grade}
+                                                            </span>
+                                                            <span className={`text-xs border px-2 py-0.5 rounded-full ${getStyleColor(ascent.style)}`}>
+                                                                {ascent.style}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div className="text-right">
+                                                        <p className="text-sm text-gray-400">{ascent.height}m</p>
+                                                        <p className="text-xs text-gray-500 mt-0.5">
+                                                            {ascent.attempts} {ascent.attempts === 1 ? 'attempt' : 'attempts'}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="border border-dino-border rounded-2xl flex items-center justify-center">
+                                    <p className="text-gray-400 text-sm">No sessions yet. Create one to get started.</p>
+                                </div>
+                            )}
+
+                        </div>
+                    )}
+                </main>
+            </div>
+
+            <NewSessionModal
+                isOpen={newSessionOpen}
+                onClose={() => setNewSessionOpen(false)}
+                onSuccess={(session) => setSelectedSessionId(session.id)}
+            />
+
+            {selectedSession && (
+                <AddAscentModal
+                    isOpen={addAscentOpen}
+                    onClose={() => setAddAscentOpen(false)}
+                    sessionId={selectedSession.id}
+                />
+            )}
+
+        </ProtectedRoute>
+    );
+}
