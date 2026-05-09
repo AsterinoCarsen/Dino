@@ -1,6 +1,7 @@
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Volume } from '../../lib/types';
 import { useEffect, useState } from 'react';
+import { useTypewriter } from '@/lib/hooks/useTypeWriter';
 
 interface VolumeChartProps {
     data: Volume;
@@ -19,6 +20,7 @@ async function generateSummary(prompt: string): Promise<string> {
 export default function VolumeChart({ data }: VolumeChartProps) {
     const [summary, setSummary] = useState<string>('');
     const [summaryLoading, setSummaryLoading] = useState(false);
+    const displayedSummary = useTypewriter(summary);
 
     const chartData = data.data.map(entry => ({
         period: entry.period,
@@ -30,7 +32,7 @@ export default function VolumeChart({ data }: VolumeChartProps) {
         if (chartData.length === 0) return;
         setSummaryLoading(true);
         generateSummary(
-            `You are analyzing a climber's volume over time. Comment on their consistency and peak periods. Give a 1-2 sentence insight. Data: ${JSON.stringify(data)}. Respond with only the insight text, no preamble.`
+            `You are a climbing coach giving a one-time snapshot to a climber based on their volume over time data. Write exactly 1-2 sentences directly to the climber using "you/your". Observations only — no suggestions for future sessions, no "let's", no implied follow-up. Comment on consistency and peak periods. Be encouraging. No preamble. Data: ${JSON.stringify(data)}`
         )
             .then(setSummary)
             .catch(() => setSummary(''))
@@ -87,7 +89,12 @@ export default function VolumeChart({ data }: VolumeChartProps) {
                 {summaryLoading ? (
                     <p className="text-sm text-gray-500 italic">Analyzing your volume...</p>
                 ) : summary ? (
-                    <p className="text-sm text-gray-300">{summary}</p>
+                    <p className="text-sm text-gray-300">
+                        {displayedSummary}
+                        {displayedSummary.length < summary.length && (
+                            <span className="inline-block w-0.5 h-3.5 bg-gray-400 ml-0.5 animate-pulse" />
+                        )}
+                    </p>
                 ) : null}
             </div>
         </div>

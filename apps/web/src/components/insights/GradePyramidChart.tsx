@@ -1,6 +1,8 @@
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { GradePyramid } from '../../lib/types';
 import { useEffect, useState } from 'react';
+import { useTypewriter } from '@/lib/hooks/useTypeWriter';
+
 
 interface GradePyramidChartProps {
     data: GradePyramid[];
@@ -20,6 +22,7 @@ export default function GradePyramidChart({ data }: GradePyramidChartProps) {
     const [summary, setSummary] = useState<string>('');
     const [summaryLoading, setSummaryLoading] = useState(false);
     const [activeSystem, setActiveSystem] = useState(data[0]?.gradeSystem ?? 'VScale');
+    const displayedSummary = useTypewriter(summary);
 
     const activeData = data.find(d => d.gradeSystem === activeSystem);
 
@@ -33,7 +36,7 @@ export default function GradePyramidChart({ data }: GradePyramidChartProps) {
         if (!activeData || chartData.length === 0) return;
         setSummaryLoading(true);
         generateSummary(
-            `You are analyzing a climber's grade pyramid data. Give a 1-2 sentence insight about their climbing distribution and one actionable suggestion. Be specific and encouraging. Data: ${JSON.stringify(activeData)}. Respond with only the insight text, no preamble.`
+            `You are a climbing coach giving a one-time snapshot to a climber based on their grade pyramid data. Write exactly 1-2 sentences directly to the climber using "you/your". Observations only — no suggestions for future sessions, no "let's", no implied follow-up. Be specific with grade names and encouraging. No preamble. Data: ${JSON.stringify(activeData)}`
         )
             .then(setSummary)
             .catch(() => setSummary(''))
@@ -101,7 +104,12 @@ export default function GradePyramidChart({ data }: GradePyramidChartProps) {
                 {summaryLoading ? (
                     <p className="text-sm text-gray-500 italic">Analyzing your pyramid...</p>
                 ) : summary ? (
-                    <p className="text-sm text-gray-300">{summary}</p>
+                    <p className="text-sm text-gray-300">
+                        {displayedSummary}
+                        {displayedSummary.length < summary.length && (
+                            <span className="inline-block w-0.5 h-3.5 bg-gray-400 ml-0.5 animate-pulse" />
+                        )}
+                    </p>
                 ) : null}
             </div>
         </div>

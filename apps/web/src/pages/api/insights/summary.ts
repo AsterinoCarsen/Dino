@@ -7,25 +7,29 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const { prompt } = req.body;
 
-    const response = await fetch(
-        'https://api-inference.huggingface.co/models/mistralai/',
-        {
+    if (!prompt) {
+        return res.status(400).json({ error: 'Prompt is required' });
+    }
+
+    try {
+        const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${process.env.HUGGINGFACE_API_KEY}`,
+                'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
             },
             body: JSON.stringify({
-                model: 'mistralai/Mistral-7B-Instruct-v0.3',
+                model: 'llama-3.1-8b-instant',
                 messages: [{ role: 'user', content: prompt }],
                 max_tokens: 150,
+                temperature: 0.7,
             }),
-        }
-    );
+        });
 
-    console.log(response);
-
-    const data = await response.json();
-    console.log(data);
-    return res.status(200).json({ text: data.choices[0].message.content });
+        const data = await response.json();
+        return res.status(200).json({ text: data.choices[0].message.content });
+    } catch (err) {
+        console.error('Groq API error:', err);
+        return res.status(500).json({ error: 'Failed to generate summary' });
+    }
 }
