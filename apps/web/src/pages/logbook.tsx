@@ -5,13 +5,15 @@ import ProtectedRoute from '../components/ProtectedRoute';
 import TopNav from '../components/TopNav';
 import NewSessionModal from '../components/logbook/NewSessionModal';
 import AddAscentModal from '../components/logbook/AddAscentModal';
+import AscentDetailModal from '../components/logbook/AscentDetailModal';
 import { useSessions } from '../lib/queries';
-import { Session } from '../lib/types';
+import { Session, Ascent } from '../lib/types';
 
 export default function Logbook() {
     const router = useRouter();
     const { data: sessions, isLoading } = useSessions();
     const [selectedSessionId, setSelectedSessionId] = useState<number | null>(null);
+    const [selectedAscent, setSelectedAscent] = useState<Ascent | null>(null);
     const [newSessionOpen, setNewSessionOpen] = useState(false);
     const [addAscentOpen, setAddAscentOpen] = useState(false);
 
@@ -154,7 +156,8 @@ export default function Logbook() {
                                             {selectedSession.ascents.map(ascent => (
                                                 <div
                                                     key={ascent.id}
-                                                    className="border border-dino-border rounded-xl px-4 py-3 flex justify-between items-start"
+                                                    onClick={() => setSelectedAscent(ascent)}
+                                                    className="border border-dino-border rounded-xl px-4 py-3 flex justify-between items-start cursor-pointer hover:bg-white/5 transition"
                                                 >
                                                     <div className="flex flex-col gap-1.5">
                                                         <p className="font-medium text-sm">{ascent.title}</p>
@@ -165,6 +168,11 @@ export default function Logbook() {
                                                             <span className={`text-xs border px-2 py-0.5 rounded-full ${getStyleColor(ascent.style)}`}>
                                                                 {ascent.style}
                                                             </span>
+                                                            {ascent.attempts === 1 && (
+                                                                <span className="text-xs border border-yellow-500/20 bg-yellow-500/10 text-yellow-400 px-2 py-0.5 rounded-full">
+                                                                    Flash
+                                                                </span>
+                                                            )}
                                                         </div>
                                                     </div>
                                                     <div className="text-right">
@@ -193,6 +201,12 @@ export default function Logbook() {
                 isOpen={newSessionOpen}
                 onClose={() => setNewSessionOpen(false)}
                 onSuccess={(session) => setSelectedSessionId(session.id)}
+            />
+
+            <AscentDetailModal
+                ascent={selectedAscent}
+                isOpen={selectedAscent !== null}
+                onClose={() => setSelectedAscent(null)}
             />
 
             {selectedSession && (

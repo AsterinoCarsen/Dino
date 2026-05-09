@@ -1,5 +1,6 @@
 namespace api.DTOs;
 
 public record LoginResponseDto(
-    string Token
+    string Token,
+    UserResponseDto User
 );

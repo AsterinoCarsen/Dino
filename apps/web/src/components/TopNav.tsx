@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { LayoutDashboard, BookOpen, BarChart2, Trophy, LogOut } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import useAuthStore from '../lib/store/authStore';
 
 const navItems = [
@@ -13,6 +14,11 @@ const navItems = [
 export default function TopNav() {
     const router = useRouter();
     const { clearAuth, user } = useAuthStore();
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     const handleLogout = () => {
         clearAuth();
@@ -47,8 +53,16 @@ export default function TopNav() {
             </div>
 
             <div className="flex items-center gap-3">
-                {user && (
-                    <span className="text-sm text-gray-400">{user.username}</span>
+                {mounted && user && (
+                    <Link
+                        href="/profile"
+                        className="flex items-center gap-2 text-sm text-gray-400 hover:text-white transition"
+                    >
+                        <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center text-xs font-medium text-white">
+                            {user.username.charAt(0).toUpperCase()}
+                        </div>
+                        {user.username}
+                    </Link>
                 )}
                 <button
                     onClick={handleLogout}

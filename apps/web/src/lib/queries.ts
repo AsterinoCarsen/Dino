@@ -7,6 +7,7 @@ import {
     GradePyramid,
     AttemptRatio,
     Volume,
+    AchievementProgress
 } from './types';
 
 export function useSummary() {
@@ -43,7 +44,7 @@ export function useGradePyramid(gradeSystem?: string) {
         queryKey: ['insights', 'grade-pyramid', gradeSystem ?? 'all'],
         queryFn: () =>
             api.get<GradePyramid[]>(
-                `/api/insights/grade-pyramid${gradeSystem ? `?gradeSystem=${gradeSystem}` : ''}`
+                `/api/insight/grade-pyramid${gradeSystem ? `?gradeSystem=${gradeSystem}` : ''}`
             ),
     });
 }
@@ -53,7 +54,7 @@ export function useAttemptRatio(gradeSystem?: string) {
         queryKey: ['insights', 'attempt-ratio', gradeSystem ?? 'all'],
         queryFn: () =>
             api.get<AttemptRatio[]>(
-                `/api/insights/attempt-ratio${gradeSystem ? `?gradeSystem=${gradeSystem}` : ''}`
+                `/api/insight/attempt-ratio${gradeSystem ? `?gradeSystem=${gradeSystem}` : ''}`
             ),
     });
 }
@@ -61,6 +62,13 @@ export function useAttemptRatio(gradeSystem?: string) {
 export function useVolume(groupBy: 'month' | 'session' = 'month') {
     return useQuery({
         queryKey: ['insights', 'volume', groupBy],
-        queryFn: () => api.get<Volume>(`/api/insights/volume?groupBy=${groupBy}`),
+        queryFn: () => api.get<Volume>(`/api/insight/volume?groupBy=${groupBy}`),
+    });
+}
+
+export function useAchievementProgress() {
+    return useQuery({
+        queryKey: ['achievements', 'progress'],
+        queryFn: () => api.get<AchievementProgress[]>('/api/achievement/progress'),
     });
 }

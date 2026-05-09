@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import { MapPin } from 'lucide-react';
 import { Session } from '../../lib/types';
 
 interface RecentSessionsProps {
@@ -31,7 +32,7 @@ export default function RecentSessions({ sessions }: RecentSessionsProps) {
                         >
                             <div className="flex items-center gap-4">
                                 <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center">
-                                    <span className="text-xs text-gray-400">▲</span>
+                                    <MapPin size={14} className="text-gray-400" />
                                 </div>
                                 <div>
                                     <p className="text-sm font-medium">{session.location}</p>

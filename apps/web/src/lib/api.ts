@@ -27,6 +27,10 @@ async function handleResponse<T>(res: Response): Promise<T> {
     throw new Error(error || `HTTP error ${res.status}`);
   }
 
+  if (res.status === 204) {
+      return {} as T;
+  }
+
   return res.json() as Promise<T>;
 }
 

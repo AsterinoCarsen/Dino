@@ -76,3 +76,15 @@ export interface Volume {
     groupBy: string;
     data: VolumeEntry[];
 }
+
+export interface AchievementProgress {
+    id: number;
+    title: string;
+    description: string;
+    condition: string;
+    threshold: number;
+    gradeSystem: string | null;
+    earned: boolean;
+    earnedAt: string | null;
+    currentProgress: number;
+}
