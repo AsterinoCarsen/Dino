@@ -18,8 +18,7 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins(
             "http://localhost:3000",
-            "https://asterino.dev",
-            "https://www.asterino.dev"
+            "https://dino.asterino.dev"
         )
               .AllowAnyHeader()
               .AllowAnyMethod();
