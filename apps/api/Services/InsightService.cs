@@ -147,6 +147,43 @@ public class InsightService
     }
 
     /// <summary>
+    /// Returns a high-level summary of the user's climbing stats.
+    /// </summary>
+    public async Task<SummaryDto> GetSummaryAsync(Guid userId)
+    {
+        var cacheKey = $"insights:{userId}:summary";
+
+        var cached = await _cache.GetAsync<SummaryDto>(cacheKey);
+        if (cached != null) return cached;
+
+        var ascents = await _db.Ascents
+            .Include(a => a.Session)
+            .Where(a => a.Session.UserId == userId)
+            .ToListAsync();
+
+        var totalSessions = await _db.Sessions
+            .CountAsync(s => s.UserId == userId);
+
+        var highestGrades = ascents
+            .GroupBy(a => a.GradeSystem)
+            .Select(g => new GradeSystemHighDto(
+                g.Key.ToString(),
+                GradeComparer.GetGradeLabel(g.Key, g.Max(a => a.GradeRank))
+            ))
+            .ToList();
+
+        var result = new SummaryDto(
+            ascents.Count,
+            totalSessions,
+            ascents.Sum(a => a.Height),
+            highestGrades
+        );
+
+        await _cache.SetAsync(cacheKey, result);
+        return result;
+    }
+
+    /// <summary>
     /// Returns the distinct grade systems the user has ascents in,
     /// filtered to a specific system if provided.
     /// </summary>

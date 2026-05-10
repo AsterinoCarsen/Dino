@@ -35,7 +35,10 @@ public class AuthService
         _db.Users.Add(user);
         await _db.SaveChangesAsync();
 
-        return new RegisterResponseDto(user.UserId, user.Username, user.CreatedAt);
+        return new RegisterResponseDto(
+            GenerateToken(user),
+            new UserResponseDto(user.UserId, user.Username, user.CreatedAt)
+        );
     }
 
     public async Task<LoginResponseDto?> LoginAsync(LoginRequestDto dto)
@@ -46,7 +49,10 @@ public class AuthService
         var valid = BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash);
         if (!valid) return null;
 
-        return new LoginResponseDto(GenerateToken(user));
+        return new LoginResponseDto(
+            GenerateToken(user),
+            new UserResponseDto(user.UserId, user.Username, user.CreatedAt)
+        );
     }
 
     private string GenerateToken(User user)

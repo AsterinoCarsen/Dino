@@ -1,19 +1,45 @@
 services:
+  api:
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile
+    expose:
+      - "8080"
+    depends_on:
+      - db
+      - redis
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://0.0.0.0:8080
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=climbinglog;Username=postgres;Password=${POSTGRES_PASSWORD}
+      - Redis__ConnectionString=redis:6379
+      - Jwt__Key=${JWT_KEY}
+      - Jwt__Issuer=${JWT_ISSUER}
+      - Jwt__Audience=${JWT_AUDIENCE}
+    restart: unless-stopped
+
   db:
     image: postgres:16
     environment:
       POSTGRES_DB: climbinglog
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    ports:
-      - "5433:5432"
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
 
   redis:
     image: redis:7-alpine
-    ports:
-      - "6379:6379"
+    restart: unless-stopped
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    command: tunnel --no-autoupdate run
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+    depends_on:
+      - api
+    restart: unless-stopped
 
 volumes:
   postgres_data:

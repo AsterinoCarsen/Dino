@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { FormEvent } from "react";
 import Image from "next/image";
+import useAuthStore from "@/lib/store/authStore";
 
 interface VerifyResponseBody {
     success: boolean;
@@ -9,32 +10,16 @@ interface VerifyResponseBody {
 
 export default function Home() {
     const router = useRouter();
+    const { isAuthenticated } = useAuthStore();
 
-    const handleRedirectAuthPage = async (e: FormEvent) => {
+    const handleRedirectAuthPage = (e: FormEvent) => {
         e.preventDefault();
-        
-        const token = localStorage.getItem("token");
-
-        if (token) {
-            const response = await fetch("/api/auth/verify", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ token })
-            });
-
-            const data: VerifyResponseBody = await response.json();
-
-            if (data.success) {
-                router.push("/dashboard");
-            } else {
-                router.push("/authenticate");
-            }
+        if (isAuthenticated()) {
+            router.push("/dashboard");
         } else {
             router.push("/authenticate");
         }
-    }
+    };
 
     return (
         <div className="min-h-screen bg-dino-dark text-dino-text flex flex-col">

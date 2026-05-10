@@ -97,6 +97,57 @@ public class AchievementService
     }
 
     /// <summary>
+    /// Returns all achievement definitions with the user's current progress toward each one.
+    /// </summary>
+    public async Task<ICollection<AchievementProgressDto>> GetProgressAsync(Guid userId)
+    {
+        var definitions = await _db.AchievementDefinitions.ToListAsync();
+
+        var earnedMap = await _db.UserAchievements
+            .Where(ua => ua.UserId == userId)
+            .ToDictionaryAsync(ua => ua.AchievementDefinitionId, ua => ua.EarnedAt);
+
+        var stats = await ComputeUserStatsAsync(userId);
+
+        return definitions.Select(d =>
+        {
+            var earned = earnedMap.TryGetValue(d.Id, out var earnedAt);
+            var current = GetCurrentProgress(d, stats);
+
+            return new AchievementProgressDto(
+                d.Id,
+                d.Title,
+                d.Description,
+                d.Condition.ToString(),
+                d.Threshold,
+                d.GradeSystem?.ToString(),
+                earned,
+                earned ? earnedAt : null,
+                current
+            );
+        }).ToList();
+    }
+
+    /// <summary>
+    /// Gets the user's current progress value for a given achievement condition.
+    /// </summary>
+    private static int GetCurrentProgress(AchievementDefinition definition, UserStats stats)
+    {
+        return definition.Condition switch
+        {
+            AchievementCondition.TotalAscents => stats.TotalAscents,
+            AchievementCondition.TotalSessions => stats.TotalSessions,
+            AchievementCondition.TotalHeight => stats.TotalHeight,
+            AchievementCondition.HighestGrade =>
+                definition.GradeSystem.HasValue &&
+                stats.HighestRankPerSystem.TryGetValue(definition.GradeSystem.Value, out var rank)
+                    ? rank
+                    : 0,
+            _ => 0
+        };
+    }
+
+    /// <summary>
     /// Computes all stats needed for achievement evaluation in a single pass.
     /// </summary>
     private async Task<UserStats> ComputeUserStatsAsync(Guid userId)

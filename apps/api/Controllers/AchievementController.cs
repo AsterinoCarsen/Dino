@@ -35,4 +35,14 @@ public class AchievementController : BaseController
         var result = await _achievementService.GetEarnedAsync(GetUserId());
         return Ok(result);
     }
+
+    /// <summary>
+    /// Returns all achievements with the user's current progress toward each one.
+    /// </summary>
+    [HttpGet("progress")]
+    public async Task<IActionResult> GetProgress()
+    {
+        var result = await _achievementService.GetProgressAsync(GetUserId());
+        return Ok(result);
+    }
 }

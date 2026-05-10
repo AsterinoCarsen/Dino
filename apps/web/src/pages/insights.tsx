@@ -1,67 +1,75 @@
-import { useEffect, useState } from "react";
-import { fetchAscensions } from "@/lib/getAscents";
-import { AscentItemType } from "@/lib/performance/getAscensionsType";
+import { useState } from 'react';
+import ProtectedRoute from '../components/ProtectedRoute';
+import TopNav from '../components/TopNav';
+import GradePyramidChart from '../components/insights/GradePyramidChart';
+import AttemptRatioChart from '../components/insights/AttemptRatioChart';
+import VolumeChart from '../components/insights/VolumeChart';
+import { useGradePyramid, useAttemptRatio, useVolume } from '../lib/queries';
 
-import { Card } from "@/components";
-import SideBar from "@/components/Sidebar";
-import { GradeProgressionChart } from "@/components";
-import SendSuccessRateGraph from "@/components/SendSuccessRateGraph";
+type Tab = 'Grade Pyramid' | 'Attempt Ratio' | 'Volume';
+const TABS: Tab[] = ['Grade Pyramid', 'Attempt Ratio', 'Volume'];
 
 export default function Insights() {
-    const [ascensions, setAscensions] = useState<AscentItemType[]>([]);
-    const [showBoulder, setShowBoulder] = useState(true);
+    const [activeTab, setActiveTab] = useState<Tab>('Grade Pyramid');
 
-    const handleToggle = (e: React.MouseEvent) => {
-        e.preventDefault();
-        setShowBoulder((prev) => !prev);
-    };
+    const { data: pyramidData, isLoading: pyramidLoading } = useGradePyramid();
+    const { data: ratioData, isLoading: ratioLoading } = useAttemptRatio();
+    const { data: volumeData, isLoading: volumeLoading } = useVolume();
 
-    useEffect(() => {
-            async function loadAscents() {
-                const ascents = await fetchAscensions();
-                setAscensions(ascents);
-            }
-    
-            loadAscents();
-        }, []);
+    const isLoading = pyramidLoading || ratioLoading || volumeLoading;
 
     return (
-        <div className="min-h-screen bg-dino-dark text-dino-text flex">
-            {/* Sidebar / Navigation */}
-            <SideBar />
+        <ProtectedRoute>
+            <div className="min-h-screen bg-dino-dark text-dino-text">
+                <TopNav />
+                <main className="max-w-5xl mx-auto px-6 py-8 flex flex-col gap-6">
 
-            {/* Main content */}
-            <main className="flex-1 p-8 ml-12 mr-12 overflow-y-auto">
-                
-                {/* Header */}
-                <Card>
-                    <h2 className="text-2xl font-semibold">Climbing Insights</h2>
-                    <p className="text-gray-400">Your performance trends and climbing analytics.</p>
-                </Card>
-                
-                <div className="my-6 flex">
-                    <button
-                        onClick={handleToggle}
-                        className="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-2 rounded-full font-semibold shadow transition"
-                    >
-                        {showBoulder ? "View Route Grades →" : "View Boulder Grades →"}
-                    </button>
-                </div>
-
-                {/* Grade Progression */}
-                <Card title="Grade Progression Over Time">
-                    <div className="w-full h-64">
-                        <GradeProgressionChart ascensions={ascensions} showBoulder={showBoulder} />
+                    <div>
+                        <h1 className="text-3xl font-medium">Insights</h1>
+                        <p className="text-gray-400 mt-1 text-sm">Analyze your climbing performance with detailed visualizations</p>
                     </div>
-                </Card>
 
-                {/* Success Rate by Grade */}
-                <Card title="Flash % Rate by Grade">
-                    <div className="w-full h-64">
-                        <SendSuccessRateGraph ascensions={ascensions} showBoulder={showBoulder} />
+                    <div className="flex gap-2">
+                        {TABS.map(tab => (
+                            <button
+                                key={tab}
+                                onClick={() => setActiveTab(tab)}
+                                className={`text-sm px-4 py-1.5 rounded-lg border transition ${
+                                    activeTab === tab
+                                        ? 'border-white/30 text-white bg-white/10'
+                                        : 'border-dino-border text-gray-400 hover:text-white hover:bg-white/5'
+                                }`}
+                            >
+                                {tab}
+                            </button>
+                        ))}
                     </div>
-                </Card>
-            </main>
-        </div>
+
+                    {isLoading ? (
+                        <p className="text-gray-400 text-sm">Loading insights...</p>
+                    ) : (
+                        <>
+                            {activeTab === 'Grade Pyramid' && pyramidData && pyramidData.length > 0 && (
+                                <GradePyramidChart data={pyramidData} />
+                            )}
+                            {activeTab === 'Attempt Ratio' && ratioData && ratioData.length > 0 && (
+                                <AttemptRatioChart data={ratioData} />
+                            )}
+                            {activeTab === 'Volume' && volumeData && volumeData.data.length > 0 && (
+                                <VolumeChart data={volumeData} />
+                            )}
+                            {((activeTab === 'Grade Pyramid' && (!pyramidData || pyramidData.length === 0)) ||
+                              (activeTab === 'Attempt Ratio' && (!ratioData || ratioData.length === 0)) ||
+                              (activeTab === 'Volume' && (!volumeData || volumeData.data.length === 0))) && (
+                                <div className="border border-dino-border rounded-2xl p-12 flex items-center justify-center">
+                                    <p className="text-gray-400 text-sm">No data yet. Log some ascents to see insights.</p>
+                                </div>
+                            )}
+                        </>
+                    )}
+
+                </main>
+            </div>
+        </ProtectedRoute>
     );
 }
