@@ -1,20 +1,34 @@
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { FormEvent } from "react";
-import Image from "next/image";
-import useAuthStore from "@/lib/store/authStore";
+import Link from "next/link";
+import { BarChart2, BookOpen, Trophy, Zap, Mountain } from "lucide-react";
+import useAuthStore from "../lib/store/authStore";
 
-interface VerifyResponseBody {
-    success: boolean;
-    message: string;
+function FeatureCard({ icon, title, description }: { icon: React.ReactNode; title: string; description: string }) {
+    return (
+        <div className="border border-white/10 rounded-2xl p-6 flex flex-col gap-3 hover:bg-white/5 transition">
+            <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center">
+                {icon}
+            </div>
+            <h3 className="font-medium">{title}</h3>
+            <p className="text-sm text-gray-400 leading-relaxed">{description}</p>
+        </div>
+    );
 }
 
 export default function Home() {
     const router = useRouter();
     const { isAuthenticated } = useAuthStore();
+    const [mounted, setMounted] = useState(false);
 
-    const handleRedirectAuthPage = (e: FormEvent) => {
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    const handleGetStarted = (e: FormEvent) => {
         e.preventDefault();
-        if (isAuthenticated()) {
+        if (mounted && isAuthenticated()) {
             router.push("/dashboard");
         } else {
             router.push("/authenticate");
@@ -23,109 +37,136 @@ export default function Home() {
 
     return (
         <div className="min-h-screen bg-dino-dark text-dino-text flex flex-col">
-            {/* Navigation */}
-            <header className="flex justify-between items-center px-35 py-6 border-b border-dino-border">
-                <h1 className="text-3xl font-bold">Dino</h1>
-                <nav className="flex gap-8 items-center">
-                    <a href="#" className="text-gray-400 hover:text-white transition">Features</a>
-                    <a href="#" className="text-gray-400 hover:text-white transition">Screenshots</a>
-                    <a href="#" className="text-gray-400 hover:text-white transition">About</a>
-                    <button onClick={handleRedirectAuthPage} className="bg-emerald-500 cursor-pointer hover:bg-emerald-600 px-6 py-2 rounded-full font-semibold transition">Sign In</button>
+
+            <header className="flex justify-between items-center px-8 py-4 border-b border-white/10">
+                <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center">
+                        <Mountain size={14} className="text-white" />
+                    </div>
+                    <span className="font-medium">Dino</span>
+                </div>
+                <nav className="flex items-center gap-6">
+                    <a href="#features" className="text-sm text-gray-400 hover:text-white transition">Features</a>
+                    <a href="#preview" className="text-sm text-gray-400 hover:text-white transition">Preview</a>
+                    <button
+                        onClick={handleGetStarted}
+                        className="text-sm bg-white text-black px-4 py-1.5 rounded-lg font-medium hover:bg-gray-100 transition"
+                    >
+                        Sign in
+                    </button>
                 </nav>
             </header>
 
-            {/* Hero Section */}
-            <section className="flex flex-col md:flex-row items-center justify-between px-35 py-20">
-                <div className="max-w-xl">
-                    <h2 className="text-5xl font-bold mb-6">Track Your Climbing, Crush Your Goals</h2>
-                    <p className="text-gray-400 text-lg mb-8">
-                        Dino helps climbers log ascents, monitor progress, and unlock new achievements with
-                        beautiful insights and detailed stats.
-                    </p>
-                    <div className="flex gap-4">
-                        <button onClick={handleRedirectAuthPage} className="bg-emerald-500 hover:bg-emerald-600 px-8 py-3 rounded-full font-semibold transition">
-                            Get Started
-                        </button>
-                        <a href="#features" className="bg-white/5 hover:bg-white/10 border border-dino-border px-8 py-3 rounded-full font-semibold transition">
-                            Learn More
-                        </a>
-                    </div>
+            <section className="flex flex-col items-center justify-center text-center px-6 py-32 gap-6">
+                <div className="inline-flex items-center gap-2 text-xs text-gray-400 border border-white/10 px-3 py-1.5 rounded-full">
+                    <Zap size={11} />
+                    AI-powered climbing insights
                 </div>
-                <div className="mt-12 md:mt-0 md:ml-12">
-                    <div className="relative w-[500px] h-[330px] rounded-xl overflow-hidden border border-dino-border shadow-lg">
-                        <Image
-                            src="/hero.png"
-                            alt="Dino App Hero Preview"
-                            fill
-                            className="object-contain object-center"
-                            priority
+                <h1 className="text-5xl font-medium max-w-2xl leading-tight">
+                    Track your climbing.<br />Understand your progress.
+                </h1>
+                <p className="text-gray-400 max-w-md text-base leading-relaxed">
+                    Dino helps climbers log sessions, visualize grade progression across V-Scale, YDS, and French systems, and earn achievements along the way.
+                </p>
+                <div className="flex gap-3 mt-2">
+                    <button
+                        onClick={handleGetStarted}
+                        className="bg-white text-black px-6 py-2.5 rounded-xl font-medium text-sm hover:bg-gray-100 transition"
+                    >
+                        Get started free
+                    </button>
+                    <a
+                        href="#preview"
+                        className="border border-white/10 px-6 py-2.5 rounded-xl text-sm font-medium hover:bg-white/5 transition"
+                    >
+                        See preview
+                    </a>
+                </div>
+            </section>
+
+            <section id="features" className="px-8 py-20 border-t border-white/10">
+                <div className="max-w-5xl mx-auto">
+                    <p className="text-xs text-gray-500 uppercase tracking-widest text-center mb-12">Features</p>
+                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <FeatureCard
+                            icon={<BookOpen size={18} className="text-gray-300" />}
+                            title="Session Logbook"
+                            description="Log sessions and ascents with grades, attempts, style, and height. Master-detail layout keeps everything organized."
+                        />
+                        <FeatureCard
+                            icon={<BarChart2 size={18} className="text-gray-300" />}
+                            title="AI Insights"
+                            description="Grade pyramid, attempt ratio, and volume charts with AI-generated summaries that analyze your performance."
+                        />
+                        <FeatureCard
+                            icon={<Trophy size={18} className="text-gray-300" />}
+                            title="Achievements"
+                            description="23 achievements across total ascents, sessions, height climbed, and hardest grades per grading system."
+                        />
+                        <FeatureCard
+                            icon={<Zap size={18} className="text-gray-300" />}
+                            title="Grade Normalization"
+                            description="Track grades across V-Scale, YDS, and French systems with a rank-based normalization engine."
                         />
                     </div>
                 </div>
             </section>
 
-            {/* Features */}
-            <section id="features" className="px-35 py-16 border-t border-dino-border">
-                <h3 className="text-3xl font-semibold mb-12 text-center">Why Climbers Love Dino</h3>
-                <div className="grid md:grid-cols-3 gap-8">
-                    <FeatureCard title="Detailed Logbook" description="Track every climb with grades, attempts, style, and notes to analyze your performance over time." />
-                    <FeatureCard title="Insightful Analytics" description="Visualize your grade progression, volume, and strengths/weaknesses with interactive charts." />
-                    <FeatureCard title="Earn Achievements" description="Push yourself with milestone badges and share your climbing journey with friends." />
-                </div>
-            </section>
+            <section id="preview" className="px-8 py-20 border-t border-white/10">
+                <div className="max-w-5xl mx-auto flex flex-col gap-12">
+                    <p className="text-xs text-gray-500 uppercase tracking-widest text-center">Preview</p>
 
-            {/* Screenshot Preview */}
-            <section id="screenshots" className="px-35 py-16 border-t border-dino-border">
-                <h3 className="text-3xl font-semibold mb-12 text-center">Take a Peek Inside</h3>
-                <div className="grid md:grid-cols-3 gap-8">
-                    <div className="relative w-full aspect-[1546/531] bg-white/5 border border-dino-border rounded-xl flex items-center justify-center text-gray-500">
-                        <Image
-                            src="/index1.png"
-                            alt="Dino App Hero Preview"
-                            fill
-                            className="object-contain object-center"
-                            priority
-                        />
+                    <div className="flex flex-col gap-4">
+                        <p className="text-xs text-gray-500 uppercase tracking-widest">Dashboard</p>
+                        <div className="border border-white/10 rounded-2xl overflow-hidden">
+                            <img src="/Dashboard.gif" alt="Dashboard preview" className="w-full" />
+                        </div>
                     </div>
-                    <div className="relative w-full aspect-[1550/664] bg-white/5 border border-dino-border rounded-xl flex items-center justify-center text-gray-500">
-                        <Image
-                            src="/index2.png"
-                            alt="Dino App Hero Preview"
-                            fill
-                            className="object-contain object-center"
-                            priority
-                        />
+
+                    <div className="flex flex-col gap-4">
+                        <p className="text-xs text-gray-500 uppercase tracking-widest">Logbook</p>
+                        <div className="border border-white/10 rounded-2xl overflow-hidden">
+                            <img src="/Logbook.gif" alt="Logbook preview" className="w-full" />
+                        </div>
                     </div>
-                    <div className="relative w-full aspect-[1541/765] bg-white/5 border border-dino-border rounded-xl flex items-center justify-center text-gray-500">
-                        <Image
-                            src="/index3.png"
-                            alt="Dino App Hero Preview"
-                            fill
-                            className="object-contain object-center"
-                            priority
-                        />
+
+                    <div className="flex flex-col gap-4">
+                        <p className="text-xs text-gray-500 uppercase tracking-widest">Insights</p>
+                        <div className="border border-white/10 rounded-2xl overflow-hidden">
+                            <img src="/Insights.gif" alt="Insights preview" className="w-full" />
+                        </div>
+                    </div>
+
+                    <div className="flex flex-col gap-4">
+                        <p className="text-xs text-gray-500 uppercase tracking-widest">Achievements</p>
+                        <div className="border border-white/10 rounded-2xl overflow-hidden">
+                            <img src="/Achievements.gif" alt="Achievements preview" className="w-full" />
+                        </div>
                     </div>
                 </div>
             </section>
 
-            {/* Call to Action */}
-            <footer className="px-12 py-16 border-t border-dino-border text-center">
-                <h3 className="text-3xl font-semibold mb-4">Ready to Climb Smarter?</h3>
-                <p className="text-gray-400 mb-8">Join now and take your climbing to the next level.</p>
-                <button onClick={handleRedirectAuthPage} className="bg-emerald-500 hover:bg-emerald-600 px-8 py-3 rounded-full font-semibold transition">
-                    Sign Up for Free
+            <footer className="px-8 py-16 border-t border-white/10 flex flex-col items-center gap-6">
+                <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center">
+                        <Mountain size={14} className="text-white" />
+                    </div>
+                    <span className="font-medium">Dino</span>
+                </div>
+                <p className="text-sm text-gray-400 max-w-sm text-center">
+                    A full-stack climbing analytics platform. Log, track, and understand your climbing performance.
+                </p>
+                <button
+                    onClick={handleGetStarted}
+                    className="bg-white text-black px-6 py-2.5 rounded-xl font-medium text-sm hover:bg-gray-100 transition"
+                >
+                    Start climbing smarter
                 </button>
+                <p className="text-xs text-gray-600 mt-4">
+                    Built by <a href="https://asterino.dev" className="text-gray-400 hover:text-white transition">Carsen Asterino</a>
+                </p>
             </footer>
-        </div>
-    );
-}
 
-/* Components */
-function FeatureCard({ title, description }: { title: string; description: string }) {
-    return (
-        <div className="bg-white/5 p-6 rounded-xl border border-dino-border hover:bg-white/10 transition shadow-lg hover:shadow-xl">
-            <h4 className="text-xl font-semibold mb-2">{title}</h4>
-            <p className="text-gray-400">{description}</p>
         </div>
     );
 }
