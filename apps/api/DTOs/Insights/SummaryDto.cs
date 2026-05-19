@@ -7,5 +7,6 @@ public record SummaryDto(
     int TotalAscents,
     int TotalSessions,
     int TotalHeight,
-    ICollection<GradeSystemHighDto> HighestGrades
+    ICollection<GradeSystemHighDto> HighestGrades,
+    string? AiSummary
 );
