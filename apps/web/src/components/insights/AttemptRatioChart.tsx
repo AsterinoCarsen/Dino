@@ -1,21 +1,9 @@
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { AttemptRatio } from '../../lib/types';
-import { useEffect, useState } from 'react';
-import { useTypewriter } from '@/lib/hooks/useTypeWriter';
-
+import { useState } from 'react';
 
 interface AttemptRatioChartProps {
     data: AttemptRatio[];
-}
-
-async function generateSummary(prompt: string): Promise<string> {
-    const response = await fetch('/api/insights/summary', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt }),
-    });
-    const data = await response.json();
-    return data.text;
 }
 
 function getZones(data: AttemptRatio[]) {
@@ -43,10 +31,7 @@ function getZones(data: AttemptRatio[]) {
 }
 
 export default function AttemptRatioChart({ data }: AttemptRatioChartProps) {
-    const [summary, setSummary] = useState<string>('');
-    const [summaryLoading, setSummaryLoading] = useState(false);
     const [activeSystem, setActiveSystem] = useState(data[0]?.gradeSystem ?? 'VScale');
-    const displayedSummary = useTypewriter(summary);
 
     const activeData = data.find(d => d.gradeSystem === activeSystem);
     const zones = getZones(data.filter(d => d.gradeSystem === activeSystem));
@@ -55,17 +40,6 @@ export default function AttemptRatioChart({ data }: AttemptRatioChartProps) {
         grade: entry.grade,
         'Avg Attempts': parseFloat(entry.averageAttempts.toFixed(1)),
     })) ?? [];
-
-    useEffect(() => {
-        if (!activeData || chartData.length === 0) return;
-        setSummaryLoading(true);
-        generateSummary(
-            `You are a climbing coach giving a one-time snapshot to a climber based on their attempt ratio data. Write exactly 1-2 sentences directly to the climber using "you/your". Observations only — no suggestions for future sessions, no "let's", no implied follow-up. Be specific with grade names and encouraging. No preamble. Data: ${JSON.stringify(activeData)}`
-        )
-            .then(setSummary)
-            .catch(() => setSummary(''))
-            .finally(() => setSummaryLoading(false));
-    }, [activeSystem]);
 
     return (
         <div className="border border-dino-border rounded-2xl p-6 flex flex-col gap-4">
@@ -143,18 +117,11 @@ export default function AttemptRatioChart({ data }: AttemptRatioChartProps) {
                 </div>
             )}
 
-            <div className="bg-white/5 rounded-xl px-4 py-3 min-h-[48px] flex items-center">
-                {summaryLoading ? (
-                    <p className="text-sm text-gray-500 italic">Analyzing your attempts...</p>
-                ) : summary ? (
-                    <p className="text-sm text-gray-300">
-                        {displayedSummary}
-                        {displayedSummary.length < summary.length && (
-                            <span className="inline-block w-0.5 h-3.5 bg-gray-400 ml-0.5 animate-pulse" />
-                        )}
-                    </p>
-                ) : null}
-            </div>
+            {activeData?.aiSummary && (
+                <div className="bg-white/5 rounded-xl px-4 py-3 min-h-[48px] flex items-center">
+                    <p className="text-sm text-gray-300">{activeData.aiSummary}</p>
+                </div>
+            )}
         </div>
     );
 }
