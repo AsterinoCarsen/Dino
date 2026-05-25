@@ -16,6 +16,8 @@ services:
       - Jwt__Key=${JWT_KEY}
       - Jwt__Issuer=${JWT_ISSUER}
       - Jwt__Audience=${JWT_AUDIENCE}
+      - Groq__ApiKey=${GROQ__APIKEY}
+      - Groq__Model=${GROQ__MODEL}
     restart: unless-stopped
 
   db:

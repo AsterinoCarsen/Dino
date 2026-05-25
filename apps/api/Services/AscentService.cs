@@ -93,15 +93,22 @@ public class AscentService
     private async Task InvalidateInsightsCacheAsync(Guid userId)
     {
         await _cache.DeleteAsync($"insights:{userId}:grade-pyramid:all");
+        await _cache.DeleteAsync($"insights:{userId}:grade-pyramid:all:summary");
         await _cache.DeleteAsync($"insights:{userId}:attempt-ratio:all");
+        await _cache.DeleteAsync($"insights:{userId}:attempt-ratio:all:summary");
         await _cache.DeleteAsync($"insights:{userId}:volume:month");
+        await _cache.DeleteAsync($"insights:{userId}:volume:month:summary");
         await _cache.DeleteAsync($"insights:{userId}:volume:session");
+        await _cache.DeleteAsync($"insights:{userId}:volume:session:summary");
         await _cache.DeleteAsync($"insights:{userId}:summary");
-        // Also delete per-system keys for each grade system
+        await _cache.DeleteAsync($"insights:{userId}:summary:ai");
+
         foreach (var system in Enum.GetValues<GradeSystem>())
         {
             await _cache.DeleteAsync($"insights:{userId}:grade-pyramid:{system}");
+            await _cache.DeleteAsync($"insights:{userId}:grade-pyramid:{system}:summary");
             await _cache.DeleteAsync($"insights:{userId}:attempt-ratio:{system}");
+            await _cache.DeleteAsync($"insights:{userId}:attempt-ratio:{system}:summary");
         }
     }
 

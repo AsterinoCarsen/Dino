@@ -23,7 +23,8 @@ public record GradePyramidEntryDto(
 /// </summary>
 public record GradePyramidDto(
     string GradeSystem,
-    ICollection<GradePyramidEntryDto> Data
+    ICollection<GradePyramidEntryDto> Data,
+    string? AiSummary
 );
 
 /// <summary>
@@ -42,7 +43,8 @@ public record AttemptRatioEntryDto(
 /// </summary>
 public record AttemptRatioDto(
     string GradeSystem,
-    ICollection<AttemptRatioEntryDto> Data
+    ICollection<AttemptRatioEntryDto> Data,
+    string? AiSummary
 );
 
 /// <summary>
@@ -59,5 +61,6 @@ public record VolumeEntryDto(
 /// </summary>
 public record VolumeDto(
     string GroupBy,
-    ICollection<VolumeEntryDto> Data
+    ICollection<VolumeEntryDto> Data,
+    string? AiSummary
 );

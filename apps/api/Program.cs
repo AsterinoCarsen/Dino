@@ -53,9 +53,10 @@ builder.Services.AddControllers()
     });
 
 builder.Services.AddAuthorization();
-builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddSingleton<GroqService>();
 
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<SessionService>();

@@ -34,6 +34,7 @@ export interface Summary {
     totalSessions: number;
     totalHeight: number;
     highestGrades: GradeSystemHigh[];
+    aiSummary?: string;
 }
 
 export interface UserAchievement {
@@ -51,6 +52,7 @@ export interface GradePyramidEntry {
 export interface GradePyramid {
     gradeSystem: string;
     data: GradePyramidEntry[];
+    aiSummary?: string;
 }
 
 export interface AttemptRatioEntry {
@@ -64,6 +66,7 @@ export interface AttemptRatioEntry {
 export interface AttemptRatio {
     gradeSystem: string;
     data: AttemptRatioEntry[];
+    aiSummary?: string;
 }
 
 export interface VolumeEntry {
@@ -75,6 +78,7 @@ export interface VolumeEntry {
 export interface Volume {
     groupBy: string;
     data: VolumeEntry[];
+    aiSummary?: string;
 }
 
 export interface AchievementProgress {

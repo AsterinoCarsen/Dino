@@ -13,11 +13,13 @@ public class InsightService
 {
     private readonly ClimbingLogContext _db;
     private readonly CacheService _cache;
+    private readonly GroqService _groq;
 
-    public InsightService(ClimbingLogContext db, CacheService cache)
+    public InsightService(ClimbingLogContext db, CacheService cache, GroqService groq)
     {
         _db = db;
         _cache = cache;
+        _groq = groq;
     }
 
     /// <summary>
@@ -27,6 +29,7 @@ public class InsightService
     public async Task<ICollection<GradePyramidDto>> GetGradePyramidAsync(Guid userId, string? gradeSystem = null)
     {
         var cacheKey = $"insights:{userId}:grade-pyramid:{gradeSystem ?? "all"}";
+        var summaryCacheKey = $"{cacheKey}:summary";
 
         var cached = await _cache.GetAsync<ICollection<GradePyramidDto>>(cacheKey);
         if (cached != null) return cached;
@@ -51,7 +54,13 @@ public class InsightService
                 ))
                 .ToList();
 
-            result.Add(new GradePyramidDto(system.ToString(), entries));
+            var aiSummary = await _cache.GetAsync<string>(summaryCacheKey)
+                ?? await _groq.GenerateSummaryAsync(
+                    $"Grade pyramid data for {system}: {System.Text.Json.JsonSerializer.Serialize(entries)}"
+                );
+
+            await _cache.SetAsync(summaryCacheKey, aiSummary);
+            result.Add(new GradePyramidDto(system.ToString(), entries, aiSummary));
         }
 
         await _cache.SetAsync(cacheKey, result);
@@ -65,6 +74,7 @@ public class InsightService
     public async Task<ICollection<AttemptRatioDto>> GetAttemptRatioAsync(Guid userId, string? gradeSystem = null)
     {
         var cacheKey = $"insights:{userId}:attempt-ratio:{gradeSystem ?? "all"}";
+        var summaryCacheKey = $"{cacheKey}:summary";
 
         var cached = await _cache.GetAsync<ICollection<AttemptRatioDto>>(cacheKey);
         if (cached != null) return cached;
@@ -91,7 +101,13 @@ public class InsightService
                 ))
                 .ToList();
 
-            result.Add(new AttemptRatioDto(system.ToString(), entries));
+            var aiSummary = await _cache.GetAsync<string>(summaryCacheKey)
+                ?? await _groq.GenerateSummaryAsync(
+                    $"Attempt ratio data for {system}: {System.Text.Json.JsonSerializer.Serialize(entries)}"
+                );
+
+            await _cache.SetAsync(summaryCacheKey, aiSummary);
+            result.Add(new AttemptRatioDto(system.ToString(), entries, aiSummary));
         }
 
         await _cache.SetAsync(cacheKey, result);
@@ -104,6 +120,7 @@ public class InsightService
     public async Task<VolumeDto> GetVolumeAsync(Guid userId, string groupBy = "month")
     {
         var cacheKey = $"insights:{userId}:volume:{groupBy}";
+        var summaryCacheKey = $"{cacheKey}:summary";
 
         var cached = await _cache.GetAsync<VolumeDto>(cacheKey);
         if (cached != null) return cached;
@@ -140,8 +157,14 @@ public class InsightService
                 .ToList();
         }
 
-        var result = new VolumeDto(groupBy, entries);
-        
+        var aiSummary = await _cache.GetAsync<string>(summaryCacheKey)
+            ?? await _groq.GenerateSummaryAsync(
+                $"Climbing volume data grouped by {groupBy}: {System.Text.Json.JsonSerializer.Serialize(entries)}"
+            );
+
+        await _cache.SetAsync(summaryCacheKey, aiSummary);
+
+        var result = new VolumeDto(groupBy, entries, aiSummary);
         await _cache.SetAsync(cacheKey, result);
         return result;
     }
@@ -152,6 +175,7 @@ public class InsightService
     public async Task<SummaryDto> GetSummaryAsync(Guid userId)
     {
         var cacheKey = $"insights:{userId}:summary";
+        var summaryCacheKey = $"{cacheKey}:ai";
 
         var cached = await _cache.GetAsync<SummaryDto>(cacheKey);
         if (cached != null) return cached;
@@ -172,11 +196,20 @@ public class InsightService
             ))
             .ToList();
 
+        var aiSummary = await _cache.GetAsync<string>(summaryCacheKey)
+            ?? await _groq.GenerateSummaryAsync(
+                $"Climbing summary: {ascents.Count} total ascents across {totalSessions} sessions, " +
+                $"highest grades: {System.Text.Json.JsonSerializer.Serialize(highestGrades)}"
+            );
+
+        await _cache.SetAsync(summaryCacheKey, aiSummary);
+
         var result = new SummaryDto(
             ascents.Count,
             totalSessions,
             ascents.Sum(a => a.Height),
-            highestGrades
+            highestGrades,
+            aiSummary
         );
 
         await _cache.SetAsync(cacheKey, result);
