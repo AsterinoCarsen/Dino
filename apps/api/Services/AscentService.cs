@@ -64,7 +64,48 @@ public class AscentService
 
         _db.Ascents.Add(ascent);
         await _db.SaveChangesAsync();
-        await InvalidateInsightsCacheAsync(userId);
+        await _cache.InvalidateInsightsAsync(userId);
+        await _achievementService.EvaluateAsync(userId);
+
+        return MapToDto(ascent);
+    }
+
+    /// <summary>
+    /// Updates an existing ascent, verifying it belongs to the requesting user via session ownership.
+    /// </summary>
+    public async Task<AscentResponseDto?> UpdateAsync(int id, AscentUpdateRequestDto dto, Guid userId)
+    {
+        var ascent = await _db.Ascents
+            .Include(a => a.Session)
+            .FirstOrDefaultAsync(a => a.Id == id && a.Session.UserId == userId);
+
+        if (ascent == null) return null;
+
+        if (!Enum.TryParse<GradeSystem>(dto.GradeSystem, ignoreCase: true, out var gradeSystem))
+            return null;
+
+        if (!Enum.TryParse<ClimbStyle>(dto.Style, ignoreCase: true, out var style))
+            return null;
+
+        int gradeRank;
+        try
+        {
+            gradeRank = GradeComparer.GetGradeRank(gradeSystem, dto.Grade);
+        }
+        catch (ArgumentException)
+        {
+            return null;
+        }
+
+        ascent.Title = dto.Title;
+        ascent.GradeSystem = gradeSystem;
+        ascent.GradeRank = gradeRank;
+        ascent.Style = style;
+        ascent.Height = dto.Height;
+        ascent.Attempts = dto.Attempts;
+
+        await _db.SaveChangesAsync();
+        await _cache.InvalidateInsightsAsync(userId);
         await _achievementService.EvaluateAsync(userId);
 
         return MapToDto(ascent);
@@ -83,33 +124,8 @@ public class AscentService
 
         _db.Ascents.Remove(ascent);
         await _db.SaveChangesAsync();
-        await InvalidateInsightsCacheAsync(userId);
+        await _cache.InvalidateInsightsAsync(userId);
         return true;
-    }
-
-    /// <summary>
-    /// Invalidates all insight cache keys for a user after an ascent write.
-    /// </summary>
-    private async Task InvalidateInsightsCacheAsync(Guid userId)
-    {
-        await _cache.DeleteAsync($"insights:{userId}:grade-pyramid:all");
-        await _cache.DeleteAsync($"insights:{userId}:grade-pyramid:all:summary");
-        await _cache.DeleteAsync($"insights:{userId}:attempt-ratio:all");
-        await _cache.DeleteAsync($"insights:{userId}:attempt-ratio:all:summary");
-        await _cache.DeleteAsync($"insights:{userId}:volume:month");
-        await _cache.DeleteAsync($"insights:{userId}:volume:month:summary");
-        await _cache.DeleteAsync($"insights:{userId}:volume:session");
-        await _cache.DeleteAsync($"insights:{userId}:volume:session:summary");
-        await _cache.DeleteAsync($"insights:{userId}:summary");
-        await _cache.DeleteAsync($"insights:{userId}:summary:ai");
-
-        foreach (var system in Enum.GetValues<GradeSystem>())
-        {
-            await _cache.DeleteAsync($"insights:{userId}:grade-pyramid:{system}");
-            await _cache.DeleteAsync($"insights:{userId}:grade-pyramid:{system}:summary");
-            await _cache.DeleteAsync($"insights:{userId}:attempt-ratio:{system}");
-            await _cache.DeleteAsync($"insights:{userId}:attempt-ratio:{system}:summary");
-        }
     }
 
     /// <summary>

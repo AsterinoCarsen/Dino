@@ -25,6 +25,14 @@ public class AscentController : BaseController
         return Ok(result);
     }
 
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(int id, [FromBody] AscentUpdateRequestDto dto)
+    {
+        var result = await _ascentService.UpdateAsync(id, dto, GetUserId());
+        if (result == null) return BadRequest("Invalid grade system, style, grade, or session.");
+        return Ok(result);
+    }
+
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
