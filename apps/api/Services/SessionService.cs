@@ -10,10 +10,12 @@ namespace api.Services;
 public class SessionService
 {
     private readonly ClimbingLogContext _db;
+    private readonly CacheService _cache;
 
-    public SessionService(ClimbingLogContext db)
+    public SessionService(ClimbingLogContext db, CacheService cache)
     {
         _db = db;
+        _cache = cache;
     }
 
     public async Task<SessionResponseDto> CreateAsync(SessionRequestDto dto, Guid userId)
@@ -93,5 +95,53 @@ public class SessionService
                     a.CreatedAt
                 )).ToList()
         );
+    }
+
+    public async Task<SessionResponseDto?> UpdateAsync(int sessionId, SessionRequestDto dto, Guid userId)
+    {
+        var session = await _db.Sessions
+            .Include(s => s.Ascents)
+            .FirstOrDefaultAsync(s => s.Id == sessionId && s.UserId == userId);
+
+        if (session == null) return null;
+
+        session.Location = dto.Location;
+        session.Notes = dto.Notes;
+
+        await _db.SaveChangesAsync();
+
+        return new SessionResponseDto(
+            session.Id,
+            session.Location,
+            session.Notes,
+            session.CreatedAt,
+            session.Ascents
+                .OrderByDescending(a => a.GradeRank)
+                .Select(a => new AscentResponseDto(
+                    a.Id,
+                    a.Title,
+                    a.GradeSystem.ToString(),
+                    GradeComparer.GetGradeLabel(a.GradeSystem, a.GradeRank),
+                    a.Style.ToString(),
+                    a.Height,
+                    a.Attempts,
+                    a.SessionId,
+                    a.CreatedAt
+                )).ToList()
+        );
+    }
+
+    public async Task<bool> DeleteAsync(int sessionId, Guid userId)
+    {
+        var session = await _db.Sessions
+            .Include(s => s.Ascents)
+            .FirstOrDefaultAsync(s => s.Id == sessionId && s.UserId == userId);
+
+        if (session == null) return false;
+
+        _db.Sessions.Remove(session);
+        await _db.SaveChangesAsync();
+        await _cache.InvalidateInsightsAsync(userId);
+        return true;
     }
 }

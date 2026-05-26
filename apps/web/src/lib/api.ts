@@ -47,6 +47,13 @@ const api = {
       body: JSON.stringify(body),
     }).then(res => handleResponse<T>(res)),
 
+  put: <T>(url: string, body?: unknown): Promise<T> =>
+    fetch(`${BASE_URL}${url}`, {
+      method: 'PUT',
+      headers: authHeaders(),
+      body: JSON.stringify(body),
+    }).then(res => handleResponse<T>(res)),
+
   delete: <T>(url: string): Promise<T> =>
     fetch(`${BASE_URL}${url}`, {
       method: 'DELETE',

@@ -42,4 +42,20 @@ public class SessionController : BaseController
         if (result == null) return NotFound();
         return Ok(result);
     }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(int id, [FromBody] SessionRequestDto dto)
+    {
+        var result = await _sessionService.UpdateAsync(id, dto, GetUserId());
+        if (result == null) return NotFound();
+        return Ok(result);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var success = await _sessionService.DeleteAsync(id, GetUserId());
+        if (!success) return NotFound();
+        return NoContent();
+    }
 }
