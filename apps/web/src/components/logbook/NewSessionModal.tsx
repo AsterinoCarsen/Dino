@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '../../lib/api';
@@ -8,6 +8,7 @@ interface NewSessionModalProps {
     isOpen: boolean;
     onClose: () => void;
     onSuccess: (session: Session) => void;
+    session?: Session;
 }
 
 interface FormState {
@@ -16,22 +17,37 @@ interface FormState {
     error: string;
 }
 
-export default function NewSessionModal({ isOpen, onClose, onSuccess }: NewSessionModalProps) {
+export default function NewSessionModal({ isOpen, onClose, onSuccess, session }: NewSessionModalProps) {
     const queryClient = useQueryClient();
+    const isEditing = !!session;
+
     const [form, setForm] = useState<FormState>({
         location: '',
         notes: '',
         error: '',
     });
 
+    useEffect(() => {
+        if (session) {
+            setForm({ location: session.location, notes: session.notes, error: '' });
+        } else {
+            setForm({ location: '', notes: '', error: '' });
+        }
+    }, [session, isOpen]);
+
     const mutation = useMutation({
-        mutationFn: () => api.post<Session>('/api/session', {
-            location: form.location,
-            notes: form.notes,
-        }),
-        onSuccess: (session) => {
+        mutationFn: () => isEditing
+            ? api.put<Session>(`/api/session/${session.id}`, {
+                location: form.location,
+                notes: form.notes,
+            })
+            : api.post<Session>('/api/session', {
+                location: form.location,
+                notes: form.notes,
+            }),
+        onSuccess: (result) => {
             queryClient.invalidateQueries({ queryKey: ['sessions'] });
-            onSuccess(session);
+            onSuccess(result);
             handleClose();
         },
         onError: (err: Error) => {
@@ -63,7 +79,7 @@ export default function NewSessionModal({ isOpen, onClose, onSuccess }: NewSessi
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
             <div className="bg-[#1a1a1a] border border-white/10 rounded-2xl w-full max-w-md p-6 text-white">
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-lg font-medium">New Session</h2>
+                    <h2 className="text-lg font-medium">{isEditing ? 'Edit Session' : 'New Session'}</h2>
                     <button onClick={handleClose} className="text-gray-400 hover:text-white transition">
                         <X size={20} />
                     </button>
@@ -102,13 +118,26 @@ export default function NewSessionModal({ isOpen, onClose, onSuccess }: NewSessi
                         <p className="text-red-400 text-sm">{form.error}</p>
                     )}
 
-                    <button
-                        onClick={handleSubmit}
-                        disabled={mutation.isPending}
-                        className="w-full bg-white text-black disabled:opacity-50 hover:bg-gray-100 font-medium py-2.5 rounded-xl transition text-sm"
-                    >
-                        {mutation.isPending ? 'Creating...' : 'Create Session'}
-                    </button>
+                    <div className="flex gap-3">
+                        {isEditing && (
+                            <button
+                                onClick={handleClose}
+                                className="flex-1 border border-white/10 text-gray-400 hover:text-white py-2.5 rounded-xl transition text-sm"
+                            >
+                                Cancel
+                            </button>
+                        )}
+                        <button
+                            onClick={handleSubmit}
+                            disabled={mutation.isPending}
+                            className="flex-1 bg-white text-black disabled:opacity-50 hover:bg-gray-100 font-medium py-2.5 rounded-xl transition text-sm"
+                        >
+                            {mutation.isPending
+                                ? isEditing ? 'Saving...' : 'Creating...'
+                                : isEditing ? 'Save Changes' : 'Create Session'
+                            }
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
