@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { Plus, MapPin, Calendar, Pencil, Trash2 } from 'lucide-react';
+import { Plus, MapPin, Calendar, Pencil, Trash2, Upload } from 'lucide-react';
 import ProtectedRoute from '../components/ProtectedRoute';
 import TopNav from '../components/TopNav';
 import NewSessionModal from '../components/logbook/NewSessionModal';
 import AddAscentModal from '../components/logbook/AddAscentModal';
 import AscentDetailModal from '../components/logbook/AscentDetailModal';
+import ImportModal from '@/components/logbook/ImportModal';
+import ConfirmModal from '@/components/logbook/ConfirmModal';
 import { useSessions } from '../lib/queries';
 import { Session, Ascent } from '../lib/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -20,7 +22,8 @@ export default function Logbook() {
     const [newSessionOpen, setNewSessionOpen] = useState(false);
     const [editSessionOpen, setEditSessionOpen] = useState(false);
     const [addAscentOpen, setAddAscentOpen] = useState(false);
-    const [confirmingDelete, setConfirmingDelete] = useState(false);
+    const [importOpen, setImportOpen] = useState(false);
+    const [deleteSessionOpen, setDeleteSessionOpen] = useState(false);
 
     useEffect(() => {
         if (!sessions || sessions.length == 0) return;
@@ -48,11 +51,11 @@ export default function Logbook() {
             queryClient.invalidateQueries({ queryKey: ['summary'] });
             queryClient.invalidateQueries({ queryKey: ['insights'] });
             setSelectedSessionId(null);
-            setConfirmingDelete(false);
+            setDeleteSessionOpen(false);
         },
         onError: (err: Error) => {
             console.error('Failed to delete session:', err.message);
-            setConfirmingDelete(false);
+            setDeleteSessionOpen(false);
         },
     });
 
@@ -87,13 +90,22 @@ export default function Logbook() {
                             <h1 className="text-3xl font-medium">Logbook</h1>
                             <p className="text-gray-400 mt-1 text-sm">Browse your climbing sessions and ascents</p>
                         </div>
-                        <button
-                            onClick={() => setNewSessionOpen(true)}
-                            className="flex items-center gap-2 bg-white text-black px-5 py-2.5 rounded-xl font-medium text-sm hover:bg-gray-100 transition"
-                        >
-                            <Plus size={16} />
-                            New Session
-                        </button>
+                        <div className="flex items-center gap-3">
+                            <button
+                                onClick={() => setImportOpen(true)}
+                                className="flex items-center gap-2 border border-dino-border px-5 py-2.5 rounded-xl font-medium text-sm hover:bg-white/5 transition"
+                            >
+                                <Upload size={16} />
+                                Import
+                            </button>
+                            <button
+                                onClick={() => setNewSessionOpen(true)}
+                                className="flex items-center gap-2 bg-white text-black px-5 py-2.5 rounded-xl font-medium text-sm hover:bg-gray-100 transition"
+                            >
+                                <Plus size={16} />
+                                New Session
+                            </button>
+                        </div>
                     </div>
 
                     {isLoading ? (
@@ -114,7 +126,6 @@ export default function Logbook() {
                                                 key={session.id}
                                                 onClick={() => {
                                                     setSelectedSessionId(session.id);
-                                                    setConfirmingDelete(false);
                                                 }}
                                                 className={`px-5 py-4 cursor-pointer transition ${
                                                     isSelected
@@ -159,32 +170,13 @@ export default function Logbook() {
                                                 <Pencil size={14} />
                                                 Edit
                                             </button>
-                                            {confirmingDelete ? (
-                                                <div className="flex items-center gap-2">
-                                                    <p className="text-xs text-gray-400">Delete this session?</p>
-                                                    <button
-                                                        onClick={() => deleteSessionMutation.mutate()}
-                                                        disabled={deleteSessionMutation.isPending}
-                                                        className="text-xs text-red-400 hover:text-red-300 border border-red-500/20 px-3 py-2 rounded-xl transition disabled:opacity-50"
-                                                    >
-                                                        {deleteSessionMutation.isPending ? 'Deleting...' : 'Confirm'}
-                                                    </button>
-                                                    <button
-                                                        onClick={() => setConfirmingDelete(false)}
-                                                        className="text-xs text-gray-400 hover:text-white border border-dino-border px-3 py-2 rounded-xl transition"
-                                                    >
-                                                        Cancel
-                                                    </button>
-                                                </div>
-                                            ) : (
-                                                <button
-                                                    onClick={() => setConfirmingDelete(true)}
-                                                    className="flex items-center gap-1.5 border border-red-500/20 px-3 py-2 rounded-xl text-sm text-red-400 hover:text-red-300 hover:bg-red-500/5 transition"
-                                                >
-                                                    <Trash2 size={14} />
-                                                    Delete
-                                                </button>
-                                            )}
+                                            <button
+                                                onClick={() => setDeleteSessionOpen(true)}
+                                                className="flex items-center gap-1.5 border border-red-500/20 px-3 py-2 rounded-xl text-sm text-red-400 hover:text-red-300 hover:bg-red-500/5 transition"
+                                            >
+                                                <Trash2 size={14} />
+                                                Delete
+                                            </button>
                                             <button
                                                 onClick={() => setAddAscentOpen(true)}
                                                 className="flex items-center gap-2 border border-dino-border px-4 py-2 rounded-xl text-sm font-medium hover:bg-white/5 transition"
@@ -261,6 +253,21 @@ export default function Logbook() {
                 onClose={() => setEditSessionOpen(false)}
                 onSuccess={() => setEditSessionOpen(false)}
                 session={selectedSession ?? undefined}
+            />
+
+            <ImportModal
+                isOpen={importOpen}
+                onClose={() => setImportOpen(false)}
+            />
+
+            <ConfirmModal
+                isOpen={deleteSessionOpen}
+                onClose={() => setDeleteSessionOpen(false)}
+                onConfirm={() => deleteSessionMutation.mutate()}
+                title="Delete Session"
+                message="This will permanently delete the session and all its ascents. This action cannot be undone."
+                confirmLabel="Delete Session"
+                isPending={deleteSessionMutation.isPending}
             />
 
             <AscentDetailModal
