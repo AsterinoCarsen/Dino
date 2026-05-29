@@ -38,7 +38,7 @@ export default function Dashboard() {
                     </div>
 
                     {lastSession && (
-                        <LastSessionSpotlight session={lastSession} />
+                        <LastSessionSpotlight session={lastSession} summary={summary} />
                     )}
 
                     <div>
