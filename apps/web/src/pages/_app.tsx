@@ -10,6 +10,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <QueryClientProvider client={queryClient}>
       <Component {...pageProps} />
       <Analytics />
+      <div className="md:hidden h-16" /> {/* Bottom spacer for mobile */}
     </QueryClientProvider>
   );
 }

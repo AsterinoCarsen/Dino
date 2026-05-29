@@ -112,10 +112,10 @@ export default function Achievements() {
         <ProtectedRoute>
             <div className="min-h-screen bg-dino-dark text-dino-text">
                 <TopNav />
-                <main className="max-w-5xl mx-auto px-6 py-8 flex flex-col gap-6">
+                <main className="max-w-5xl mx-auto px-4 md:px-6 py-4 md:py-8 pb-6 md:pb-8 flex flex-col gap-6">
 
                     <div>
-                        <h1 className="text-3xl font-medium">Achievements</h1>
+                        <h1 className="text-2xl md:text-3xl font-medium">Achievements</h1>
                         {achievements && (
                             <p className="text-gray-400 mt-1 text-sm">
                                 {earned.length} of {achievements.length} achievements unlocked
@@ -124,7 +124,7 @@ export default function Achievements() {
                         )}
                     </div>
 
-                    <div className="flex gap-2">
+                    <div className="flex flex-wrap gap-2">
                         {filters.map(({ label, count }) => (
                             <button
                                 key={label}
@@ -143,7 +143,7 @@ export default function Achievements() {
                     {isLoading ? (
                         <p className="text-gray-400 text-sm">Loading achievements...</p>
                     ) : (
-                        <div className="grid grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                             {filtered.map(achievement => (
                                 <AchievementCard key={achievement.id} achievement={achievement} />
                             ))}

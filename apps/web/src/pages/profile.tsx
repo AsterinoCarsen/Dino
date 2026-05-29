@@ -20,9 +20,9 @@ export default function Profile() {
         <ProtectedRoute>
             <div className="min-h-screen bg-dino-dark text-dino-text">
                 <TopNav />
-                <main className="max-w-2xl mx-auto px-6 py-8 flex flex-col gap-6">
+                <main className="max-w-2xl mx-auto px-4 md:px-6 py-4 md:py-8 pb-6 md:pb-8 flex flex-col gap-6">
 
-                    <h1 className="text-3xl font-medium">Profile</h1>
+                    <h1 className="text-2xl md:text-3xl font-medium">Profile</h1>
 
                     <div className="border border-dino-border rounded-2xl p-6 flex flex-col gap-6">
                         <div className="flex items-center gap-4">
@@ -57,7 +57,7 @@ export default function Profile() {
                         {summary && summary.highestGrades.length > 0 && (
                             <div className="border-t border-dino-border pt-6">
                                 <p className="text-xs text-gray-500 mb-3">Hardest Sends</p>
-                                <div className="flex gap-3">
+                                <div className="flex flex-wrap gap-3">
                                     {summary.highestGrades.map(g => (
                                         <div key={g.gradeSystem} className="bg-white/5 rounded-xl px-4 py-3">
                                             <p className="text-xs text-gray-500 mb-1">{g.gradeSystem}</p>
