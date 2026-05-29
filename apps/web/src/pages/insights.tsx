@@ -22,14 +22,14 @@ export default function Insights() {
         <ProtectedRoute>
             <div className="min-h-screen bg-dino-dark text-dino-text">
                 <TopNav />
-                <main className="max-w-5xl mx-auto px-6 py-8 flex flex-col gap-6">
+                <main className="max-w-5xl mx-auto px-4 md:px-6 py-4 md:py-8 pb-6 md:pb-8 flex flex-col gap-6">
 
                     <div>
-                        <h1 className="text-3xl font-medium">Insights</h1>
+                        <h1 className="text-2xl md:text-3xl font-medium">Insights</h1>
                         <p className="text-gray-400 mt-1 text-sm">Analyze your climbing performance with detailed visualizations</p>
                     </div>
 
-                    <div className="flex gap-2">
+                    <div className="flex flex-wrap gap-2">
                         {TABS.map(tab => (
                             <button
                                 key={tab}
