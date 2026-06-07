@@ -4,15 +4,17 @@ import StatCard from '../components/dashboard/StatCard';
 import LastSessionSpotlight from '../components/dashboard/LastSessionSpotlight';
 import RecentSessions from '../components/dashboard/RecentSessions';
 import RecentlyEarned from '../components/dashboard/RecentlyEarned';
-import { useSummary, useSessions, useEarnedAchievements } from '../lib/queries';
+import { useSummary, useSessions, useEarnedAchievements, useSessionSpotlight } from '../lib/queries';
 
 export default function Dashboard() {
     const { data: summary, isLoading: summaryLoading } = useSummary();
     const { data: sessions, isLoading: sessionsLoading } = useSessions();
     const { data: achievements, isLoading: achievementsLoading } = useEarnedAchievements();
 
-    const isLoading = summaryLoading || sessionsLoading || achievementsLoading;
     const lastSession = sessions?.[0] ?? null;
+    const { data: spotlight } = useSessionSpotlight(lastSession?.id ?? null);
+
+    const isLoading = summaryLoading || sessionsLoading || achievementsLoading;
     const lastAchievement = achievements?.[achievements.length - 1] ?? null;
     const highestVScale = summary?.highestGrades.find(g => g.gradeSystem === 'VScale');
 
@@ -38,7 +40,7 @@ export default function Dashboard() {
                     </div>
 
                     {lastSession && (
-                        <LastSessionSpotlight session={lastSession} summary={summary} />
+                        <LastSessionSpotlight session={lastSession} spotlight={spotlight} />
                     )}
 
                     <div>
