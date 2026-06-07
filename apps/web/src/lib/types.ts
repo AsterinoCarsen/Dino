@@ -92,3 +92,10 @@ export interface AchievementProgress {
     earnedAt: string | null;
     currentProgress: number;
 }
+
+export interface SessionSpotlight {
+    percentile: number;
+    compositeScore: number;
+    sessionRank: number;
+    totalSessions: number;
+}

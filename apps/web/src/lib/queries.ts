@@ -7,7 +7,8 @@ import {
     GradePyramid,
     AttemptRatio,
     Volume,
-    AchievementProgress
+    AchievementProgress,
+    SessionSpotlight
 } from './types';
 
 export function useSummary() {
@@ -29,6 +30,14 @@ export function useSession(id: number) {
         queryKey: ['session', id],
         queryFn: () => api.get<Session>(`/api/session/${id}`),
         enabled: !!id,
+    });
+}
+
+export function useSessionSpotlight(sessionId: number | null) {
+    return useQuery({
+        queryKey: ['session', sessionId, 'spotlight'],
+        queryFn: () => api.get<SessionSpotlight>(`/api/session/${sessionId}/spotlight`),
+        enabled: sessionId !== null,
     });
 }
 

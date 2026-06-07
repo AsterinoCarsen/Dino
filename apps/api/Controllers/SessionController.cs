@@ -58,4 +58,12 @@ public class SessionController : BaseController
         if (!success) return NotFound();
         return NoContent();
     }
+
+    [HttpGet("{id}/spotlight")]
+    public async Task<IActionResult> GetSpotlight(int id)
+    {
+        var result = await _sessionService.GetSpotlightAsync(id, GetUserId());
+        if (result == null) return NotFound();
+        return Ok(result);
+    }
 }

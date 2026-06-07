@@ -1,11 +1,11 @@
-import { Session, Summary } from '../../lib/types';
+import { Session, SessionSpotlight } from '../../lib/types';
 
 interface LastSessionSpotlightProps {
     session: Session;
-    summary?: Summary;
+    spotlight?: SessionSpotlight;
 }
 
-export default function LastSessionSpotlight({ session, summary }: LastSessionSpotlightProps) {
+export default function LastSessionSpotlight({ session, spotlight }: LastSessionSpotlightProps) {
     const date = new Date(session.createdAt).toLocaleDateString('en-US', {
         month: 'long',
         day: 'numeric',
@@ -16,12 +16,9 @@ export default function LastSessionSpotlight({ session, summary }: LastSessionSp
     const totalHeight = ascents.reduce((sum, a) => sum + a.height, 0);
     const flashes = ascents.filter(a => a.attempts === 1).length;
     const flashRate = ascents.length > 0 ? Math.round((flashes / ascents.length) * 100) : 0;
-
     const topAscent = ascents.length > 0 ? ascents[0] : null;
 
-    const isPersonalBest = topAscent && summary?.highestGrades.some(
-        g => g.gradeSystem === topAscent.gradeSystem && g.highestGrade === topAscent.grade
-    );
+    const showPercentile = spotlight && spotlight.totalSessions >= 2;
 
     return (
         <div className="border border-dino-border rounded-2xl p-6 flex flex-col gap-6">
@@ -31,9 +28,11 @@ export default function LastSessionSpotlight({ session, summary }: LastSessionSp
                     <p className="text-lg font-medium">{session.location}</p>
                     <p className="text-sm text-gray-400">{date}</p>
                 </div>
-                {isPersonalBest && topAscent && (
+                {showPercentile && (
                     <div className="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-4 py-2 rounded-xl self-start">
-                        <span className="text-sm font-medium">🏆 New Personal Best — {topAscent.grade}</span>
+                        <span className="text-sm font-medium">
+                            Top {spotlight.percentile}% of your sessions
+                        </span>
                     </div>
                 )}
             </div>
