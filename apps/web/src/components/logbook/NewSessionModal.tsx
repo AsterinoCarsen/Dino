@@ -14,6 +14,7 @@ interface NewSessionModalProps {
 interface FormState {
     location: string;
     notes: string;
+    createdAt: string;
     error: string;
 }
 
@@ -24,14 +25,25 @@ export default function NewSessionModal({ isOpen, onClose, onSuccess, session }:
     const [form, setForm] = useState<FormState>({
         location: '',
         notes: '',
+        createdAt: '',
         error: '',
     });
 
     useEffect(() => {
         if (session) {
-            setForm({ location: session.location, notes: session.notes, error: '' });
+            setForm({
+                location: session.location,
+                notes: session.notes,
+                createdAt: new Date(session.createdAt).toISOString().slice(0, 16),
+                error: '',
+            });
         } else {
-            setForm({ location: '', notes: '', error: '' });
+            setForm({
+                location: '',
+                notes: '',
+                createdAt: new Date().toISOString().slice(0, 16),
+                error: '',
+            });
         }
     }, [session, isOpen]);
 
@@ -40,10 +52,12 @@ export default function NewSessionModal({ isOpen, onClose, onSuccess, session }:
             ? api.put<Session>(`/api/session/${session.id}`, {
                 location: form.location,
                 notes: form.notes,
+                createdAt: form.createdAt ? new Date(form.createdAt).toISOString() : null,
             })
             : api.post<Session>('/api/session', {
                 location: form.location,
                 notes: form.notes,
+                createdAt: form.createdAt ? new Date(form.createdAt).toISOString() : null,
             }),
         onSuccess: (result) => {
             queryClient.invalidateQueries({ queryKey: ['sessions'] });
@@ -56,7 +70,7 @@ export default function NewSessionModal({ isOpen, onClose, onSuccess, session }:
     });
 
     const handleClose = () => {
-        setForm({ location: '', notes: '', error: '' });
+        setForm({ location: '', notes: '', createdAt: '', error: '' });
         onClose();
     };
 
@@ -97,6 +111,16 @@ export default function NewSessionModal({ isOpen, onClose, onSuccess, session }:
                             className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-white/30"
                             value={form.location}
                             onChange={e => setForm(prev => ({ ...prev, location: e.target.value }))}
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm text-gray-400 mb-1">Date & Time</label>
+                        <input
+                            type="datetime-local"
+                            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-white/30 [color-scheme:dark]"
+                            value={form.createdAt}
+                            onChange={e => setForm(prev => ({ ...prev, createdAt: e.target.value }))}
                         />
                     </div>
 
