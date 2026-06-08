@@ -4,5 +4,6 @@ namespace api.DTOs;
 
 public record SessionRequestDto(
     [MaxLength(75)] string Location,
-    [MaxLength(150)] string Notes
+    [MaxLength(150)] string Notes,
+    DateTime? CreatedAt
 );

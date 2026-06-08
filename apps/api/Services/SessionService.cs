@@ -24,7 +24,10 @@ public class SessionService
         {
             Location = dto.Location,
             Notes = dto.Notes,
-            UserId = userId
+            UserId = userId,
+            CreatedAt = dto.CreatedAt.HasValue
+                    ? DateTime.SpecifyKind(dto.CreatedAt.Value, DateTimeKind.Utc)
+                    : DateTime.Now,
         };
 
         _db.Sessions.Add(session);
@@ -107,6 +110,8 @@ public class SessionService
 
         session.Location = dto.Location;
         session.Notes = dto.Notes;
+        if (dto.CreatedAt.HasValue)
+            session.CreatedAt = DateTime.SpecifyKind(dto.CreatedAt.Value, DateTimeKind.Utc);
 
         await _db.SaveChangesAsync();
 
